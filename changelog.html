@@ -262,11 +262,12 @@ body {
   background: var(--gold);
   margin-left: 4px;
   vertical-align: middle;
-  animation: cursorBlink 0.8s step-end infinite;
+  animation: cursorBlink 0.9s ease-in-out infinite;
 }
 @keyframes cursorBlink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%, 45% { opacity: 1; }
+  50%, 95% { opacity: 0; }
+  100% { opacity: 1; }
 }
 .hero-tags {
   display: flex;
@@ -324,7 +325,7 @@ body {
   gap: 10px;
   cursor: pointer;
   border: none;
-  transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out), border-color .3s var(--ease-out), color .3s var(--ease-out), background-color .3s var(--ease-out);
+  transition: transform .28s var(--ease-out), box-shadow .48s var(--ease-out), border-color .48s var(--ease-out), color .48s var(--ease-out), background-color .48s var(--ease-out);
   position: relative;
   overflow: hidden;
 }
@@ -409,23 +410,30 @@ body {
   width: 4px; height: 8px;
   background: var(--green);
   border-radius: 2px;
-  animation: scrollWheel 2s infinite;
+  animation: scrollWheel 2.1s cubic-bezier(0.5, 0, 0.9, 0.45) infinite;
 }
 @keyframes scrollWheel {
-  0% { opacity: 1; top: 6px; }
-  100% { opacity: 0; top: 20px; }
+  0% { opacity: 0; top: 6px; }
+  18% { opacity: 1; }
+  68% { opacity: 1; top: 13px; }
+  100% { opacity: 0; top: 22px; }
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  0%   { opacity: 0; transform: translateY(34px) scale(.98); }
+  15%  { opacity: 0; transform: translateY(38px) scale(.975); }
+  50%  { opacity: 1; transform: translateY(-2px) scale(1.01); }
+  75%  { transform: translateY(1px) scale(.997); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* 焦点入场：方块放置式到位（快速、利落、无弹跳） */
 @keyframes heroIn {
-  from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
-  60% { filter: blur(0); }
-  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  0%   { opacity: 0; transform: translateY(22px) scale(.985); filter: blur(8px); }
+  12%  { opacity: 0; transform: translateY(26px) scale(.98); filter: blur(8px); }
+  45%  { opacity: 1; transform: translateY(-3px) scale(1.015); filter: blur(2px); }
+  70%  { transform: translateY(1px) scale(.995); filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 }
 
 /* ============ 快速跳转卡 ============ */
@@ -448,7 +456,7 @@ body {
   padding: 22px 18px;
   text-decoration: none;
   color: var(--text-primary);
-  transition: transform .5s var(--ease-out), box-shadow .5s var(--ease-out), border-color .5s var(--ease-out);
+  transition: transform .28s var(--ease-out), box-shadow .5s var(--ease-out), border-color .5s var(--ease-out);
   box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
@@ -558,16 +566,12 @@ body {
   transform: translateY(24px);
   transition: opacity 0.55s var(--ease-out),
               transform 0.55s var(--ease-out);
+  transition-delay: calc(0.08s + var(--i,0)*0.07s*(1 - var(--i,0)*0.15));
 }
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
-.reveal-delay-1 { transition-delay: 0.06s; }
-.reveal-delay-2 { transition-delay: 0.12s; }
-.reveal-delay-3 { transition-delay: 0.18s; }
-.reveal-delay-4 { transition-delay: 0.24s; }
-.reveal-delay-5 { transition-delay: 0.3s; }
 
 /* ============ 模组简介区 ============ */
 .intro-grid {
@@ -601,7 +605,7 @@ body {
   border-radius: 12px;
   padding: 28px 24px;
   text-align: center;
-  transition: transform .55s var(--ease-out), border-color .55s var(--ease-out), box-shadow .55s var(--ease-out);
+  transition: transform .3s var(--ease-out), border-color .55s var(--ease-out), box-shadow .55s var(--ease-out);
   position: relative;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -649,7 +653,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 36px 28px;
-  transition: transform .4s var(--ease-out), border-color .4s var(--ease-out), box-shadow .4s var(--ease-out);
+  transition: transform .28s var(--ease-out), border-color .5s var(--ease-out), box-shadow .5s var(--ease-out);
   position: relative;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -872,7 +876,7 @@ body {
   background: linear-gradient(90deg, var(--cyan), var(--green));
   border-radius: 2px;
   width: 0;
-  transition: width 1.8s var(--ease-out);
+  will-change: width;
 }
 
 /* ============ 安装指南区 ============ */
@@ -924,7 +928,7 @@ body {
 }
 .install-step:last-child { border-bottom: none; }
 .install-step:hover .step-content { transform: translateX(8px); }
-.step-content { transition: transform .15s var(--ease-out); }
+.step-content { transition: transform .25s var(--ease-out); }
 .step-number {
   flex-shrink: 0;
   width: 44px; height: 44px;
@@ -1117,7 +1121,7 @@ body {
   color: var(--cyan);
   font-weight: 600;
   cursor: pointer;
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
+  transition: transform .25s var(--ease-out), color .45s var(--ease-out), background-color .45s var(--ease-out), border-color .45s var(--ease-out), box-shadow .45s var(--ease-out), opacity .45s var(--ease-out);
   animation: hintPulse 2.6s ease-in-out infinite;
 }
 .download-click-hint:hover {
@@ -1133,13 +1137,16 @@ body {
   animation: handTap 1.6s ease-in-out infinite;
 }
 @keyframes hintPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(2,132,199,0.15); }
-  50% { box-shadow: 0 0 0 8px rgba(2,132,199,0); }
+  0%, 72%, 100% { box-shadow: 0 0 0 0 rgba(2,132,199,0.15); }
+  82% { box-shadow: 0 0 0 0 rgba(2,132,199,0.15); }
+  92% { box-shadow: 0 0 0 10px rgba(2,132,199,0); }
 }
 @keyframes handTap {
-  0%, 100% { transform: translateY(0) scale(1); }
-  40% { transform: translateY(-3px) scale(1.15); }
-  60% { transform: translateY(0) scale(0.95); }
+  0%, 60%, 100% { transform: translateY(0) scale(1); }
+  72% { transform: translateY(1px) scale(1); }
+  82% { transform: translateY(-4px) scale(1.18); }
+  92% { transform: translateY(1px) scale(.93); }
+  97% { transform: translateY(0) scale(1.02); }
 }
 
 /* ============ Toast 提示 ============ */
@@ -1289,7 +1296,7 @@ body {
   gap: 14px;
   padding: 12px 0;
   border-bottom: 1px solid var(--border);
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
+  transition: transform .25s var(--ease-out), color .45s var(--ease-out), background-color .45s var(--ease-out), border-color .45s var(--ease-out), box-shadow .45s var(--ease-out), opacity .45s var(--ease-out);
 }
 .version-item:last-child { border-bottom: none; }
 .version-item:hover { transform: translateX(4px); }
@@ -1542,7 +1549,7 @@ body {
   border-radius: 50%;
   background: #fbbf24;
   box-shadow: 0 0 10px rgba(251,191,36,0.85), 0 0 26px rgba(251,191,36,0.4);
-  transition: top 0.6s var(--ease-out);
+  transition: top 0.7s cubic-bezier(0.45, 0, 0.2, 1);
   z-index: 3;
   pointer-events: none;
 }
@@ -1559,9 +1566,9 @@ body {
   border-color: rgba(251,191,36,0.55);
 }
 @keyframes stationPulse {
-  0% { transform: scale(0.75); opacity: 0.9; }
-  70% { transform: scale(1.45); opacity: 0; }
-  100% { opacity: 0; }
+  0%, 55% { transform: scale(0.8); opacity: 0; }
+  62% { opacity: 0.85; }
+  100% { transform: scale(1.7); opacity: 0; }
 }
 /* 终点站（历史版本） */
 .metro-station.end .ms-dot { border-radius: 50% 50% 6px 6px; }
@@ -1576,8 +1583,16 @@ body {
 .mpanel { display: none; }
 .mpanel.active { display: block; animation: mpanelIn 0.4s var(--ease-out) both; }
 .mpanel.leaving { display: block; animation: mpanelOut 0.2s var(--ease-in) forwards; }
-@keyframes mpanelIn { from { opacity: 0; transform: translateY(20px) scale(0.99); } to { opacity: 1; transform: none; } }
-@keyframes mpanelOut { to { opacity: 0; transform: translateY(-14px) scale(0.99); } }
+@keyframes mpanelIn {
+  from { opacity: 0; transform: translateY(24px) scale(.97); }
+  55% { opacity: 1; transform: translateY(-2px) scale(1.02); }
+  75% { transform: translateY(1px) scale(.995); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes mpanelOut {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateY(-14px) scale(0.99); }
+}
 .mv-header {
   background: #10131c; border: 1px solid #2a3145;
   border-radius: 12px; padding: 12px 18px; margin-bottom: 12px; position: relative; overflow: hidden;
@@ -1801,6 +1816,11 @@ body {
     transform: scaleX(1.06);
     letter-spacing: 0.02em;
   }
+  85% {
+    opacity: 1;
+    transform: scaleX(0.97);
+    letter-spacing: -0.01em;
+  }
   100% {
     opacity: 1;
     transform: scaleX(1);
@@ -1818,7 +1838,7 @@ body {
   width: 8px; height: 16px;
   background: var(--green);
   vertical-align: middle;
-  animation: cursorBlink 0.8s step-end infinite;
+  animation: cursorBlink 0.9s ease-in-out infinite;
 }
 
 /* ============ FAQ 区 ============ */
@@ -2355,16 +2375,18 @@ body {
   transform: translateY(0.4em);
   filter: blur(4px);
   animation: wordPlace 0.55s var(--ease-out) both;
-  animation-delay: calc(0.16s + var(--wi, 0) * 0.1s);
+  animation-delay: calc(0.14s + var(--wi,0)*0.08s - var(--wi,0)*var(--wi,0)*0.004s);
 }
 .hero-title .w-unit.block-text {
   animation: gradientFlow 4s linear infinite, wordPlace 0.55s var(--ease-out) both;
-  animation-delay: 0s, calc(0.16s + var(--wi, 0) * 0.1s);
+  animation-delay: 0s, calc(0.14s + var(--wi,0)*0.08s - var(--wi,0)*var(--wi,0)*0.004s);
 }
 @keyframes wordPlace {
-  from { opacity: 0; transform: translateY(0.4em); filter: blur(4px); }
-  60% { filter: blur(0); }
-  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  0%   { opacity: 0; transform: translateY(0.5em) scale(.985); filter: blur(6px); }
+  12%  { opacity: 0; transform: translateY(0.6em) scale(.98); filter: blur(6px); }
+  45%  { opacity: 1; transform: translateY(-0.1em) scale(1.02); filter: blur(1px); }
+  70%  { transform: translateY(0.05em) scale(.995); filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 }
 
 /* ============ 排版布局 v3（Vercel Web Interface Guidelines · 只动排版布局，主题不变） ============ */
@@ -2969,25 +2991,43 @@ code, .terminal-line { overflow-wrap: anywhere; }
   resize();
   window.addEventListener('resize', resize);
   class BlockParticle {
-    constructor() { this.reset(true); }
+    constructor(idx, total) { this.idx = idx; this.total = total; this.reset(true); }
     reset(initial) {
+      const frac = this.idx / this.total;
+      let depth;
+      if (frac < 0.33) depth = 2;
+      else if (frac < 0.66) depth = 1;
+      else depth = 0;
+      this.depth = depth;
+      const baseSpeed = [0.55, 0.30, 0.12][depth];
+      const baseSpeedX = [0.40, 0.25, 0.12][depth];
       this.size = Math.random() * 18 + 4;
       this.x = Math.random() * canvas.width;
       this.y = initial ? Math.random() * canvas.height : canvas.height + this.size;
-      this.speedY = -(Math.random() * 0.38 + 0.10);
-      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.speedY = -(baseSpeed + Math.random() * 0.12);
+      this.speedX = (Math.random() - 0.5) * baseSpeedX;
       this.rotation = Math.random() * Math.PI * 2;
       this.rotationSpeed = (Math.random() - 0.5) * 0.02;
-      this.opacity = Math.random() * (isDark ? 0.16 : 0.13) + (isDark ? 0.05 : 0.03);
+      this.targetOpacity = Math.random() * (isDark ? 0.16 : 0.13) + (isDark ? 0.05 : 0.03);
+      this.opacity = initial ? this.targetOpacity * Math.random() : 0;
       this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
-      this.pulse = Math.random() * Math.PI * 2;
+      this.pulse = Math.random() * Math.PI * 2 + this.idx * 0.3;
+      this.fadeOut = false;
     }
     update() {
+      if (this.opacity < this.targetOpacity && !this.fadeOut) {
+        this.opacity += 0.015;
+        if (this.opacity > this.targetOpacity) this.opacity = this.targetOpacity;
+      }
       this.y += this.speedY;
       this.x += this.speedX;
       this.rotation += this.rotationSpeed;
       this.pulse += 0.014;
-      if (this.y < -this.size) this.reset(false);
+      if (this.y < -this.size) this.fadeOut = true;
+      if (this.fadeOut) {
+        this.opacity -= 0.04;
+        if (this.opacity <= 0) this.reset(false);
+      }
     }
     draw() {
       ctx.save();
@@ -2995,9 +3035,9 @@ code, .terminal-line { overflow-wrap: anywhere; }
       ctx.rotate(this.rotation);
       const breath = 0.88 + 0.12 * Math.sin(this.pulse * 2);
       ctx.scale(breath, breath);
-      ctx.globalAlpha = this.opacity * (0.7 + 0.3 * Math.sin(this.pulse));
+      ctx.globalAlpha = Math.max(0, this.opacity * (0.7 + 0.3 * Math.sin(this.pulse)));
       ctx.fillStyle = this.color;
-      if (isDark) { ctx.shadowColor = this.color; ctx.shadowBlur = 12; }
+      if (isDark && this.opacity > 0.02) { ctx.shadowColor = this.color; ctx.shadowBlur = 12; }
       const s = this.size;
       ctx.fillRect(-s/2, -s/2, s, s);
       ctx.globalAlpha *= 0.5;
@@ -3012,7 +3052,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
     }
   }
   const count = Math.min(80, Math.floor(window.innerWidth / 26));
-  for (let i = 0; i < count; i++) particles.push(new BlockParticle());
+  for (let i = 0; i < count; i++) particles.push(new BlockParticle(i, count));
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach(p => { p.update(); p.draw(); });
@@ -3075,7 +3115,16 @@ code, .terminal-line { overflow-wrap: anywhere; }
       }
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  const revealEls = document.querySelectorAll('.reveal');
+  revealEls.forEach((el) => {
+    // 按同级兄弟分组编号，使 cascade 延迟只在同一行/同一组内生效
+    const group = el.parentElement
+      ? el.parentElement.querySelectorAll(':scope > .reveal')
+      : null;
+    const i = group ? Array.prototype.indexOf.call(group, el) : 0;
+    el.style.setProperty('--i', i);
+    observer.observe(el);
+  });
 })();
 
 /* ============ 更新日志地铁切换（进出过渡 + 列车到站） ============ */
