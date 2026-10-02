@@ -2143,6 +2143,71 @@ code, .terminal-line { overflow-wrap: anywhere; }
 /* ---- 焦点态：粘性导航不遮挡聚焦元素 ---- */
 .section :focus-visible { scroll-margin-bottom: 24px; }
 
+
+/* ============ 版本更新公告弹窗 v2.1.1 ============ */
+.update-box {
+  width: min(460px, 92vw); max-height: 92vh;
+  border-color: rgba(251,191,36,0.26);
+  box-shadow: 0 30px 90px rgba(0,0,0,0.65);
+  position: relative; overflow: hidden;
+}
+.update-box::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #4a8ad5, #fbbf24, #4a8ad5);
+  background-size: 200% 100%; animation: updateBar 3.6s linear infinite;
+}
+@keyframes updateBar { to { background-position: 200% 0; } }
+.update-header {
+  background: linear-gradient(135deg, rgba(251,191,36,0.10), transparent);
+  border-bottom-color: rgba(251,191,36,0.18);
+}
+.update-body { padding: 26px 26px 24px; text-align: center; }
+.update-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 4px 13px; border-radius: 999px; margin-bottom: 16px;
+  background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.35);
+  color: #fbbf24; font-size: 11.5px; font-weight: 700; letter-spacing: 0.6px;
+}
+.update-badge .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #fbbf24;
+  animation: updateDot 1.6s ease-in-out infinite;
+}
+@keyframes updateDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.65); }
+}
+.update-ver {
+  font-size: 46px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.1;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, #6ba8f0, #e8eaf0 55%, #fbbf24);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.update-name { font-size: 16px; font-weight: 700; color: #e8eaf0; margin-bottom: 8px; }
+.update-desc {
+  font-size: 13.5px; color: #9aa3b8; line-height: 1.75;
+  max-width: 330px; margin: 0 auto 18px;
+}
+.update-soon {
+  display: inline-block; padding: 8px 18px; border-radius: 10px; margin-bottom: 22px;
+  background: rgba(74,138,213,0.09); border: 1px dashed rgba(107,168,240,0.42);
+  color: #6ba8f0; font-size: 13px; font-weight: 600;
+}
+.update-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.update-btn {
+  padding: 10px 20px; border-radius: 10px; font-size: 13.5px; font-weight: 600;
+  cursor: pointer; border: 1px solid #2a3145; background: #10131c; color: #9aa3b8;
+  transition: all 0.15s var(--ease-out);
+}
+.update-btn:hover { color: #e8eaf0; border-color: #3d475e; }
+.update-btn.primary {
+  background: linear-gradient(135deg, #4a8ad5, #6ba8f0);
+  color: #fff; border-color: transparent;
+}
+.update-btn.primary:hover { filter: brightness(1.1); transform: translateY(-1px); color: #fff; }
+@media (max-width: 480px) {
+  .update-ver { font-size: 38px; }
+  .update-body { padding: 20px 18px; }
+}
 </style>
 </head>
 <body>
@@ -2169,7 +2234,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
     <li><a href="changelog.html" class="nav-changelog-link">更新日志 <span class="changelog-badge">NEW</span></a></li>
     <li><a href="#" id="nav-license" class="nav-changelog-link">使用协议</a></li>
   </ul>
-  <div class="nav-version">v2.1.0-Release</div>
+  <div class="nav-version">v2.1.1-Release</div>
 </nav>
 
 <!-- ============ Hero 区 ============ -->
@@ -2487,7 +2552,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
     <div class="version-history-title">Version History · 版本历史</div>
     <div class="version-list">
       <div class="version-item">
-        <span class="version-number">v2.1.0</span>
+        <span class="version-number">v2.1.1</span>
         <span class="version-tag release">Release</span>
         <span class="version-tag latest">最新</span>
         <span class="version-tag major">重大更新</span>
@@ -2498,6 +2563,16 @@ code, .terminal-line { overflow-wrap: anywhere; }
         <span class="version-status recommended">推荐使用</span>
       </div>
       <div class="version-item">
+        <span class="version-number">v2.1.0</span>
+        <span class="version-tag release">Release</span>
+        <span class="version-tag major">重大更新</span>
+        <span class="version-platforms">
+          <span class="version-platform forge">Forge</span>
+          <span class="version-platform fabric">Fabric</span>
+        </span>
+        <span class="version-status deprecated">已被 2.1.1 取代</span>
+      </div>
+      <div class="version-item">
         <span class="version-number">v2.0.3.2</span>
         <span class="version-tag release">Release</span>
         <span class="version-tag major">重大更新</span>
@@ -2505,7 +2580,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
           <span class="version-platform forge">Forge</span>
           <span class="version-platform fabric">Fabric</span>
         </span>
-        <span class="version-status deprecated">已被 2.1.0 取代</span>
+        <span class="version-status deprecated">已被 2.1.1 取代</span>
       </div>
       <div class="version-item">
         <span class="version-number">v2.0.3.1</span>
@@ -2514,7 +2589,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
           <span class="version-platform forge">Forge</span>
           <span class="version-platform fabric">Fabric</span>
         </span>
-        <span class="version-status deprecated">已被 2.1.0 取代</span>
+        <span class="version-status deprecated">已被 2.1.1 取代</span>
       </div>
       <div class="version-item">
         <span class="version-number">v2.0.3</span>
@@ -2523,7 +2598,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
           <span class="version-platform forge">Forge</span>
           <span class="version-platform fabric">Fabric</span>
         </span>
-        <span class="version-status deprecated">已被 2.1.0 取代</span>
+        <span class="version-status deprecated">已被 2.1.1 取代</span>
       </div>
       <div class="version-item">
         <span class="version-number">v2.0.2</span>
@@ -2532,7 +2607,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
           <span class="version-platform forge">Forge</span>
           <span class="version-platform fabric">Fabric</span>
         </span>
-        <span class="version-status deprecated">已被 2.1.0 取代</span>
+        <span class="version-status deprecated">已被 2.1.1 取代</span>
       </div>
       <div class="version-item">
         <span class="version-number">v2.0.1</span>
@@ -2541,7 +2616,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
           <span class="version-platform forge">Forge</span>
           <span class="version-platform fabric">Fabric</span>
         </span>
-        <span class="version-status deprecated">已被 2.1.0 取代</span>
+        <span class="version-status deprecated">已被 2.1.1 取代</span>
       </div>
       <div class="version-divider">历史版本（不建议使用）</div>
       <div class="version-item">
@@ -2600,7 +2675,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
       </div>
     </div>
     <div class="version-footnote">
-      <strong>说明：</strong>自 <strong>v2.0.0</strong> 版本起新增 Fabric 加载器支持，此前 1.x 系列仅支持 Forge。1.x Alpha 版本为早期测试版，功能不完善且存在已知问题，强烈建议升级至最新 v2.1.0-Release。
+      <strong>说明：</strong>自 <strong>v2.0.0</strong> 版本起新增 Fabric 加载器支持，此前 1.x 系列仅支持 Forge。1.x Alpha 版本为早期测试版，功能不完善且存在已知问题，强烈建议升级至最新 v2.1.1-Release。
     </div>
   </div>
 
@@ -2629,7 +2704,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
       <div class="step-number">3</div>
       <div class="step-content">
         <h4>放入模组文件</h4>
-        <p>将 <code>Block_ID-forge-2.1.0-Release.jar</code> 放入 <code>.minecraft/mods</code> 文件夹，启动游戏即可。</p>
+        <p>将 <code>Block_ID-forge-2.1.1-Release.jar</code> 放入 <code>.minecraft/mods</code> 文件夹，启动游戏即可。</p>
       </div>
     </div>
   </div>
@@ -2653,7 +2728,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
       <div class="step-number">3</div>
       <div class="step-content">
         <h4>放入模组文件</h4>
-        <p>将 <code>Block_ID-fabric-2.1.0-Release.jar</code> 放入 <code>.minecraft/mods</code> 文件夹，启动游戏即可。</p>
+        <p>将 <code>Block_ID-fabric-2.1.1-Release.jar</code> 放入 <code>.minecraft/mods</code> 文件夹，启动游戏即可。</p>
       </div>
     </div>
   </div>
@@ -2697,7 +2772,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
       </div>
       <div class="faq-answer">
         <div class="faq-answer-inner">
-          <span class="a-label">A:</span>请务必更新至 <code>v2.1.0-Release</code> 或更高版本。此版本已彻底重构底层渲染，内置视口裁剪优化，滚动十分流畅。
+          <span class="a-label">A:</span>请务必更新至 <code>v2.1.1-Release</code> 或更高版本。此版本已彻底重构底层渲染，内置视口裁剪优化，滚动十分流畅。
         </div>
       </div>
     </div>
@@ -2751,7 +2826,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
       <span>下载：QQ群 1121599701</span>
     </div>
     <div class="footer-bottom">
-      Block ID v2.1.0-Release · Forge / Fabric · 2026.09.06 · <a href="#" id="footer-license" style="color:var(--accent);">使用协议</a>
+      Block ID v2.1.1-Release · Forge / Fabric · 2026.09.06 · <a href="#" id="footer-license" style="color:var(--accent);">使用协议</a>
     </div>
   </div>
 </footer>
@@ -2837,7 +2912,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
         <div class="mtitle"><div class="micon tech">📋</div>模组信息</div>
         <ul class="mlist">
           <li><strong>模组名称</strong>：Block ID（方块ID）</li>
-          <li><strong>当前版本</strong>：v2.1.0-Release</li>
+          <li><strong>当前版本</strong>：v2.1.1-Release</li>
           <li><strong>支持版本</strong>：Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</li>
           <li><strong>官方渠道</strong>：QQ群 1121599701 · GitHub · Modrinth · CurseForge</li>
           <li><strong>协议生效日期</strong>：2026年9月6日</li>
@@ -2856,6 +2931,28 @@ code, .terminal-line { overflow-wrap: anywhere; }
         <button class="btn btn-primary license-agree-btn" id="license-agree-btn" disabled>
           我已阅读并同意以上协议
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ 版本更新公告弹窗 v2.1.1 ============ -->
+<div class="modal-overlay" id="update-modal" role="dialog" aria-modal="true" aria-labelledby="update-modal-title">
+  <div class="modal-box update-box">
+    <div class="modal-header update-header">
+      <div class="modal-header-title" id="update-modal-title"><span class="rocket">🚀</span> Block ID 更新公告</div>
+      <button class="modal-close" id="update-modal-close" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body update-body">
+      <div class="update-badge"><span class="dot"></span>NEW UPDATE</div>
+      <div class="update-ver">v2.1.1</div>
+      <div class="update-name">模组更新 2.1.1</div>
+      <p class="update-desc">新版正在路上，本次更新内容正在整理中，敬请期待。</p>
+      <div class="update-soon">📋 更新日志 · 敬请期待</div>
+      <div class="update-actions">
+        <button class="update-btn primary" id="update-modal-ok">知道了</button>
+        <button class="update-btn" id="update-modal-later">本次不再提醒</button>
       </div>
     </div>
   </div>
@@ -3492,6 +3589,55 @@ function downloadQQ() {
 document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon svg, .toast-icon svg').forEach(s => {
   if (!s.hasAttribute('aria-label') && !s.hasAttribute('role')) s.setAttribute('aria-hidden', 'true');
 });
+
+
+/* ============ 版本更新公告弹窗 v2.1.1 ============ */
+(function() {
+  const UPDATE_KEY = 'blockid_update_211_seen';
+  const modal = document.getElementById('update-modal');
+  const licenseModal = document.getElementById('license-modal');
+  const closeBtn = document.getElementById('update-modal-close');
+  const okBtn = document.getElementById('update-modal-ok');
+  const laterBtn = document.getElementById('update-modal-later');
+  if (!modal) return;
+
+  let opened = false;
+
+  function open() {
+    if (opened) return;
+    opened = true;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close(remember) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    if (remember) {
+      try { localStorage.setItem(UPDATE_KEY, '1'); } catch (e) {}
+    }
+  }
+
+  // 首次进入时展示一次；若使用协议弹窗仍在展示，则排队等待其关闭
+  function tryOpen() {
+    if (licenseModal && licenseModal.classList.contains('open')) {
+      setTimeout(tryOpen, 400);
+      return;
+    }
+    open();
+  }
+
+  let seen = false;
+  try { seen = localStorage.getItem(UPDATE_KEY) === '1'; } catch (e) {}
+  if (!seen) setTimeout(tryOpen, 1200);
+
+  okBtn.addEventListener('click', () => close(false));
+  laterBtn.addEventListener('click', () => close(true));
+  closeBtn.addEventListener('click', () => close(false));
+  modal.addEventListener('click', e => { if (e.target === modal) close(false); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) close(false);
+  });
+})();
 
 </script>
 </body>
