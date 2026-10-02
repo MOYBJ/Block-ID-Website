@@ -1615,6 +1615,100 @@ body {
 .mv-tag.hot { background: rgba(56,189,248,0.14); color: #38bdf8; border: 1px solid rgba(56,189,248,0.35); }
 .mv-tag.latest { background: rgba(74,222,128,0.14); color: #4ade80; border: 1px solid rgba(74,222,128,0.35); }
 .mv-tag.upcoming { background: rgba(217,119,6,0.16); color: #f59e0b; border: 1px dashed rgba(217,119,6,0.5); }
+/* ============ 历史版本：正式版本 / 早期版本 两栏归档 ============ */
+.archive-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 4px;
+}
+.archive-col {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 16px 14px;
+  min-width: 0;
+}
+.archive-col-head,
+.archive-col-sub {
+  display: flex; align-items: center; gap: 8px;
+  padding-bottom: 10px; margin-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.archive-col-sub {
+  margin-top: 18px; padding-top: 14px;
+  padding-bottom: 0; border-bottom: none;
+}
+.archive-col-icon { font-size: 13px; line-height: 1; }
+.archive-col-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.archive-col-count {
+  margin-left: auto; font-family: var(--font-mono);
+  font-size: 10.5px; font-weight: 600; color: var(--text-muted);
+  padding: 2px 8px; border-radius: 6px; background: rgba(148,163,184,0.12);
+  white-space: nowrap;
+}
+.archive-col-release .archive-col-head { border-bottom-color: rgba(59,130,246,0.28); }
+.archive-col-release .archive-col-count { color: #3b82f6; background: rgba(59,130,246,0.12); }
+.archive-col-early .archive-col-head { border-bottom-color: rgba(251,191,36,0.3); }
+.archive-col-early .archive-col-count { color: var(--gold); background: rgba(251,191,36,0.12); }
+
+.archive-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.archive-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-card-hover);
+  cursor: pointer;
+  transition: transform .25s var(--ease-out), border-color .25s var(--ease-out),
+              box-shadow .25s var(--ease-out), background-color .25s var(--ease-out);
+}
+.archive-item:hover {
+  transform: translateX(3px);
+  border-color: var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+.archive-item:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }
+.archive-ver {
+  font-family: var(--font-mono); font-size: 12.5px; font-weight: 700;
+  color: var(--text-primary); white-space: nowrap;
+}
+.archive-meta {
+  font-size: 11.5px; color: var(--text-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.archive-arrow {
+  font-size: 16px; line-height: 1; color: var(--text-muted);
+  transition: transform .2s var(--ease-out), color .2s var(--ease-out);
+}
+.archive-item:hover .archive-arrow { transform: translateX(3px); color: #3b82f6; }
+
+.archive-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-bottom: 12px; padding: 7px 14px; border-radius: 9px;
+  border: 1px solid var(--border); background: var(--bg-card-hover);
+  color: var(--text-secondary); font-size: 12.5px; font-weight: 600;
+  cursor: pointer;
+  transition: color .2s var(--ease-out), border-color .2s var(--ease-out), transform .2s var(--ease-out);
+}
+.archive-back:hover {
+  color: var(--text-primary);
+  border-color: var(--border-light);
+  transform: translateX(-2px);
+}
+.archive-back[hidden] { display: none; }
+
+@media (max-width: 900px) {
+  .archive-columns { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .archive-item { grid-template-columns: 1fr auto; }
+  .archive-meta { grid-column: 1 / -1; white-space: normal; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .archive-item, .archive-back, .archive-arrow { transition-duration: .01ms !important; }
+}
 .mv-platforms { margin-left: auto; display: flex; gap: 6px; }
 .mv-platform {
   font-size: 10.5px; padding: 2px 9px; border-radius: 6px;
@@ -2548,49 +2642,13 @@ code, .terminal-line { overflow-wrap: anywhere; }
           <span class="ms-tags"><span class="tag upcoming">预告</span></span>
         </span>
       </button>
-      <button class="metro-station major" data-mv="2.1.0">
-        <span class="ms-dot"><i></i></span>
-        <span class="ms-body">
-          <span class="ms-ver">v2.1.0-Release</span>
-          <span class="ms-tags"><span class="tag">重大更新</span></span>
-        </span>
-      </button>
-      <button class="metro-station major" data-mv="2.0.3.2">
-        <span class="ms-dot"><i></i></span>
-        <span class="ms-body">
-          <span class="ms-ver">v2.0.3.2</span>
-          <span class="ms-tags"><span class="tag">重大更新</span></span>
-        </span>
-      </button>
-      <button class="metro-station" data-mv="2.0.3.1">
-        <span class="ms-dot"><i></i></span>
-        <span class="ms-body"><span class="ms-ver">v2.0.3.1</span></span>
-      </button>
-      <button class="metro-station" data-mv="2.0.3">
-        <span class="ms-dot"><i></i></span>
-        <span class="ms-body"><span class="ms-ver">v2.0.3</span></span>
-      </button>
-      <button class="metro-station" data-mv="2.0.2">
-        <span class="ms-dot"><i></i></span>
-        <span class="ms-body"><span class="ms-ver">v2.0.2</span></span>
-      </button>
-      <button class="metro-station" data-mv="2.0.1">
-        <span class="ms-dot"><i></i></span>
-        <span class="ms-body"><span class="ms-ver">v2.0.1</span></span>
-      </button>
-      <button class="metro-station major" data-mv="2.0.0">
-        <span class="ms-dot"><i></i></span>
-        <span class="ms-body">
-          <span class="ms-ver">v2.0.0</span>
-          <span class="ms-tags"><span class="tag">重大更新</span></span>
-        </span>
-      </button>
       <button class="metro-station end" data-mv="history">
         <span class="ms-dot"><i></i></span>
         <span class="ms-body"><span class="ms-ver">历史版本</span></span>
       </button>
     </div>
     <div class="modal-body">
+      <button class="archive-back" id="archive-back" hidden>← 返回历史版本</button>
 
       <!-- v2.1.1 -->
       <div class="mpanel active" id="mv-2.1.1">
@@ -2895,23 +2953,90 @@ code, .terminal-line { overflow-wrap: anywhere; }
         <div class="mv-header">
           <div class="mv-top">
             <span class="mv-title">📜 历史版本</span>
-            <span class="mv-tag alpha">Alpha</span>
+            <span class="mv-tag alpha">Archive</span>
           </div>
-          <div class="mv-desc">1.x 系列为早期测试版本，功能不完善且存在已知问题，强烈建议升级至最新 Beta 版本。</div>
+          <div class="mv-desc">v2.1.0 及更早的版本已归档于此。正式版本为 Release 发行版，早期版本为 Beta / Alpha 测试版，此处仅作存档查阅。</div>
         </div>
-        <div class="mtimeline">
-          <div class="mtl-item"><div class="mtl-version">v1.2.0-Alpha</div><div class="mtl-desc">早期测试版 · 仅支持 Forge · 基础 ID 复制与搜索功能</div></div>
-          <div class="mtl-item"><div class="mtl-version">v1.1.1-Alpha</div><div class="mtl-desc">早期测试版 · 仅支持 Forge · Bug 修复</div></div>
-          <div class="mtl-item"><div class="mtl-version">v1.1.0-Alpha</div><div class="mtl-desc">早期测试版 · 仅支持 Forge · 新增常用方块功能</div></div>
-          <div class="mtl-item"><div class="mtl-version">v1.0.1-Alpha</div><div class="mtl-desc">早期测试版 · 仅支持 Forge · 初始功能完善</div></div>
-          <div class="mtl-item"><div class="mtl-version">v1.0.0-Alpha</div><div class="mtl-desc">初始版本 · 仅支持 Forge · 基础方块 ID 查看与复制</div></div>
+
+        <div class="archive-columns">
+          <!-- 左栏：正式版本 -->
+          <section class="archive-col archive-col-release">
+            <div class="archive-col-head">
+              <span class="archive-col-icon">✅</span>
+              <span class="archive-col-title">正式版本</span>
+              <span class="archive-col-count">Release · 4 个</span>
+            </div>
+            <ul class="archive-list">
+              <li class="archive-item" data-open="2.1.0" tabindex="0" role="button">
+                <span class="archive-ver">v2.1.0-Release</span>
+                <span class="archive-meta">重大更新 · 收藏夹/组系统、历史记录</span>
+                <span class="archive-arrow" aria-hidden="true">›</span>
+              </li>
+              <li class="archive-item" data-open="2.0.3.2" tabindex="0" role="button">
+                <span class="archive-ver">v2.0.3.2-Release</span>
+                <span class="archive-meta">重大更新 · 项目结构重组、命名标准化</span>
+                <span class="archive-arrow" aria-hidden="true">›</span>
+              </li>
+              <li class="archive-item" data-open="2.0.3.1" tabindex="0" role="button">
+                <span class="archive-ver">v2.0.3.1-Release</span>
+                <span class="archive-meta">新增 1.19.2 支持、协议更新</span>
+                <span class="archive-arrow" aria-hidden="true">›</span>
+              </li>
+              <li class="archive-item" data-open="2.0.3" tabindex="0" role="button">
+                <span class="archive-ver">v2.0.3-Release</span>
+                <span class="archive-meta">首个正式版 · 结束 Beta 阶段</span>
+                <span class="archive-arrow" aria-hidden="true">›</span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- 右栏：早期版本 -->
+          <section class="archive-col archive-col-early">
+            <div class="archive-col-head">
+              <span class="archive-col-icon">🧪</span>
+              <span class="archive-col-title">早期版本</span>
+              <span class="archive-col-count">Beta · 3 个</span>
+            </div>
+            <ul class="archive-list">
+              <li class="archive-item" data-open="2.0.2" tabindex="0" role="button">
+                <span class="archive-ver">v2.0.2-Beta</span>
+                <span class="archive-meta">方块属性设置、放置率权重</span>
+                <span class="archive-arrow" aria-hidden="true">›</span>
+              </li>
+              <li class="archive-item" data-open="2.0.1" tabindex="0" role="button">
+                <span class="archive-ver">v2.0.1-Beta</span>
+                <span class="archive-meta">重构后的稳定性修复</span>
+                <span class="archive-arrow" aria-hidden="true">›</span>
+              </li>
+              <li class="archive-item" data-open="2.0.0" tabindex="0" role="button">
+                <span class="archive-ver">v2.0.0-Beta</span>
+                <span class="archive-meta">全面重构 · UI / 交互 / 数据管理</span>
+                <span class="archive-arrow" aria-hidden="true">›</span>
+              </li>
+            </ul>
+
+            <div class="archive-col-sub">
+              <span class="archive-col-icon">🧩</span>
+              <span class="archive-col-title">1.x Alpha</span>
+              <span class="archive-col-count">5 个</span>
+            </div>
+            <div class="mtimeline">
+              <div class="mtl-item"><div class="mtl-version">v1.2.0-Alpha</div><div class="mtl-desc">早期测试版 · 仅支持 Forge · 基础 ID 复制与搜索功能</div></div>
+              <div class="mtl-item"><div class="mtl-version">v1.1.1-Alpha</div><div class="mtl-desc">早期测试版 · 仅支持 Forge · Bug 修复</div></div>
+              <div class="mtl-item"><div class="mtl-version">v1.1.0-Alpha</div><div class="mtl-desc">早期测试版 · 仅支持 Forge · 新增常用方块功能</div></div>
+              <div class="mtl-item"><div class="mtl-version">v1.0.1-Alpha</div><div class="mtl-desc">早期测试版 · 仅支持 Forge · 初始功能完善</div></div>
+              <div class="mtl-item"><div class="mtl-version">v1.0.0-Alpha</div><div class="mtl-desc">初始版本 · 仅支持 Forge · 基础方块 ID 查看与复制</div></div>
+            </div>
+          </section>
         </div>
+
         <div class="msection" style="margin-top:10px;">
           <div class="mtitle"><div class="micon tech">ℹ️</div>说明</div>
           <ul class="mlist">
             <li>自 <strong>v2.0.0</strong> 起新增 Fabric 加载器支持，1.x 系列仅支持 Forge</li>
             <li>1.x Alpha 为早期测试版，强烈建议升级至最新 v2.1.0-Release</li>
             <li>所有版本均需前置：Cloth Config API（任何版本）、WorldEdit 7.2+</li>
+            <li>点击带 <strong>›</strong> 的版本可展开查看该版本的完整更新日志</li>
           </ul>
         </div>
       </div>
@@ -3289,6 +3414,50 @@ code, .terminal-line { overflow-wrap: anywhere; }
 document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon svg').forEach(s => {
   if (!s.hasAttribute('aria-label') && !s.hasAttribute('role')) s.setAttribute('aria-hidden', 'true');
 });
+
+/* ============ 历史版本两栏：展开指定版本日志 / 返回归档 ============ */
+(function() {
+  const back = document.getElementById('archive-back');
+  const items = document.querySelectorAll('.archive-item[data-open]');
+  const body = document.querySelector('.changelog-box .modal-body');
+  if (!back || !items.length) return;
+
+  function scrollTop() { if (body) body.scrollTop = 0; }
+
+  function showVersion(id) {
+    const target = document.getElementById('mv-' + id);
+    const current = document.querySelector('.mpanel.active');
+    if (!target || target === current) return;
+    if (current) current.classList.remove('active');
+    target.classList.add('active');
+    back.hidden = false;
+    scrollTop();
+  }
+
+  function backToArchive() {
+    const current = document.querySelector('.mpanel.active');
+    const archive = document.getElementById('mv-history');
+    if (current) current.classList.remove('active');
+    if (archive) archive.classList.add('active');
+    back.hidden = true;
+    scrollTop();
+  }
+
+  items.forEach(item => {
+    const open = () => showVersion(item.dataset.open);
+    item.addEventListener('click', open);
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+    });
+  });
+
+  back.addEventListener('click', backToArchive);
+
+  // 一旦改由地铁图导航，就隐藏返回按钮
+  document.querySelectorAll('.metro-station').forEach(tab => {
+    tab.addEventListener('click', () => { back.hidden = true; });
+  });
+})();
 
 </script>
 </body>
