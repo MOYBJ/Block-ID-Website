@@ -1616,6 +1616,7 @@ body {
 .mv-tag.latest { background: rgba(74,222,128,0.14); color: #4ade80; border: 1px solid rgba(74,222,128,0.35); }
 .mv-tag.upcoming { background: rgba(217,119,6,0.16); color: #f59e0b; border: 1px dashed rgba(217,119,6,0.5); }
 /* ============ 历史版本：正式版本 / 早期版本 两栏归档 ============ */
+/* 配色与日志区固定深色一致：#10131c 容器 / #1c2130 条目 / #2a3145 边框 */
 .archive-columns {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1623,8 +1624,8 @@ body {
   margin-top: 4px;
 }
 .archive-col {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: #10131c;
+  border: 1px solid #2a3145;
   border-radius: 14px;
   padding: 16px 16px 14px;
   min-width: 0;
@@ -1633,24 +1634,24 @@ body {
 .archive-col-sub {
   display: flex; align-items: center; gap: 8px;
   padding-bottom: 10px; margin-bottom: 10px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #2a3145;
 }
 .archive-col-sub {
   margin-top: 18px; padding-top: 14px;
   padding-bottom: 0; border-bottom: none;
 }
 .archive-col-icon { font-size: 13px; line-height: 1; }
-.archive-col-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.archive-col-title { font-size: 14px; font-weight: 700; color: #e8eaf0; }
 .archive-col-count {
   margin-left: auto; font-family: var(--font-mono);
-  font-size: 10.5px; font-weight: 600; color: var(--text-muted);
-  padding: 2px 8px; border-radius: 6px; background: rgba(148,163,184,0.12);
+  font-size: 10.5px; font-weight: 600; color: #9aa3b8;
+  padding: 2px 8px; border-radius: 6px; background: rgba(154,163,184,0.12);
   white-space: nowrap;
 }
 .archive-col-release .archive-col-head { border-bottom-color: rgba(59,130,246,0.28); }
-.archive-col-release .archive-col-count { color: #3b82f6; background: rgba(59,130,246,0.12); }
+.archive-col-release .archive-col-count { color: #6ba8f0; background: rgba(59,130,246,0.14); }
 .archive-col-early .archive-col-head { border-bottom-color: rgba(251,191,36,0.3); }
-.archive-col-early .archive-col-count { color: var(--gold); background: rgba(251,191,36,0.12); }
+.archive-col-early .archive-col-count { color: #fbbf24; background: rgba(251,191,36,0.14); }
 
 .archive-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .archive-item {
@@ -1658,43 +1659,44 @@ body {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center; gap: 10px;
   padding: 10px 12px; border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--bg-card-hover);
+  border: 1px solid #2a3145;
+  background: #1c2130;
   cursor: pointer;
   transition: transform .25s var(--ease-out), border-color .25s var(--ease-out),
               box-shadow .25s var(--ease-out), background-color .25s var(--ease-out);
 }
 .archive-item:hover {
   transform: translateX(3px);
-  border-color: var(--border-light);
-  box-shadow: var(--shadow-sm);
+  border-color: #3d4860;
+  background: #212839;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
 }
-.archive-item:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }
+.archive-item:focus-visible { outline: 2px solid #6ba8f0; outline-offset: 2px; }
 .archive-ver {
   font-family: var(--font-mono); font-size: 12.5px; font-weight: 700;
-  color: var(--text-primary); white-space: nowrap;
+  color: #e8eaf0; white-space: nowrap;
 }
 .archive-meta {
-  font-size: 11.5px; color: var(--text-muted);
+  font-size: 11.5px; color: #9aa3b8;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .archive-arrow {
-  font-size: 16px; line-height: 1; color: var(--text-muted);
+  font-size: 16px; line-height: 1; color: #9aa3b8;
   transition: transform .2s var(--ease-out), color .2s var(--ease-out);
 }
-.archive-item:hover .archive-arrow { transform: translateX(3px); color: #3b82f6; }
+.archive-item:hover .archive-arrow { transform: translateX(3px); color: #6ba8f0; }
 
 .archive-back {
   display: inline-flex; align-items: center; gap: 6px;
   margin-bottom: 12px; padding: 7px 14px; border-radius: 9px;
-  border: 1px solid var(--border); background: var(--bg-card-hover);
-  color: var(--text-secondary); font-size: 12.5px; font-weight: 600;
+  border: 1px solid #2a3145; background: #1c2130;
+  color: #a9b6ca; font-size: 12.5px; font-weight: 600;
   cursor: pointer;
   transition: color .2s var(--ease-out), border-color .2s var(--ease-out), transform .2s var(--ease-out);
 }
 .archive-back:hover {
-  color: var(--text-primary);
-  border-color: var(--border-light);
+  color: #e8eaf0;
+  border-color: #3d4860;
   transform: translateX(-2px);
 }
 .archive-back[hidden] { display: none; }
