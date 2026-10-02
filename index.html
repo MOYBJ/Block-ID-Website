@@ -1486,123 +1486,6 @@ body {
   font-size: 15px;
 }
 
-/* ============ 终端演示区 ============ */
-.terminal-section {
-  max-width: 900px;
-}
-.terminal {
-  background: #0d1117;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  position: relative;
-  height: 56px;
-  transition: height 0.45s var(--ease-out);
-}
-.terminal.open {
-  /* 高度由 JS 随内容动态控制 */
-}
-/* 扫描线效果 */
-.terminal::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(74,222,128,0.4), transparent);
-  animation: scanLine 4.5s linear infinite;
-  pointer-events: none;
-  z-index: 2;
-}
-@keyframes scanLine {
-  0% { top: 0; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-.terminal-header {
-  display: flex;
-  align-items: center;
-  padding: 14px 20px;
-  background: #161b22;
-  border-bottom: 1px solid var(--border);
-  gap: 8px;
-}
-.terminal-dot {
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  transition: transform 0.2s;
-}
-.terminal:hover .terminal-dot { transform: scale(1.2); }
-.terminal-dot.red { background: #ff5f56; }
-.terminal-dot.yellow { background: #ffbd2e; }
-.terminal-dot.green {
-  background: #27c93f;
-}
-.terminal-title {
-  margin-left: 12px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-muted);
-}
-.terminal-body {
-  padding: 28px 28px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 2.1;
-  min-height: 300px;
-  position: relative;
-}
-.terminal-line {
-  opacity: 0;
-  transform: scaleX(0);
-  transform-origin: left center;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-.terminal-line.typed {
-  opacity: 1;
-  transform: scaleX(1);
-}
-.terminal-line.stretched {
-  animation: stretchReveal 0.4s var(--ease-out) forwards;
-}
-@keyframes stretchReveal {
-  0% {
-    opacity: 0;
-    transform: scaleX(0);
-    letter-spacing: -0.1em;
-  }
-  55% {
-    opacity: 1;
-    transform: scaleX(1.06);
-    letter-spacing: 0.02em;
-  }
-  85% {
-    opacity: 1;
-    transform: scaleX(0.97);
-    letter-spacing: -0.01em;
-  }
-  100% {
-    opacity: 1;
-    transform: scaleX(1);
-    letter-spacing: normal;
-  }
-}
-.terminal-line .prompt { color: var(--green); }
-.terminal-line .command { color: var(--cyan); }
-.terminal-line .output { color: var(--text-secondary); }
-.terminal-line .success { color: var(--green); }
-.terminal-line .warn { color: var(--gold); }
-.terminal-line .block-id { color: var(--gold); }
-.terminal-cursor {
-  display: inline-block;
-  width: 8px; height: 16px;
-  background: var(--green);
-  vertical-align: middle;
-  animation: cursorBlink 0.9s ease-in-out infinite;
-}
-
 /* ============ FAQ 区 ============ */
 .faq-list {
   max-width: 800px;
@@ -2007,8 +1890,7 @@ body {
     background: radial-gradient(circle, rgba(56,189,248,0.13) 0%, transparent 70%);
   }
 
-  .terminal,
-  .changelog-box,
+    .changelog-box,
   .modal-box,
   .modal-overlay {
     box-shadow: 0 24px 64px rgba(0,0,0,0.55);
@@ -2135,7 +2017,7 @@ p, li { text-wrap: pretty; overflow-wrap: break-word; }
 .download-card-header > *,
 .feature-title,
 .version-item > * { min-width: 0; }
-code, .terminal-line { overflow-wrap: anywhere; }
+code { overflow-wrap: anywhere; }
 
 /* ---- 弹窗滚动容器：滚动不穿透到页面 ---- */
 .modal-body { overscroll-behavior: contain; }
@@ -2368,13 +2250,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
       <div class="quick-nav-title">核心功能 <svg class="quick-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
       <div class="quick-nav-desc">六大功能详解</div>
     </a>
-    <a href="#demo" class="quick-nav-card reveal reveal-delay-1">
-      <div class="quick-nav-icon" style="background:rgba(22,163,74,0.1);border:1px solid rgba(22,163,74,0.25);">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-      </div>
-      <div class="quick-nav-title">操作演示 <svg class="quick-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
-      <div class="quick-nav-desc">终端模拟实操</div>
-    </a>
+    
     <a href="#install" class="quick-nav-card reveal reveal-delay-2">
       <div class="quick-nav-icon" style="background:rgba(217,119,6,0.1);border:1px solid rgba(217,119,6,0.25);">
         <svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -2531,25 +2407,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
   </div>
 </section>
 
-<!-- ============ 终端演示区 ============ -->
-<section class="section terminal-section" id="demo">
-  <div class="section-header reveal">
-    <div class="section-label">DEMO</div>
-    <h2 class="section-title">实际操作演示</h2>
-    <p class="section-desc">从打开界面到复制指令，只需几步</p>
-  </div>
-  <div class="terminal reveal">
-    <div class="terminal-header">
-      <span class="terminal-dot red"></span>
-      <span class="terminal-dot yellow"></span>
-      <span class="terminal-dot green"></span>
-      <span class="terminal-title">minecraft - block_id - 80x24</span>
-    </div>
-    <div class="terminal-body" id="terminal-body">
-      <!-- 由 JS 逐行写入 -->
-    </div>
-  </div>
-</section>
+
 
 <!-- ============ 安装指南区 ============ -->
 <section class="section" id="install">
@@ -3330,138 +3188,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
   });
 })();
 
-/* ============ 终端打字动画（窗口随内容平滑拉长） ============ */
-(function() {
-  const body = document.getElementById('terminal-body');
-  const terminalEl = body.closest('.terminal');
-  const lines = [
-    { type: 'input', text: '<span class="prompt">[BlockID]</span> <span class="command">按下 G 键打开主界面</span>' },
-    { type: 'output', text: '<span class="output">> 界面已加载 · 三列布局：全部 / 常用 / 已选</span>' },
-    { type: 'output', text: '<span class="output">> 已加载 1500+ 方块（原版 + 模组）· 拼音缓存就绪</span>' },
-    { type: 'input', text: '<span class="prompt">[BlockID]</span> <span class="command">搜索: shanchang</span>' },
-    { type: 'output', text: '<span class="output">> 多音字匹配：闪长岩(minecraft:diorite) · 安山岩 · 花岗岩</span>' },
-    { type: 'input', text: '<span class="prompt">[BlockID]</span> <span class="command">搜索: st</span>' },
-    { type: 'output', text: '<span class="output">> 声母缩写匹配：石头 · 闪长岩 · 深板岩 · 砂轮 · 砂岩...</span>' },
-    { type: 'input', text: '<span class="prompt">[BlockID]</span> <span class="command">选择 "石头" → 点击 + 加入常用</span>' },
-    { type: 'output', text: '<span class="success">> 已收藏至常用列表 · 已保存到 block_id.json</span>' },
-    { type: 'input', text: '<span class="prompt">[BlockID]</span> <span class="command">按下 C 键复制手持方块 ID</span>' },
-    { type: 'output', text: '<span class="success">> 已复制: minecraft:stone</span>' },
-    { type: 'input', text: '<span class="prompt">[BlockID]</span> <span class="command">切换替换模式 · 目标: 闪长岩</span>' },
-    { type: 'output', text: '<span class="warn">> 替换源: minecraft:stone → 目标: minecraft:diorite</span>' },
-    { type: 'input', text: '<span class="prompt">[BlockID]</span> <span class="command">多选: 石头 + 深板岩 → 闪长岩 + 花岗岩</span>' },
-    { type: 'output', text: '<span class="output">> 已选 2 个替换源 · 2 个目标方块</span>' },
-    { type: 'input', text: '<span class="prompt">[BlockID]</span> <span class="command">生成指令并复制</span>' },
-    { type: 'success', text: '<span class="success">> //replace minecraft:stone,minecraft:deepslate minecraft:diorite,minecraft:granite</span>' },
-    { type: 'success', text: '<span class="success">> 指令已复制到剪贴板 · 粘贴到聊天即可执行 ✓</span>' },
-    { type: 'output', text: '<span class="output">> 视口裁剪渲染中 · 当前帧率 60 FPS · 滚动流畅</span>' },
-    { type: 'cursor', text: '<span class="prompt">[BlockID]</span> <span class="terminal-cursor"></span>' }
-  ];
 
-  function stripHtml(html) {
-    const tmp = document.createElement('div');
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || '';
-  }
-
-  function resizeTerminal() {
-    if (!terminalEl) return;
-    const header = terminalEl.querySelector('.terminal-header');
-    const headerH = header ? header.offsetHeight : 0;
-    const bodyH = body.scrollHeight;
-    terminalEl.style.height = (headerH + bodyH) + 'px';
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      observer.disconnect();
-      if (terminalEl) terminalEl.classList.add('open');
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        lines.forEach(l => {
-          const el = document.createElement('div');
-          el.className = 'terminal-line';
-          el.innerHTML = l.text;
-          body.appendChild(el);
-        });
-        resizeTerminal();
-        return;
-      }
-      setTimeout(() => {
-        let idx = 0;
-
-        function typeLine(lineEl, plainText, fullHtml, speed, done) {
-          let pos = 0;
-          lineEl.style.opacity = '1';
-          lineEl.style.transform = 'scaleX(1)';
-          const punct = new Set([',', '.', ';', '!', '?', ':']);
-          function tick() {
-            if (pos <= plainText.length) {
-              lineEl.textContent = plainText.substring(0, pos);
-              const ch = plainText[pos - 1];
-              let delay = (speed * 0.6) + Math.random() * 50;
-              if (ch && punct.has(ch)) delay += 200;
-              pos++;
-              setTimeout(tick, delay);
-            } else {
-              lineEl.innerHTML = fullHtml;
-              resizeTerminal();
-              if (done) done();
-            }
-          }
-          tick();
-        }
-
-        function revealLine(lineEl, html, done) {
-          lineEl.innerHTML = html;
-          lineEl.classList.add('stretched');
-          setTimeout(() => {
-            resizeTerminal();
-            if (done) done();
-          }, 380);
-        }
-
-        function next() {
-          if (idx >= lines.length) return;
-          const line = lines[idx];
-          const el = document.createElement('div');
-          el.className = 'terminal-line';
-          el.style.visibility = 'hidden';
-          el.innerHTML = line.text;
-          body.appendChild(el);
-          resizeTerminal();
-          el.style.visibility = '';
-          el.innerHTML = '';
-          el.style.opacity = '0';
-          el.style.transform = 'scaleX(0)';
-
-          if (line.type === 'input') {
-            const plain = stripHtml(line.text);
-            typeLine(el, plain, line.text, 26, () => {
-              idx++;
-              setTimeout(next, 300);
-            });
-          } else if (line.type === 'cursor') {
-            el.innerHTML = line.text;
-            el.style.opacity = '1';
-            el.style.transform = 'scaleX(1)';
-            idx++;
-          } else {
-            revealLine(el, line.text, () => {
-              idx++;
-              setTimeout(next, 160);
-            });
-          }
-        }
-        next();
-      }, 200);
-    }
-  }, { threshold: 0.1 });
-  if (terminalEl) observer.observe(terminalEl);
-  else observer.observe(body);
-
-  window.addEventListener('resize', () => {
-    if (terminalEl && terminalEl.classList.contains('open')) resizeTerminal();
-  });
-})();
 
 /* ============ FAQ 手风琴 ============ */
 (function() {
@@ -3573,7 +3300,15 @@ function downloadQQ() {
   let isAutoShow = false;
   let countLeft = 0;
   let timerId = null;
-  const READ_LOCK_SECONDS = 10;
+  const READ_LOCK_SECONDS = 5;
+
+  // 同意一次即永久记录，之后不再自动弹出
+  function hasAccepted() {
+    try {
+      return localStorage.getItem('blockid_license_accepted') === '1'
+        || localStorage.getItem('blockid_license_agreed_time') !== null;
+    } catch (e) { return false; }
+  }
 
   function clearCountdown() {
     if (timerId) { clearInterval(timerId); timerId = null; }
@@ -3649,18 +3384,19 @@ function downloadQQ() {
   closeBtn.addEventListener('click', closeModal);
   agreeBtn.addEventListener('click', () => {
     hasAgreed = true;
-    localStorage.setItem('blockid_license_agreed_time', Date.now().toString());
+    try {
+      localStorage.setItem('blockid_license_accepted', '1');
+      localStorage.setItem('blockid_license_agreed_time', Date.now().toString());
+    } catch (e) {}
+    clearCountdown();
     closeModal();
   });
   modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+  // 未同意则每次进入都自动弹出，不再有冷却时间；同意过则永不再弹
   setTimeout(() => {
-    const agreedTime = localStorage.getItem('blockid_license_agreed_time');
-    const now = Date.now();
-    if (!agreedTime || (now - parseInt(agreedTime)) > 5 * 60 * 1000) {
-      openModal(true);
-    }
+    if (!hasAccepted()) openModal(true);
   }, 600);
 })();
 
