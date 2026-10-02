@@ -1504,6 +1504,8 @@ body {
   background: rgba(74,138,213,0.18); color: #6ba8f0; font-weight: 700; letter-spacing: 0.3px;
 }
 .metro-station .tag.latest { background: #fbbf24; color: #0b0e14; }
+.metro-station .tag.upcoming { background: #d97706; color: #fff; }
+.metro-station.upcoming .ms-dot { border-style: dashed; }
 /* 悬停 */
 .metro-station:hover .ms-dot {
   border-color: #38bdf8;
@@ -1612,6 +1614,7 @@ body {
 .mv-tag.alpha { background: rgba(167,139,250,0.14); color: #a78bfa; border: 1px solid rgba(167,139,250,0.35); }
 .mv-tag.hot { background: rgba(56,189,248,0.14); color: #38bdf8; border: 1px solid rgba(56,189,248,0.35); }
 .mv-tag.latest { background: rgba(74,222,128,0.14); color: #4ade80; border: 1px solid rgba(74,222,128,0.35); }
+.mv-tag.upcoming { background: rgba(217,119,6,0.16); color: #f59e0b; border: 1px dashed rgba(217,119,6,0.5); }
 .mv-platforms { margin-left: auto; display: flex; gap: 6px; }
 .mv-platform {
   font-size: 10.5px; padding: 2px 9px; border-radius: 6px;
@@ -2501,7 +2504,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
     <li><a href="index.html#faq">常见问题</a></li>
     <li><a href="index.html">使用协议</a></li>
   </ul>
-  <div class="nav-version">v2.1.1-Release</div>
+  <div class="nav-version">v2.1.0-Release</div>
 </nav>
 
 <!-- ============ Hero 区 ============ -->
@@ -2538,11 +2541,11 @@ code, .terminal-line { overflow-wrap: anywhere; }
   <div class="changelog-box reveal">
     <div class="metro-line">
       <div class="metro-track"><span class="metro-train"></span></div>
-      <button class="metro-station active latest major" data-mv="2.1.1">
+      <button class="metro-station active latest upcoming" data-mv="2.1.1">
         <span class="ms-dot"><i></i></span>
         <span class="ms-body">
           <span class="ms-ver">v2.1.1-Release</span>
-          <span class="ms-tags"><span class="tag latest">最新</span><span class="tag">重大更新</span></span>
+          <span class="ms-tags"><span class="tag upcoming">预告</span></span>
         </span>
       </button>
       <button class="metro-station major" data-mv="2.1.0">
@@ -2595,25 +2598,25 @@ code, .terminal-line { overflow-wrap: anywhere; }
           <div class="mv-top">
             <span class="mv-title">🚀 Block_ID 2.1.1-Release</span>
             <span class="mv-tag release">Release</span>
-            <span class="mv-tag latest">最新</span>
-            <span class="mv-tag major">重大更新</span>
+            <span class="mv-tag upcoming">即将发布</span>
             <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
           </div>
-          <div class="mv-desc">2.1.1 正式版已发布，本次更新的完整变更清单正在整理中，敬请期待。</div>
+          <div class="mv-desc">v2.1.1 尚未正式发布，本版本仍在开发中。具体更新内容与修复清单敬请期待。</div>
         </div>
         <div class="msection">
           <div class="mtitle"><div class="micon core">🚧</div>更新日志</div>
           <ul class="mlist">
-            <li><strong>敬请期待</strong>：详细的新增功能、优化项与 Bug 修复清单正在整理中，稍后将在本页面完整公布</li>
-            <li><strong>查看方式</strong>：本页面“最新”标签始终指向当前正式版本，日志公布后可在此直接查看</li>
+            <li><strong>敬请期待</strong>：详细的新增功能、优化项与 Bug 修复清单将在正式发布后于本页面完整公布</li>
+            <li><strong>查看方式</strong>：本版本正式发布后，本面板将同步更新为完整日志</li>
           </ul>
         </div>
         <div class="msection">
           <div class="mtitle"><div class="micon tech">📌</div>关于本版本</div>
           <ul class="mlist">
             <li><strong>版本号</strong>：v2.1.1-Release（沿用 v2.1.0-Release 命名格式）</li>
+            <li><strong>当前状态</strong>：<strong style="color:#fbbf24;">开发中，尚未发布</strong>，暂不提供下载</li>
             <li><strong>适用版本</strong>：Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</li>
-            <li><strong>升级建议</strong>：建议 v2.1.0 及更早版本的用户更新至此版本</li>
+            <li><strong>下载建议</strong>：本版本发布前，请继续使用当前正式版 <strong>v2.1.0-Release</strong></li>
           </ul>
         </div>
       </div>
@@ -2907,7 +2910,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
           <div class="mtitle"><div class="micon tech">ℹ️</div>说明</div>
           <ul class="mlist">
             <li>自 <strong>v2.0.0</strong> 起新增 Fabric 加载器支持，1.x 系列仅支持 Forge</li>
-            <li>1.x Alpha 为早期测试版，强烈建议升级至最新 v2.1.1-Release</li>
+            <li>1.x Alpha 为早期测试版，强烈建议升级至最新 v2.1.0-Release</li>
             <li>所有版本均需前置：Cloth Config API（任何版本）、WorldEdit 7.2+</li>
           </ul>
         </div>
@@ -2999,7 +3002,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
       <span>下载：QQ群 1121599701</span>
     </div>
     <div class="footer-bottom">
-      Block ID v2.1.1-Release · Forge / Fabric · 2026.09.06 · <a href="index.html" style="color:var(--accent);">使用协议</a>
+      Block ID v2.1.0-Release · Forge / Fabric · 2026.09.06 · <a href="index.html" style="color:var(--accent);">使用协议</a>
     </div>
   </div>
 </footer>
