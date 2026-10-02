@@ -2208,6 +2208,87 @@ code, .terminal-line { overflow-wrap: anywhere; }
   .update-ver { font-size: 38px; }
   .update-body { padding: 20px 18px; }
 }
+
+/* ============ v2.1.1 预告条目 + 历史版本折叠 ============ */
+.version-item.upcoming {
+  position: relative; padding-left: 14px; margin-left: -14px;
+  background: linear-gradient(90deg, rgba(217,119,6,0.07), transparent 72%);
+  border-bottom-color: rgba(217,119,6,0.22);
+}
+.version-item.upcoming::before {
+  content: ''; position: absolute; left: 0; top: 7px; bottom: 7px;
+  width: 3px; border-radius: 2px;
+  background: linear-gradient(180deg, var(--gold), var(--gold-dim));
+}
+.version-tag.upcoming {
+  background: rgba(217,119,6,0.12);
+  color: var(--gold);
+  border: 1px solid rgba(217,119,6,0.32);
+}
+.version-status.pending { color: var(--gold); font-weight: 600; font-size: 12px; }
+.version-fold {
+  border-bottom: 1px solid var(--border);
+  /* Apple 官网签名缓动：起步快、尾段极缓，收放有重量感 */
+  --apple-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-fold: 0.58s;
+}
+.version-fold-toggle {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 0; cursor: pointer; list-style: none;
+  font-size: 13px; color: var(--text-secondary);
+  transition: color .3s var(--apple-ease); user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.version-fold-toggle::-webkit-details-marker { display: none; }
+.version-fold-toggle:hover { color: var(--text-primary); }
+.version-fold-toggle:active .fold-arrow { transform: scale(0.86); }
+.fold-arrow {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 15px; font-size: 11px; color: var(--text-muted);
+  transition: transform var(--dur-fold) var(--apple-ease), color .3s var(--apple-ease);
+  will-change: transform;
+}
+.version-fold.is-open .fold-arrow { transform: rotate(90deg); color: var(--gold); }
+.fold-title { font-weight: 600; }
+.fold-current {
+  margin-left: auto; font-family: var(--font-mono);
+  font-size: 11px; font-weight: 600; color: var(--green);
+}
+/* 高度动画走 grid-template-rows：GPU 友好，不触发逐帧 layout 回流 */
+.version-fold-body {
+  display: grid; grid-template-rows: 0fr; opacity: 0;
+  transition: grid-template-rows var(--dur-fold) var(--apple-ease),
+              opacity calc(var(--dur-fold) * 0.62) var(--apple-ease);
+}
+.version-fold.is-open .version-fold-body { grid-template-rows: 1fr; opacity: 1; }
+.version-fold-inner { overflow: hidden; min-height: 0; }
+.version-fold-inner > .version-item:last-child { border-bottom: none; }
+/* 条目递进进场：轻微下沉再归位，营造层次感 */
+.version-fold-inner > .version-item {
+  opacity: 0; transform: translateY(-9px);
+  transition: opacity .42s var(--apple-ease), transform .58s var(--apple-ease);
+  transition-delay: var(--stagger, 0ms);
+  will-change: opacity, transform;
+}
+.version-fold.is-open .version-fold-inner > .version-item { opacity: 1; transform: none; }
+.version-fold-inner > .version-divider {
+  opacity: 0; transition: opacity .4s var(--apple-ease) 40ms;
+}
+.version-fold.is-open .version-fold-inner > .version-divider { opacity: 1; }
+/* 展开完成后释放 will-change，避免长期占用合成层 */
+.version-fold:not(.is-animating) .fold-arrow,
+.version-fold:not(.is-animating) .version-fold-inner > .version-item { will-change: auto; }
+@media (max-width: 640px) {
+  .fold-current { display: none; }
+  .version-fold { --dur-fold: 0.46s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .version-fold { --dur-fold: 0.01ms; }
+  .version-fold-body,
+  .version-fold-inner > .version-item,
+  .version-fold-inner > .version-divider,
+  .fold-arrow { transition-duration: 0.01ms !important; transition-delay: 0ms !important; }
+}
 </style>
 </head>
 <body>
@@ -2234,7 +2315,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
     <li><a href="changelog.html" class="nav-changelog-link">更新日志 <span class="changelog-badge">NEW</span></a></li>
     <li><a href="#" id="nav-license" class="nav-changelog-link">使用协议</a></li>
   </ul>
-  <div class="nav-version">v2.1.1-Release</div>
+  <div class="nav-version">v2.1.0-Release</div>
 </nav>
 
 <!-- ============ Hero 区 ============ -->
@@ -2551,131 +2632,141 @@ code, .terminal-line { overflow-wrap: anywhere; }
   <div class="version-history reveal">
     <div class="version-history-title">Version History · 版本历史</div>
     <div class="version-list">
-      <div class="version-item">
+      <div class="version-item upcoming">
         <span class="version-number">v2.1.1</span>
         <span class="version-tag release">Release</span>
-        <span class="version-tag latest">最新</span>
-        <span class="version-tag major">重大更新</span>
+        <span class="version-tag upcoming">即将发布</span>
         <span class="version-platforms">
           <span class="version-platform forge">Forge</span>
           <span class="version-platform fabric">Fabric</span>
         </span>
-        <span class="version-status recommended">推荐使用</span>
+        <span class="version-status pending">尚未发布 · 敬请期待</span>
       </div>
-      <div class="version-item">
-        <span class="version-number">v2.1.0</span>
-        <span class="version-tag release">Release</span>
-        <span class="version-tag major">重大更新</span>
-        <span class="version-platforms">
-          <span class="version-platform forge">Forge</span>
-          <span class="version-platform fabric">Fabric</span>
-        </span>
-        <span class="version-status deprecated">已被 2.1.1 取代</span>
-      </div>
-      <div class="version-item">
-        <span class="version-number">v2.0.3.2</span>
-        <span class="version-tag release">Release</span>
-        <span class="version-tag major">重大更新</span>
-        <span class="version-platforms">
-          <span class="version-platform forge">Forge</span>
-          <span class="version-platform fabric">Fabric</span>
-        </span>
-        <span class="version-status deprecated">已被 2.1.1 取代</span>
-      </div>
-      <div class="version-item">
-        <span class="version-number">v2.0.3.1</span>
-        <span class="version-tag release">Release</span>
-        <span class="version-platforms">
-          <span class="version-platform forge">Forge</span>
-          <span class="version-platform fabric">Fabric</span>
-        </span>
-        <span class="version-status deprecated">已被 2.1.1 取代</span>
-      </div>
-      <div class="version-item">
-        <span class="version-number">v2.0.3</span>
-        <span class="version-tag release">Release</span>
-        <span class="version-platforms">
-          <span class="version-platform forge">Forge</span>
-          <span class="version-platform fabric">Fabric</span>
-        </span>
-        <span class="version-status deprecated">已被 2.1.1 取代</span>
-      </div>
-      <div class="version-item">
-        <span class="version-number">v2.0.2</span>
-        <span class="version-tag beta">Beta</span>
-        <span class="version-platforms">
-          <span class="version-platform forge">Forge</span>
-          <span class="version-platform fabric">Fabric</span>
-        </span>
-        <span class="version-status deprecated">已被 2.1.1 取代</span>
-      </div>
-      <div class="version-item">
-        <span class="version-number">v2.0.1</span>
-        <span class="version-tag beta">Beta</span>
-        <span class="version-platforms">
-          <span class="version-platform forge">Forge</span>
-          <span class="version-platform fabric">Fabric</span>
-        </span>
-        <span class="version-status deprecated">已被 2.1.1 取代</span>
-      </div>
-      <div class="version-divider">历史版本（不建议使用）</div>
-      <div class="version-item">
-        <span class="version-number">v2.0.0</span>
-        <span class="version-tag beta">Beta</span>
-        <span class="version-platforms">
-          <span class="version-platform forge">Forge</span>
-          <span class="version-platform fabric">Fabric</span>
-        </span>
-        <span class="version-status deprecated">已被 2.0.1 取代</span>
-      </div>
-      <div class="version-item">
-        <span class="version-number">v1.2.0</span>
-        <span class="version-tag alpha">Alpha</span>
-        <span class="version-platforms">
-          <span class="version-platform forge">Forge</span>
-          <span class="version-platform none">-</span>
-        </span>
-        <span class="version-status deprecated">早期测试版</span>
-      </div>
-      <div class="version-item">
-        <span class="version-number">v1.1.1</span>
-        <span class="version-tag alpha">Alpha</span>
-        <span class="version-platforms">
-          <span class="version-platform forge">Forge</span>
-          <span class="version-platform none">-</span>
-        </span>
-        <span class="version-status deprecated">早期测试版</span>
-      </div>
-      <div class="version-item">
-        <span class="version-number">v1.1.0</span>
-        <span class="version-tag alpha">Alpha</span>
-        <span class="version-platforms">
-          <span class="version-platform forge">Forge</span>
-          <span class="version-platform none">-</span>
-        </span>
-        <span class="version-status deprecated">早期测试版</span>
-      </div>
-      <div class="version-item">
-        <span class="version-number">v1.0.1</span>
-        <span class="version-tag alpha">Alpha</span>
-        <span class="version-platforms">
-          <span class="version-platform forge">Forge</span>
-          <span class="version-platform none">-</span>
-        </span>
-        <span class="version-status deprecated">早期测试版</span>
-      </div>
-      <div class="version-item">
-        <span class="version-number">v1.0.0</span>
-        <span class="version-tag alpha">Alpha</span>
-        <span class="version-platforms">
-          <span class="version-platform forge">Forge</span>
-          <span class="version-platform none">-</span>
-        </span>
-        <span class="version-status deprecated">初始版本</span>
-      </div>
+      <details class="version-fold" id="version-fold">
+        <summary class="version-fold-toggle">
+          <span class="fold-arrow" aria-hidden="true">▸</span>
+          <span class="fold-title">历史版本（v2.1.0 及更早 · 共 12 个）</span>
+          <span class="fold-current">当前正式版 v2.1.0-Release</span>
+        </summary>
+        <div class="version-fold-body">
+        <div class="version-fold-inner">
+        <div class="version-item">
+          <span class="version-number">v2.1.0</span>
+          <span class="version-tag release">Release</span>
+          <span class="version-tag major">重大更新</span>
+          <span class="version-platforms">
+            <span class="version-platform forge">Forge</span>
+            <span class="version-platform fabric">Fabric</span>
+          </span>
+          <span class="version-status recommended">当前正式版</span>
+        </div>
+        <div class="version-item">
+          <span class="version-number">v2.0.3.2</span>
+          <span class="version-tag release">Release</span>
+          <span class="version-tag major">重大更新</span>
+          <span class="version-platforms">
+            <span class="version-platform forge">Forge</span>
+            <span class="version-platform fabric">Fabric</span>
+          </span>
+          <span class="version-status deprecated">已被 2.1.0 取代</span>
+        </div>
+        <div class="version-item">
+          <span class="version-number">v2.0.3.1</span>
+          <span class="version-tag release">Release</span>
+          <span class="version-platforms">
+            <span class="version-platform forge">Forge</span>
+            <span class="version-platform fabric">Fabric</span>
+          </span>
+          <span class="version-status deprecated">已被 2.1.0 取代</span>
+        </div>
+        <div class="version-item">
+          <span class="version-number">v2.0.3</span>
+          <span class="version-tag release">Release</span>
+          <span class="version-platforms">
+            <span class="version-platform forge">Forge</span>
+            <span class="version-platform fabric">Fabric</span>
+          </span>
+          <span class="version-status deprecated">已被 2.1.0 取代</span>
+        </div>
+        <div class="version-item">
+          <span class="version-number">v2.0.2</span>
+          <span class="version-tag beta">Beta</span>
+          <span class="version-platforms">
+            <span class="version-platform forge">Forge</span>
+            <span class="version-platform fabric">Fabric</span>
+          </span>
+          <span class="version-status deprecated">已被 2.1.0 取代</span>
+        </div>
+        <div class="version-item">
+          <span class="version-number">v2.0.1</span>
+          <span class="version-tag beta">Beta</span>
+          <span class="version-platforms">
+            <span class="version-platform forge">Forge</span>
+            <span class="version-platform fabric">Fabric</span>
+          </span>
+          <span class="version-status deprecated">已被 2.1.0 取代</span>
+        </div>
+        <div class="version-divider">历史版本（不建议使用）</div>
+        <div class="version-item">
+          <span class="version-number">v2.0.0</span>
+          <span class="version-tag beta">Beta</span>
+          <span class="version-platforms">
+            <span class="version-platform forge">Forge</span>
+            <span class="version-platform fabric">Fabric</span>
+          </span>
+          <span class="version-status deprecated">已被 2.0.1 取代</span>
+        </div>
+        <div class="version-item">
+          <span class="version-number">v1.2.0</span>
+          <span class="version-tag alpha">Alpha</span>
+          <span class="version-platforms">
+            <span class="version-platform forge">Forge</span>
+            <span class="version-platform none">-</span>
+          </span>
+          <span class="version-status deprecated">早期测试版</span>
+        </div>
+        <div class="version-item">
+          <span class="version-number">v1.1.1</span>
+          <span class="version-tag alpha">Alpha</span>
+          <span class="version-platforms">
+            <span class="version-platform forge">Forge</span>
+            <span class="version-platform none">-</span>
+          </span>
+          <span class="version-status deprecated">早期测试版</span>
+        </div>
+        <div class="version-item">
+          <span class="version-number">v1.1.0</span>
+          <span class="version-tag alpha">Alpha</span>
+          <span class="version-platforms">
+            <span class="version-platform forge">Forge</span>
+            <span class="version-platform none">-</span>
+          </span>
+          <span class="version-status deprecated">早期测试版</span>
+        </div>
+        <div class="version-item">
+          <span class="version-number">v1.0.1</span>
+          <span class="version-tag alpha">Alpha</span>
+          <span class="version-platforms">
+            <span class="version-platform forge">Forge</span>
+            <span class="version-platform none">-</span>
+          </span>
+          <span class="version-status deprecated">早期测试版</span>
+        </div>
+        <div class="version-item">
+          <span class="version-number">v1.0.0</span>
+          <span class="version-tag alpha">Alpha</span>
+          <span class="version-platforms">
+            <span class="version-platform forge">Forge</span>
+            <span class="version-platform none">-</span>
+          </span>
+          <span class="version-status deprecated">初始版本</span>
+        </div>
+        </div>
+        </div>
+      </details>
     </div>
     <div class="version-footnote">
-      <strong>说明：</strong>自 <strong>v2.0.0</strong> 版本起新增 Fabric 加载器支持，此前 1.x 系列仅支持 Forge。1.x Alpha 版本为早期测试版，功能不完善且存在已知问题，强烈建议升级至最新 v2.1.1-Release。
+      <strong>说明：</strong>自 <strong>v2.0.0</strong> 版本起新增 Fabric 加载器支持，此前 1.x 系列仅支持 Forge。1.x Alpha 版本为早期测试版，功能不完善且存在已知问题，强烈建议升级至最新 v2.1.0-Release。
     </div>
   </div>
 
@@ -2704,7 +2795,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
       <div class="step-number">3</div>
       <div class="step-content">
         <h4>放入模组文件</h4>
-        <p>将 <code>Block_ID-forge-2.1.1-Release.jar</code> 放入 <code>.minecraft/mods</code> 文件夹，启动游戏即可。</p>
+        <p>将 <code>Block_ID-forge-2.1.0-Release.jar</code> 放入 <code>.minecraft/mods</code> 文件夹，启动游戏即可。</p>
       </div>
     </div>
   </div>
@@ -2728,7 +2819,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
       <div class="step-number">3</div>
       <div class="step-content">
         <h4>放入模组文件</h4>
-        <p>将 <code>Block_ID-fabric-2.1.1-Release.jar</code> 放入 <code>.minecraft/mods</code> 文件夹，启动游戏即可。</p>
+        <p>将 <code>Block_ID-fabric-2.1.0-Release.jar</code> 放入 <code>.minecraft/mods</code> 文件夹，启动游戏即可。</p>
       </div>
     </div>
   </div>
@@ -2772,7 +2863,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
       </div>
       <div class="faq-answer">
         <div class="faq-answer-inner">
-          <span class="a-label">A:</span>请务必更新至 <code>v2.1.1-Release</code> 或更高版本。此版本已彻底重构底层渲染，内置视口裁剪优化，滚动十分流畅。
+          <span class="a-label">A:</span>请务必更新至 <code>v2.1.0-Release</code> 或更高版本。此版本已彻底重构底层渲染，内置视口裁剪优化，滚动十分流畅。
         </div>
       </div>
     </div>
@@ -2826,7 +2917,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
       <span>下载：QQ群 1121599701</span>
     </div>
     <div class="footer-bottom">
-      Block ID v2.1.1-Release · Forge / Fabric · 2026.09.06 · <a href="#" id="footer-license" style="color:var(--accent);">使用协议</a>
+      Block ID v2.1.0-Release · Forge / Fabric · 2026.09.06 · <a href="#" id="footer-license" style="color:var(--accent);">使用协议</a>
     </div>
   </div>
 </footer>
@@ -2912,7 +3003,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
         <div class="mtitle"><div class="micon tech">📋</div>模组信息</div>
         <ul class="mlist">
           <li><strong>模组名称</strong>：Block ID（方块ID）</li>
-          <li><strong>当前版本</strong>：v2.1.1-Release</li>
+          <li><strong>当前版本</strong>：v2.1.0-Release</li>
           <li><strong>支持版本</strong>：Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</li>
           <li><strong>官方渠道</strong>：QQ群 1121599701 · GitHub · Modrinth · CurseForge</li>
           <li><strong>协议生效日期</strong>：2026年9月6日</li>
@@ -2941,15 +3032,16 @@ code, .terminal-line { overflow-wrap: anywhere; }
 <div class="modal-overlay" id="update-modal" role="dialog" aria-modal="true" aria-labelledby="update-modal-title">
   <div class="modal-box update-box">
     <div class="modal-header update-header">
-      <div class="modal-header-title" id="update-modal-title"><span class="rocket">🚀</span> Block ID 更新公告</div>
+      <div class="modal-header-title" id="update-modal-title"><span class="rocket">🚀</span> Block ID 更新预告</div>
       <button class="modal-close" id="update-modal-close" aria-label="关闭">×</button>
     </div>
     <div class="modal-body update-body">
-      <div class="update-badge"><span class="dot"></span>NEW UPDATE</div>
+      <div class="update-badge"><span class="dot"></span>COMING SOON</div>
       <div class="update-ver">v2.1.1</div>
       <div class="update-name">模组更新 2.1.1</div>
-      <p class="update-desc">新版正在路上，本次更新内容正在整理中，敬请期待。</p>
+      <p class="update-desc">新版本正在开发中，<strong style="color:#fbbf24;">尚未正式发布</strong>。具体更新内容敬请期待。</p>
       <div class="update-soon">📋 更新日志 · 敬请期待</div>
+      <p class="update-note">当前正式版：v2.1.0-Release</p>
       <div class="update-actions">
         <button class="update-btn primary" id="update-modal-ok">知道了</button>
         <button class="update-btn" id="update-modal-later">本次不再提醒</button>
@@ -3636,6 +3728,64 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
   modal.addEventListener('click', e => { if (e.target === modal) close(false); });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && modal.classList.contains('open')) close(false);
+  });
+})();
+
+/* ============ 历史版本折叠：Apple 风格展开动画 ============ */
+(function() {
+  const fold = document.getElementById('version-fold');
+  if (!fold) return;
+
+  const summary = fold.querySelector('.version-fold-toggle');
+  const body = fold.querySelector('.version-fold-body');
+  const items = fold.querySelectorAll('.version-fold-inner > .version-item');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 为每个条目注入递进延迟，形成自上而下的层次进场
+  items.forEach((el, i) => el.style.setProperty('--stagger', (i * 22) + 'ms'));
+
+  let animating = false;
+
+  summary.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (animating) return;
+
+    const willOpen = !fold.hasAttribute('open');
+
+    if (reduceMotion) {
+      fold.classList.toggle('is-open', willOpen);
+      if (willOpen) fold.setAttribute('open', ''); else fold.removeAttribute('open');
+      return;
+    }
+
+    animating = true;
+    fold.classList.add('is-animating');
+
+    if (willOpen) {
+      // 先让内容进入渲染树，再强制回流，确保过渡自 0fr 起步
+      fold.setAttribute('open', '');
+      void body.offsetHeight;
+      fold.classList.add('is-open');
+    } else {
+      fold.classList.remove('is-open');
+    }
+
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      if (!willOpen) fold.removeAttribute('open');
+      fold.classList.remove('is-animating');
+      animating = false;
+      body.removeEventListener('transitionend', onEnd);
+      clearTimeout(fallback);
+    };
+    const onEnd = (ev) => {
+      if (ev.target === body && ev.propertyName.includes('grid-template-rows')) finish();
+    };
+    body.addEventListener('transitionend', onEnd);
+    // 兜底：极端情况下 transitionend 不触发也不会卡死
+    const fallback = setTimeout(finish, 900);
   });
 })();
 
