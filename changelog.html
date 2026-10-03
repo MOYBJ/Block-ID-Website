@@ -3462,5 +3462,57 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
 })();
 
 </script>
+
+<!-- ===== Block ID 站点统计（匿名埋点，失败静默，不影响页面） ===== -->
+<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js" defer></script>
+<script>
+(function () {
+  var ENDPOINT = 'https://blockid-admin.app.workbuddy.host';
+  var KEY = 'wbpk_whwchtrfJEOVB2ElS83PSo_pNItdHl7mGzEsxaNGKlfdvr31AflxWbn';
+  var PAGE_VERSION = 'v2.1.0-Release';
+  var cloud = null, queue = [], tries = 0;
+
+  function flush() {
+    if (!cloud) return;
+    while (queue.length) {
+      var row = queue.shift();
+      try { cloud.database.from("stats_events").insert(row); } catch (e) {}
+    }
+  }
+
+  function boot() {
+    if (window.WorkBuddyCloud) {
+      try {
+        cloud = window.WorkBuddyCloud.createWorkBuddyCloud({ endpoint: ENDPOINT, publishableKey: KEY });
+      } catch (e) { cloud = null; return; }
+      flush();
+      return;
+    }
+    if (++tries < 40) setTimeout(boot, 150);
+  }
+
+  function track(type, target, version) {
+    if (queue.length > 20) return;
+    queue.push({
+      event_type: type,
+      target: target || location.pathname,
+      version: version || PAGE_VERSION,
+      referrer: document.referrer || null,
+      user_agent: navigator.userAgent || null
+    });
+    flush();
+  }
+
+  track('page_view', location.pathname);
+  document.addEventListener('click', function (e) {
+    var el = e.target;
+    if (!el || !el.closest) return;
+    var a = el.closest('a[href*=".jar"], a[data-download]');
+    if (a) track('download', a.getAttribute('href') || 'download', a.dataset.version || PAGE_VERSION);
+  });
+
+  boot();
+})();
+</script>
 </body>
 </html>
