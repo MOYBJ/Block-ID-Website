@@ -3322,9 +3322,17 @@ function downloadQQ() {
   // 同意一次即永久记录，之后不再自动弹出
   function hasAccepted() {
     try {
-      return localStorage.getItem('blockid_license_accepted') === '1'
-        || localStorage.getItem('blockid_license_agreed_time') !== null;
+      return localStorage.getItem('blockid_license_accepted_v2') === '1'
+        || localStorage.getItem('blockid_license_agreed_time_v2') !== null;
     } catch (e) { return false; }
+  }
+
+  // 迁移 2026-10-03：清除已废弃的旧记录键（等同于删除用户端的弹窗点击记录）
+  function purgeStaleKeys() {
+    try {
+      localStorage.removeItem('blockid_license_accepted');
+      localStorage.removeItem('blockid_license_agreed_time');
+    } catch (e) {}
   }
 
   function clearCountdown() {
@@ -3402,8 +3410,8 @@ function downloadQQ() {
   agreeBtn.addEventListener('click', () => {
     hasAgreed = true;
     try {
-      localStorage.setItem('blockid_license_accepted', '1');
-      localStorage.setItem('blockid_license_agreed_time', Date.now().toString());
+      localStorage.setItem('blockid_license_accepted_v2', '1');
+      localStorage.setItem('blockid_license_agreed_time_v2', Date.now().toString());
     } catch (e) {}
     clearCountdown();
     closeModal();
@@ -3413,6 +3421,7 @@ function downloadQQ() {
 
   // 未同意则每次进入都自动弹出，不再有冷却时间；同意过则永不再弹
   setTimeout(() => {
+    purgeStaleKeys();
     if (!hasAccepted()) openModal(true);
   }, 600);
 })();
@@ -3438,13 +3447,25 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
 
 /* ============ 版本更新公告弹窗 v2.1.1 Beta（已发布） ============ */
 (function() {
-  const UPDATE_KEY = 'blockid_update_211_beta_seen';
+  const UPDATE_KEY = 'blockid_update_211_beta_seen_v2';
+
+  // 迁移 2026-10-03：清除已废弃的旧记录键（等同于删除用户端的弹窗点击记录）
+  function purgeStaleKeys() {
+    try {
+      localStorage.removeItem('blockid_update_211_seen');
+      localStorage.removeItem('blockid_update_211_beta_seen');
+    } catch (e) {}
+  }
   const modal = document.getElementById('update-modal');
   const licenseModal = document.getElementById('license-modal');
   const closeBtn = document.getElementById('update-modal-close');
   const okBtn = document.getElementById('update-modal-ok');
   const logBtn = document.getElementById('update-modal-changelog');
   if (!modal) return;
+
+  function logEvt(type) {
+    try { if (window.BlockIDTrack) window.BlockIDTrack(type); } catch (e) {}
+  }
 
   let opened = false;
 
@@ -3471,19 +3492,21 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
     open();
   }
 
+  purgeStaleKeys();
   let seen = false;
   try { seen = localStorage.getItem(UPDATE_KEY) === '1'; } catch (e) {}
   if (!seen) setTimeout(tryOpen, 1200);
 
-  okBtn.addEventListener('click', () => close(true));
+  okBtn.addEventListener('click', () => { logEvt('update_modal_dismiss'); close(true); });
   logBtn.addEventListener('click', () => {
+    logEvt('update_modal_goto_log');
     close(false);
     setTimeout(() => { location.href = 'changelog.html#mv-2.1.1'; }, 260);
   });
-  closeBtn.addEventListener('click', () => close(false));
-  modal.addEventListener('click', e => { if (e.target === modal) close(false); });
+  closeBtn.addEventListener('click', () => { logEvt('update_modal_close'); close(false); });
+  modal.addEventListener('click', e => { if (e.target === modal) { logEvt('update_modal_close'); close(false); } });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && modal.classList.contains('open')) close(false);
+    if (e.key === 'Escape' && modal.classList.contains('open')) { logEvt('update_modal_close'); close(false); }
   });
 })();
 
@@ -3586,6 +3609,9 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
     });
     flush();
   }
+
+  // 暴露给页面内其它脚本（弹窗点击等），埋点失败静默
+  window.BlockIDTrack = track;
 
   track('page_view', location.pathname);
   document.addEventListener('click', function (e) {
