@@ -2069,6 +2069,11 @@ code { overflow-wrap: anywhere; }
   font-size: 13.5px; color: #9aa3b8; line-height: 1.75;
   max-width: 330px; margin: 0 auto 18px;
 }
+.update-list { text-align: left; margin: 4px auto 2px; max-width: 420px; padding: 0;
+  list-style: none; display: grid; gap: 7px; }
+.update-list li { position: relative; padding-left: 17px; font-size: 13.5px; line-height: 1.6; color: #a9b6ca; }
+.update-list li::before { content: ""; position: absolute; left: 3px; top: 9px;
+  width: 5px; height: 5px; border-radius: 50%; background: #6ba8f0; }
 .update-soon {
   display: inline-block; padding: 8px 18px; border-radius: 10px; margin-bottom: 22px;
   background: rgba(74,138,213,0.09); border: 1px dashed rgba(107,168,240,0.42);
@@ -2491,14 +2496,14 @@ code { overflow-wrap: anywhere; }
     <div class="version-history-title">Version History · 版本历史</div>
     <div class="version-list">
       <div class="version-item upcoming">
-        <span class="version-number">v2.1.1</span>
-        <span class="version-tag release">Release</span>
-        <span class="version-tag upcoming">即将发布</span>
+        <span class="version-number">v2.1.1-Beta</span>
+        <span class="version-tag beta">Beta</span>
+        <span class="version-tag upcoming">开发中</span>
         <span class="version-platforms">
           <span class="version-platform forge">Forge</span>
           <span class="version-platform fabric">Fabric</span>
         </span>
-        <span class="version-status pending">尚未发布 · 敬请期待</span>
+        <span class="version-status pending">开发测试中 · 暂不提供下载</span>
       </div>
       <details class="version-fold" id="version-fold">
         <summary class="version-fold-toggle">
@@ -2895,10 +2900,16 @@ code { overflow-wrap: anywhere; }
     </div>
     <div class="modal-body update-body">
       <div class="update-badge"><span class="dot"></span>COMING SOON</div>
-      <div class="update-ver">v2.1.1</div>
-      <div class="update-name">模组更新 2.1.1</div>
-      <p class="update-desc">新版本正在开发中，<strong style="color:#fbbf24;">尚未正式发布</strong>。具体更新内容敬请期待。</p>
-      <div class="update-soon">📋 更新日志 · 敬请期待</div>
+      <div class="update-ver">v2.1.1-Beta</div>
+      <div class="update-name">模组更新 2.1.1-Beta</div>
+      <p class="update-desc">质量补丁版本，让模组从「装不上」变成「装上就能用」；同时替换掉打包在制品中的 GPL 系拼音库，消除协议风险。当前仍处<strong style="color:#fbbf24;">开发中</strong>，尚未正式发布。</p>
+      <div class="update-soon">📋 本版要点</div>
+      <ul class="update-list">
+        <li>WorldEdit 改为可选前置，未安装也能正常进游戏</li>
+        <li>修正 Forge 1.19.2 模组元数据，解决加载异常</li>
+        <li>内置拼音库换为 Apache-2.0，安装包缩小约 190 KB</li>
+        <li>移除从未被引用的 Cloth Config 前置</li>
+      </ul>
       <p class="update-note">当前正式版：v2.1.0-Release</p>
       <div class="update-actions">
         <button class="update-btn primary" id="update-modal-ok">知道了</button>
