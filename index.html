@@ -2026,32 +2026,32 @@ code { overflow-wrap: anywhere; }
 .section :focus-visible { scroll-margin-bottom: 24px; }
 
 
-/* ============ 版本更新公告弹窗 v2.1.1 ============ */
+/* ============ 版本更新公告弹窗 v2.1.1 Beta（已发布） ============ */
 .update-box {
   width: min(460px, 92vw); max-height: 92vh;
-  border-color: rgba(251,191,36,0.26);
+  border-color: rgba(74,222,128,0.26);
   box-shadow: 0 30px 90px rgba(0,0,0,0.65);
   position: relative; overflow: hidden;
 }
 .update-box::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, #4a8ad5, #fbbf24, #4a8ad5);
+  background: linear-gradient(90deg, #4a8ad5, #4ade80, #4a8ad5);
   background-size: 200% 100%; animation: updateBar 3.6s linear infinite;
 }
 @keyframes updateBar { to { background-position: 200% 0; } }
 .update-header {
-  background: linear-gradient(135deg, rgba(251,191,36,0.10), transparent);
-  border-bottom-color: rgba(251,191,36,0.18);
+  background: linear-gradient(135deg, rgba(74,222,128,0.10), transparent);
+  border-bottom-color: rgba(74,222,128,0.18);
 }
 .update-body { padding: 26px 26px 24px; text-align: center; }
 .update-badge {
   display: inline-flex; align-items: center; gap: 7px;
-  padding: 4px 13px; border-radius: 999px; margin-bottom: 16px;
-  background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.35);
-  color: #fbbf24; font-size: 11.5px; font-weight: 700; letter-spacing: 0.6px;
+  padding: 4px 13px; border-radius: 999px; margin-bottom: 14px;
+  background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.35);
+  color: #4ade80; font-size: 11.5px; font-weight: 700; letter-spacing: 0.6px;
 }
 .update-badge .dot {
-  width: 6px; height: 6px; border-radius: 50%; background: #fbbf24;
+  width: 6px; height: 6px; border-radius: 50%; background: #4ade80;
   animation: updateDot 1.6s ease-in-out infinite;
 }
 @keyframes updateDot {
@@ -2059,12 +2059,16 @@ code { overflow-wrap: anywhere; }
   50% { opacity: 0.3; transform: scale(0.65); }
 }
 .update-ver {
-  font-size: 46px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.1;
-  margin-bottom: 4px;
-  background: linear-gradient(135deg, #6ba8f0, #e8eaf0 55%, #fbbf24);
+  font-size: 46px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.15;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #4ade80, #6ba8f0 55%, #e8eaf0);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
-.update-name { font-size: 16px; font-weight: 700; color: #e8eaf0; margin-bottom: 8px; }
+/* 主标题行：v2.1.1 Beta 来了！ */
+.update-ver.announce {
+  font-size: 32px; letter-spacing: -0.6px; line-height: 1.25;
+}
+.update-name { font-size: 15px; font-weight: 700; color: #e8eaf0; margin-bottom: 8px; }
 .update-desc {
   font-size: 13.5px; color: #9aa3b8; line-height: 1.75;
   max-width: 330px; margin: 0 auto 18px;
@@ -2073,26 +2077,28 @@ code { overflow-wrap: anywhere; }
   list-style: none; display: grid; gap: 7px; }
 .update-list li { position: relative; padding-left: 17px; font-size: 13.5px; line-height: 1.6; color: #a9b6ca; }
 .update-list li::before { content: ""; position: absolute; left: 3px; top: 9px;
-  width: 5px; height: 5px; border-radius: 50%; background: #6ba8f0; }
+  width: 5px; height: 5px; border-radius: 50%; background: #4ade80; }
 .update-soon {
   display: inline-block; padding: 8px 18px; border-radius: 10px; margin-bottom: 22px;
-  background: rgba(74,138,213,0.09); border: 1px dashed rgba(107,168,240,0.42);
-  color: #6ba8f0; font-size: 13px; font-weight: 600;
+  background: rgba(74,222,128,0.09); border: 1px dashed rgba(74,222,128,0.42);
+  color: #4ade80; font-size: 13px; font-weight: 600;
 }
 .update-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .update-btn {
   padding: 10px 20px; border-radius: 10px; font-size: 13.5px; font-weight: 600;
   cursor: pointer; border: 1px solid #2a3145; background: #10131c; color: #9aa3b8;
-  transition: all 0.15s var(--ease-out);
+  transition: all 0.15s var(--ease-out); text-decoration: none;
 }
 .update-btn:hover { color: #e8eaf0; border-color: #3d475e; }
 .update-btn.primary {
-  background: linear-gradient(135deg, #4a8ad5, #6ba8f0);
-  color: #fff; border-color: transparent;
+  background: linear-gradient(135deg, #3fbf72, #4ade80);
+  color: #0b1018; border-color: transparent;
 }
-.update-btn.primary:hover { filter: brightness(1.1); transform: translateY(-1px); color: #fff; }
+.update-btn.primary:hover { filter: brightness(1.08); transform: translateY(-1px); color: #0b1018; }
 @media (max-width: 480px) {
   .update-ver { font-size: 38px; }
+  .update-ver.announce { font-size: 26px; }
+  .update-name { font-size: 14px; }
   .update-body { padding: 20px 18px; }
 }
 
@@ -2891,18 +2897,18 @@ code { overflow-wrap: anywhere; }
 </div>
 
 
-<!-- ============ 版本更新公告弹窗 v2.1.1 ============ -->
+<!-- ============ 版本更新公告弹窗 v2.1.1 Beta ============ -->
 <div class="modal-overlay" id="update-modal" role="dialog" aria-modal="true" aria-labelledby="update-modal-title">
   <div class="modal-box update-box">
     <div class="modal-header update-header">
-      <div class="modal-header-title" id="update-modal-title"><span class="rocket">🚀</span> Block ID 更新预告</div>
+      <div class="modal-header-title" id="update-modal-title"><span class="rocket">🎉</span> Block ID 新版发布</div>
       <button class="modal-close" id="update-modal-close" aria-label="关闭">×</button>
     </div>
     <div class="modal-body update-body">
       <div class="update-badge"><span class="dot"></span>已发布</div>
-      <div class="update-ver">v2.1.1-Beta</div>
-      <div class="update-name">模组更新 2.1.1-Beta</div>
-      <p class="update-desc">质量补丁版本，让模组从「装不上」变成「装上就能用」；同时替换掉打包在制品中的 GPL 系拼音库，消除协议风险。现已发布，可加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载。</p>
+      <div class="update-ver announce">v2.1.1 Beta 来了！</div>
+      <div class="update-name">Block ID 2.1.1 Beta 抢先体验版</div>
+      <p class="update-desc">质量补丁版本，让模组从「装不上」变成「装上就能用」；内置拼音库换为 Apache-2.0，安装包缩小约 190 KB，同时消除协议风险。</p>
       <div class="update-soon">📋 本版要点</div>
       <ul class="update-list">
         <li>WorldEdit 改为可选前置，未安装也能正常进游戏</li>
@@ -2912,8 +2918,8 @@ code { overflow-wrap: anywhere; }
       </ul>
       <p class="update-note">当前正式版：v2.1.0-Release</p>
       <div class="update-actions">
-        <button class="update-btn primary" id="update-modal-ok">知道了</button>
-        <button class="update-btn" id="update-modal-later">本次不再提醒</button>
+        <button class="update-btn primary" id="update-modal-changelog">查看更新日志</button>
+        <button class="update-btn" id="update-modal-ok">本次不再提醒</button>
       </div>
     </div>
   </div>
@@ -3430,14 +3436,14 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
 });
 
 
-/* ============ 版本更新公告弹窗 v2.1.1 ============ */
+/* ============ 版本更新公告弹窗 v2.1.1 Beta（已发布） ============ */
 (function() {
-  const UPDATE_KEY = 'blockid_update_211_seen';
+  const UPDATE_KEY = 'blockid_update_211_beta_seen';
   const modal = document.getElementById('update-modal');
   const licenseModal = document.getElementById('license-modal');
   const closeBtn = document.getElementById('update-modal-close');
   const okBtn = document.getElementById('update-modal-ok');
-  const laterBtn = document.getElementById('update-modal-later');
+  const logBtn = document.getElementById('update-modal-changelog');
   if (!modal) return;
 
   let opened = false;
@@ -3456,7 +3462,7 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
     }
   }
 
-  // 首次进入时展示一次；若使用协议弹窗仍在展示，则排队等待其关闭
+  // 首次进入时展示一次；若协议弹窗仍在展示，则排队等待其关闭
   function tryOpen() {
     if (licenseModal && licenseModal.classList.contains('open')) {
       setTimeout(tryOpen, 400);
@@ -3469,8 +3475,11 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
   try { seen = localStorage.getItem(UPDATE_KEY) === '1'; } catch (e) {}
   if (!seen) setTimeout(tryOpen, 1200);
 
-  okBtn.addEventListener('click', () => close(false));
-  laterBtn.addEventListener('click', () => close(true));
+  okBtn.addEventListener('click', () => close(true));
+  logBtn.addEventListener('click', () => {
+    close(false);
+    setTimeout(() => { location.href = 'changelog.html#mv-2.1.1'; }, 260);
+  });
   closeBtn.addEventListener('click', () => close(false));
   modal.addEventListener('click', e => { if (e.target === modal) close(false); });
   document.addEventListener('keydown', e => {
