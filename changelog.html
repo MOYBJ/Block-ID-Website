@@ -2640,8 +2640,8 @@ code, .terminal-line { overflow-wrap: anywhere; }
       <button class="metro-station active latest upcoming" data-mv="2.1.1">
         <span class="ms-dot"><i></i></span>
         <span class="ms-body">
-          <span class="ms-ver">v2.1.1-Release</span>
-          <span class="ms-tags"><span class="tag upcoming">预告</span></span>
+          <span class="ms-ver">v2.1.1-Beta</span>
+          <span class="ms-tags"><span class="tag upcoming">开发中</span></span>
         </span>
       </button>
       <button class="metro-station end" data-mv="history">
@@ -2656,31 +2656,66 @@ code, .terminal-line { overflow-wrap: anywhere; }
       <div class="mpanel active" id="mv-2.1.1">
         <div class="mv-header latest">
           <div class="mv-top">
-            <span class="mv-title">🚀 Block_ID 2.1.1-Release</span>
-            <span class="mv-tag release">Release</span>
-            <span class="mv-tag upcoming">即将发布</span>
+            <span class="mv-title">🚀 Block_ID 2.1.1-Beta</span>
+            <span class="mv-tag beta">Beta</span>
+            <span class="mv-tag upcoming">开发中</span>
             <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
           </div>
-          <div class="mv-desc">v2.1.1 尚未正式发布，本版本仍在开发中。具体更新内容与修复清单敬请期待。</div>
+          <div class="mv-desc">无需新增功能的质量补丁，目标是让模组从「装不上」变成「装上就能用」；同时替换掉打包在制品中的 GPL 系拼音库，消除协议风险。</div>
         </div>
+
         <div class="msection">
-          <div class="mtitle"><div class="micon core">🚧</div>更新日志</div>
+          <div class="mtitle"><div class="micon fix">🐞</div>修复</div>
           <ul class="mlist">
-            <li><strong>敬请期待</strong>：详细的新增功能、优化项与 Bug 修复清单将在正式发布后于本页面完整公布</li>
-            <li><strong>查看方式</strong>：本版本正式发布后，本面板将同步更新为完整日志</li>
+            <li><strong>WorldEdit 不再被判定为必需前置</strong>：此前模组虽在依赖清单中声明 WorldEdit 为 mandatory=true，但代码里从未调用过它的任何 API，只是把 //set / //replace 字符串写进剪贴板。
+              <span class="sub">没装 WorldEdit 的玩家会直接被判定依赖缺失、游戏读不到模组；崩溃日志中确实存在 requires worldedit 0 or above / Currently, worldedit is not installed。</span>
+              <span class="sub">现已改为可选依赖并增加运行时检测——未安装时功能完全不受影响，仅在提示语中说明指令需手动粘贴执行。</span>
+            </li>
+            <li><strong>移除从未被引用的 Cloth Config 前置</strong>：构建脚本声明了 Cloth Config、说明文档也把它列为必需前置，但源码中零引用。现已彻底移除，减少一项无谓的安装门槛。</li>
+            <li><strong>修正 Forge 1.19.2 的模组元数据</strong>：该版本的 mods.toml 存在三处错误——loaderVersion 键名拼写错误且取值写成了模组自身版本、Forge 版本范围沿用了 1.20.1 的 [47,)、游戏版本范围写成了 [1.20.1]，会导致 1.19.2 的 Forge 包加载异常。
+              <span class="sub">现已修正为 [43,) / [1.19.2]。</span>
+            </li>
+            <li><strong>修正 1.19.2 版本文档描述</strong>：该版本说明文档此前错误地写着 Minecraft 1.20.1、Forge 47+、Fabric 0.15+，现已按实际支持的版本分别更正。</li>
           </ul>
         </div>
+
         <div class="msection">
-          <div class="mtitle"><div class="micon tech">📌</div>关于本版本</div>
+          <div class="mtitle"><div class="micon core">🔄</div>变更</div>
           <ul class="mlist">
-            <li><strong>版本号</strong>：v2.1.1-Release（沿用 v2.1.0-Release 命名格式）</li>
+            <li><strong>替换内置拼音库，消除协议冲突</strong>：此前模组把 pinyin4j 直接打包进主 Jar，该库采用 GPL 系协议，与本项目「允许学习修改、禁止二次发布修改版本」的自有协议直接抵触。
+              <span class="sub">现已替换为 Apache-2.0 协议的 TinyPinyin，并将无需使用的传递依赖一并排除。安装包体积平均减少约 190 KB（Forge 约 −197 KB，Fabric 约 −190 KB）。</span>
+            </li>
+            <li><strong>中文拼音搜索行为保持兼容</strong>：新旧库对 ü 的记法不同——旧库把「绿」记作 lu，新库记作 lv。
+              <span class="sub">为不让惯用 lu 的玩家搜不到方块，已同时生成两种写法的索引，输入 lvbaoshi 或 lubaoshi 都能搜到「绿宝石块」，其余方块名的搜索行为完全一致。</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="msection">
+          <div class="mtitle"><div class="micon tech">🧹</div>清理</div>
+          <ul class="mlist">
+            <li>删除空实现的 ClientEvents 事件订阅器（四个版本各一份，无任何实际行为）</li>
+            <li>移除构建脚本中随依赖删除而失效的第三方仓库配置</li>
+          </ul>
+        </div>
+
+        <div class="msection">
+          <div class="mtitle"><div class="micon tech">📝</div>文档</div>
+          <ul class="mlist">
+            <li>四个版本的版本号统一为 v2.1.1-Beta，此前说明文档停留在 2.0.3.1，与实际发布的版本对不上</li>
+          </ul>
+        </div>
+
+        <div class="msection">
+          <div class="mtitle"><div class="micon tech">ℹ️</div>关于本版本</div>
+          <ul class="mlist">
+            <li><strong>版本号</strong>：v2.1.1-Beta（当前开发版本 · 阶段 0 收尾）</li>
             <li><strong>当前状态</strong>：<strong style="color:#fbbf24;">开发中，尚未发布</strong>，暂不提供下载</li>
             <li><strong>适用版本</strong>：Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</li>
-            <li><strong>下载建议</strong>：本版本发布前，请继续使用当前正式版 <strong>v2.1.0-Release</strong></li>
+            <li><strong>下载建议</strong>：请继续使用当前正式版 v2.1.0-Release</li>
           </ul>
         </div>
       </div>
-
       <!-- v2.1.0 -->
       <div class="mpanel" id="mv-2.1.0">
         <div class="mv-header">
