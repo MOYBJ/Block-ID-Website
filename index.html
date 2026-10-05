@@ -2064,7 +2064,7 @@ code { overflow-wrap: anywhere; }
   background: linear-gradient(135deg, #4ade80, #6ba8f0 55%, #e8eaf0);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
-/* 主标题行：v2.1.2 Release 来了！ */
+/* 主标题行：v2.1.2.1-Beta 来了！ */
 .update-ver.announce {
   font-size: 32px; letter-spacing: -0.6px; line-height: 1.25;
 }
@@ -2217,7 +2217,7 @@ code { overflow-wrap: anywhere; }
     <li><a href="changelog.html" class="nav-changelog-link">更新日志 <span class="changelog-badge">NEW</span></a></li>
     <li><a href="#" id="nav-license" class="nav-changelog-link">使用协议</a></li>
   </ul>
-  <div class="nav-version">v2.1.2-Release</div>
+  <div class="nav-version">v2.1.2.1-Beta</div>
 </nav>
 
 <!-- ============ Hero 区 ============ -->
@@ -2814,7 +2814,7 @@ code { overflow-wrap: anywhere; }
       <span>下载：QQ群 1121599701</span>
     </div>
     <div class="footer-bottom">
-      Block ID v2.1.2-Release · Forge / Fabric · 2026.10.05 · <a href="#" id="footer-license" style="color:var(--accent);">使用协议</a>
+      Block ID v2.1.2.1-Beta · Forge / Fabric · 2026.10.05 · <a href="#" id="footer-license" style="color:var(--accent);">使用协议</a>
     </div>
   </div>
 </footer>
@@ -2933,16 +2933,16 @@ code { overflow-wrap: anywhere; }
       <button class="modal-close" id="update-modal-close" aria-label="关闭">×</button>
     </div>
     <div class="modal-body update-body">
-      <div class="update-badge"><span class="dot"></span>正式版已发布</div>
-      <div class="update-ver announce">v2.1.2 Release 来了！</div>
-      <div class="update-name">Block ID 2.1.2 · 阶段 0 收官</div>
-      <p class="update-desc">阶段 0「止血」的收官版本：默认键位调整、补齐四版本统一构建，并新增 WorldEdit 联动。可加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载。</p>
+      <div class="update-badge"><span class="dot"></span>已发布</div>
+      <div class="update-ver announce">v2.1.2.1-Beta 来了！</div>
+      <div class="update-name">Block ID 2.1.2.1 · Beta 抢先体验版</div>
+      <p class="update-desc">阶段 1「合规与工程底座」第一步：统一四版本映射方案，从源头消除 Forge / Fabric 的类名差异。已发布 Beta 抢先体验版，可加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载。</p>
       <div class="update-soon">📋 本版要点</div>
       <ul class="update-list">
-        <li>默认键位改为 G / H，降低整合包按键冲突</li>
-        <li>修复三个版本漏初始化收藏与历史记录</li>
-        <li>1.20.1 检测到 WorldEdit 时自动执行指令</li>
-        <li>补齐 Forge / Fabric × 1.20.1 / 1.19.2 统一构建</li>
+        <li>Fabric 两版切换到 Mojang 官方映射（yarn → mojmap）</li>
+        <li>1.19.2 渲染写法对齐 Forge 侧，消除跨加载器差异</li>
+        <li>新增开源副本同步脚本，四版本源码一键同步</li>
+        <li>四版本构建全部通过，跨加载器差异 700 → 282 行</li>
       </ul>
       <div class="update-actions">
         <button class="update-btn primary" id="update-modal-changelog">查看更新日志</button>
@@ -3474,7 +3474,7 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
 
 /* ============ 版本更新公告弹窗 v2.1.2（已发布） ============ */
 (function() {
-  const UPDATE_KEY = 'blockid_update_212_seen';
+  const UPDATE_KEY = 'blockid_update_2121_seen';
 
   // 迁移：清除已废弃的旧记录键（等同于删除用户端的弹窗点击记录）
   function purgeStaleKeys() {
@@ -3482,6 +3482,7 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
       localStorage.removeItem('blockid_update_211_seen');
       localStorage.removeItem('blockid_update_211_beta_seen');
       localStorage.removeItem('blockid_update_211_beta_seen_v2');
+      localStorage.removeItem('blockid_update_212_seen');
     } catch (e) {}
   }
   const modal = document.getElementById('update-modal');
@@ -3529,7 +3530,7 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
   logBtn.addEventListener('click', () => {
     logEvt('update_modal_goto_log');
     close(false);
-    setTimeout(() => { location.href = 'changelog.html#mv-2.1.2'; }, 260);
+    setTimeout(() => { location.href = 'changelog.html#mv-2.1.2.1'; }, 260);
   });
   closeBtn.addEventListener('click', () => { logEvt('update_modal_close'); close(false); });
   modal.addEventListener('click', e => { if (e.target === modal) { logEvt('update_modal_close'); close(false); } });
@@ -3604,7 +3605,7 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
 (function () {
   var ENDPOINT = 'https://blockid-admin.app.workbuddy.host';
   var KEY = 'wbpk_whwchtrfJEOVB2ElS83PSo_pNItdHl7mGzEsxaNGKlfdvr31AflxWbn';
-  var PAGE_VERSION = 'v2.1.2-Release';
+  var PAGE_VERSION = 'v2.1.2.1-Beta';
   var cloud = null, queue = [], tries = 0;
 
   function flush() {
