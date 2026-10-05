@@ -2600,7 +2600,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
     <li><a href="index.html#faq">常见问题</a></li>
     <li><a href="index.html">使用协议</a></li>
   </ul>
-  <div class="nav-version">v2.1.0-Release</div>
+  <div class="nav-version">v2.1.2-Release</div>
 </nav>
 
 <!-- ============ Hero 区 ============ -->
@@ -2613,7 +2613,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
     更新日志<span style="color:var(--text-muted)"> 与 </span><span class="block-text" style="color:var(--cyan)">未来计划</span>
   </h1>
   <p class="hero-subtitle">版本迭代记录 · 开发路线图 · 持续进化</p>
-  <p class="hero-slogan2">从 v2.0.0 全面重构到 v2.1.0 收藏夹系统，见证每一步成长</p>
+  <p class="hero-slogan2">从 v2.0.0 全面重构到 v2.1.2 收官版本，见证每一步成长</p>
   <div class="hero-cta-row">
     <a href="#changelog" class="btn btn-primary">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
@@ -2637,12 +2637,16 @@ code, .terminal-line { overflow-wrap: anywhere; }
   <div class="changelog-box reveal">
     <div class="metro-line">
       <div class="metro-track"><span class="metro-train"></span></div>
-      <button class="metro-station active latest upcoming" data-mv="2.1.1">
+      <button class="metro-station active latest" data-mv="2.1.2">
         <span class="ms-dot"><i></i></span>
         <span class="ms-body">
-          <span class="ms-ver">v2.1.1-Beta</span>
-          <span class="ms-tags"><span class="tag latest">已发布</span></span>
+          <span class="ms-ver">v2.1.2-Release</span>
+          <span class="ms-tags"><span class="tag latest">当前正式版</span></span>
         </span>
+      </button>
+      <button class="metro-station" data-mv="2.1.1">
+        <span class="ms-dot"><i></i></span>
+        <span class="ms-body"><span class="ms-ver">v2.1.1-Beta</span></span>
       </button>
       <button class="metro-station end" data-mv="history">
         <span class="ms-dot"><i></i></span>
@@ -2652,13 +2656,73 @@ code, .terminal-line { overflow-wrap: anywhere; }
     <div class="modal-body">
       <button class="archive-back" id="archive-back" hidden>← 返回历史版本</button>
 
-      <!-- v2.1.1 -->
-      <div class="mpanel active" id="mv-2.1.1">
+      <!-- v2.1.2 -->
+      <div class="mpanel active" id="mv-2.1.2">
         <div class="mv-header latest">
+          <div class="mv-top">
+            <span class="mv-title">🚀 Block_ID 2.1.2-Release</span>
+            <span class="mv-tag release">Release</span>
+            <span class="mv-tag latest">当前正式版</span>
+            <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
+          </div>
+          <div class="mv-desc">阶段 0「止血」的收官版本：完成默认键位调整与文档版本校正，补齐四版本统一构建，并新增一项 WorldEdit 联动能力。</div>
+        </div>
+
+        <div class="msection">
+          <div class="mtitle"><div class="micon fix">🐞</div>修复</div>
+          <ul class="mlist">
+            <li><strong>修复三个版本漏初始化收藏与历史记录</strong>：此前只有 Forge-1.20.1 在启动时完整初始化了 ConfigManager / FavoritesManager / HistoryManager，其余三个版本（Forge-1.19.2、Fabric-1.20.1、Fabric-1.19.2）只初始化了配置管理器。
+              <span class="sub">由于两个管理器带有「首次访问时兜底初始化」的逻辑，该问题不会导致崩溃，但「默认收藏」分组不会在启动时写入配置文件，历史记录的初始状态也不可靠。</span>
+              <span class="sub">现四个版本已在启动时统一完成三项初始化。</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="msection">
+          <div class="mtitle"><div class="micon core">🔄</div>变更</div>
+          <ul class="mlist">
+            <li><strong>默认键位改为 G / H</strong>：打开方块 ID 管理界面为 G，复制手中方块 ID 为 H。
+              <span class="sub">此前复制键默认绑在 C，该键在整合包中冲突概率较高，故调整。两个键均保留默认绑定，玩家仍可在「选项 → 控制 → 方块ID」中自行修改。</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="msection">
+          <div class="mtitle"><div class="micon core">⭐</div>新增</div>
+          <ul class="mlist">
+            <li><strong>检测到 WorldEdit 时直接执行指令</strong>（1.20.1 版本）：生成 //set / //replace 指令后，若检测到环境已安装 WorldEdit，会直接把指令发送执行，省去手动打开聊天栏再粘贴的步骤。
+              <span class="sub">指令始终会先写入剪贴板，因此即便自动发送失败仍可手动粘贴执行，不影响原有用法；未检测到 WorldEdit 时保持原行为：仅复制并提示需要手动执行。</span>
+              <span class="sub">1.19.2 未提供对等的指令发送接口（该版本聊天签名机制与 1.20.1 不同），因此保持「复制到剪贴板」的行为。</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="msection">
+          <div class="mtitle"><div class="micon tech">🛠️</div>工程</div>
+          <ul class="mlist">
+            <li><strong>补齐四版本统一构建</strong>：此前仅两个 Fabric 目录内带有 workflow 文件，但它们位于仓库子目录，GitHub Actions 不会执行（该服务只识别仓库根目录的 .github/workflows/）。
+              <span class="sub">现已在仓库根目录建立统一的 build.yml，用矩阵任务一次性构建 Forge / Fabric × 1.20.1 / 1.19.2 四个版本并上传产物，同时移除子目录中不会生效的旧配置文件。</span>
+            </li>
+            <li><strong>版本号推进</strong>：2.1.1-Beta → 2.1.2-Release，四处源码配置与四份说明文档同步</li>
+          </ul>
+        </div>
+
+        <div class="msection">
+          <div class="mtitle"><div class="micon tech">ℹ️</div>关于本版本</div>
+          <ul class="mlist">
+            <li><strong>版本号</strong>：v2.1.2-Release（当前正式版 · 阶段 0 完成）</li>
+            <li><strong>当前状态</strong>：<strong style="color:#4ade80;">正式版已发布</strong></li>
+            <li><strong>适用版本</strong>：Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</li>
+            <li><strong>下载方式</strong>：加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</li>
+          </ul>
+        </div>
+      </div>
+      <!-- v2.1.1 -->
+      <div class="mpanel" id="mv-2.1.1">
+        <div class="mv-header">
           <div class="mv-top">
             <span class="mv-title">🚀 Block_ID 2.1.1-Beta</span>
             <span class="mv-tag beta">Beta</span>
-            <span class="mv-tag latest">已发布</span>
             <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
           </div>
           <div class="mv-desc">无需新增功能的质量补丁，目标是让模组从「装不上」变成「装上就能用」；同时替换掉打包在制品中的 GPL 系拼音库，消除协议风险。</div>
@@ -2709,8 +2773,8 @@ code, .terminal-line { overflow-wrap: anywhere; }
         <div class="msection">
           <div class="mtitle"><div class="micon tech">ℹ️</div>关于本版本</div>
           <ul class="mlist">
-            <li><strong>版本号</strong>：v2.1.1-Beta（当前开发版本 · 阶段 0 收尾）</li>
-            <li><strong>当前状态</strong>：<strong style="color:#4ade80;">已发布</strong>（Beta 抢先体验版）</li>
+            <li><strong>版本号</strong>：v2.1.1-Beta（已被 v2.1.2-Release 取代）</li>
+            <li><strong>当前状态</strong>：Beta 阶段已结束，已被 <strong>v2.1.2-Release</strong> 取代</li>
             <li><strong>适用版本</strong>：Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</li>
             <li><strong>下载方式</strong>：加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</li>
           </ul>
@@ -3071,7 +3135,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
           <div class="mtitle"><div class="micon tech">ℹ️</div>说明</div>
           <ul class="mlist">
             <li>自 <strong>v2.0.0</strong> 起新增 Fabric 加载器支持，1.x 系列仅支持 Forge</li>
-            <li>1.x Alpha 为早期测试版，强烈建议升级至最新 v2.1.0-Release</li>
+            <li>1.x Alpha 为早期测试版，强烈建议升级至最新 v2.1.2-Release</li>
             <li>所有版本均需前置：Cloth Config API（任何版本）、WorldEdit 7.2+</li>
             <li>点击带 <strong>›</strong> 的版本可展开查看该版本的完整更新日志</li>
           </ul>
@@ -3164,7 +3228,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
       <span>下载：QQ群 1121599701</span>
     </div>
     <div class="footer-bottom">
-      Block ID v2.1.0-Release · Forge / Fabric · 2026.10.03 · <a href="index.html" style="color:var(--accent);">使用协议</a>
+      Block ID v2.1.2-Release · Forge / Fabric · 2026.10.05 · <a href="index.html" style="color:var(--accent);">使用协议</a>
     </div>
   </div>
 </footer>
@@ -3504,7 +3568,7 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
 (function () {
   var ENDPOINT = 'https://blockid-admin.app.workbuddy.host';
   var KEY = 'wbpk_whwchtrfJEOVB2ElS83PSo_pNItdHl7mGzEsxaNGKlfdvr31AflxWbn';
-  var PAGE_VERSION = 'v2.1.0-Release';
+  var PAGE_VERSION = 'v2.1.2-Release';
   var cloud = null, queue = [], tries = 0;
 
   function flush() {
