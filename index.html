@@ -2235,8 +2235,7 @@ code { overflow-wrap: anywhere; }
     <span class="hero-tag highlight">MC 1.20.1 / 1.19.2</span>
     <span class="hero-tag">Forge 47.4.10+</span>
     <span class="hero-tag">Fabric 0.15.11+</span>
-    <span class="hero-tag warn">WorldEdit 必需</span>
-    <span class="hero-tag warn">Cloth Config 必需</span>
+    <span class="hero-tag">WorldEdit 可选</span>
     <span class="hero-tag">9 种语言</span>
   </div>
   <div class="hero-cta">
@@ -2255,9 +2254,9 @@ code { overflow-wrap: anywhere; }
   </div>
   <div class="hero-open-notice">
     <span class="notice-dot"></span>
-    <span><strong>正式版已发布</strong> · CurseForge 已上线 · Modrinth 审核中 · 模组源码公开至 GitHub</span>
+    <span><strong>正式版已发布</strong> · CurseForge 已上线 · Modrinth 已上线 · 模组源码公开至 GitHub</span>
   </div>
-  <p class="hero-download-hint">抢先体验版：加入 QQ 群 <span class="qq-num">1121599701</span> 下载 · CurseForge 已可直接搜索下载</p>
+  <p class="hero-download-hint">抢先体验版：加入 QQ 群 <span class="qq-num">1121599701</span> 下载 · Modrinth / CurseForge 已可直接搜索下载</p>
 </section>
 
 <!-- ============ 快速跳转卡 ============ -->
@@ -2371,9 +2370,9 @@ code { overflow-wrap: anywhere; }
       <div class="feature-icon green">
         <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
       </div>
-      <h3 class="feature-title">一键复制 ID <span class="key-hint">C / G</span></h3>
+      <h3 class="feature-title">一键复制 ID <span class="key-hint">G / H</span></h3>
       <p class="feature-desc">
-        按下 <code>C</code> 键即刻复制手持物品的完整方块 ID（如 <code>minecraft:stone</code>）；按下 <code>G</code> 键秒开主界面。无需切换窗口、无需任何手动操作，点开即用。
+        按下 <code>G</code> 键秒开主界面，按下 <code>H</code> 键即刻复制手持物品的完整方块 ID（如 <code>minecraft:stone</code>）。无需切换窗口、无需任何手动操作，点开即用。
       </p>
     </div>
     <!-- 功能5 -->
@@ -2383,7 +2382,7 @@ code { overflow-wrap: anywhere; }
       </div>
       <h3 class="feature-title">WorldEdit 深度集成</h3>
       <p class="feature-desc">
-        完美集成 <code>//set</code> 与 <code>//replace</code> 指令。支持方块属性设置（如 <code>minecraft:stone_slab[type=top]</code>）与放置率权重（如 <code>50%stone,50%grass</code>），滑块拖动或 Ctrl+左键精确输入，总和自动归一化。多选后一键生成完整指令并复制到剪贴板。
+        完美集成 <code>//set</code> 与 <code>//replace</code> 指令。支持方块属性设置（如 <code>minecraft:stone_slab[type=top]</code>）与放置率权重（如 <code>50%stone,50%grass</code>），滑块拖动或 Ctrl+左键精确输入，总和自动归一化。多选后一键生成完整指令并复制到剪贴板；在 1.20.1 且检测到 WorldEdit 时还可一键自动执行。
       </p>
     </div>
     <!-- 功能6 -->
@@ -2456,7 +2455,7 @@ code { overflow-wrap: anywhere; }
       </div>
       <div class="download-meta-item">
         <span class="meta-label">发布平台</span>
-        <span class="meta-value">CurseForge（已上线）· Modrinth（审核中）</span>
+        <span class="meta-value">CurseForge（已上线）· Modrinth（已上线）</span>
       </div>
       <div class="download-meta-item">
         <span class="meta-label">源码仓库</span>
@@ -2472,7 +2471,7 @@ code { overflow-wrap: anywhere; }
       </div>
     </div>
     <div class="download-note">
-      <strong>当前阶段：</strong>模组以抢先体验版形式通过 QQ 群发布，加入群后在群文件中下载对应加载器版本的 jar 包。<strong>平台状态：</strong>CurseForge 已正式上线，可直接搜索 "Block ID" 下载；Modrinth 正在审核中。<strong>版本说明：</strong>Modrinth 与 CurseForge 平台版本会落后 QQ 群抢先体验版一个小版本，最新版本优先在 QQ 群发布。请勿从其他非官方渠道获取，以免获得修改或恶意版本。
+      <strong>当前阶段：</strong>模组以抢先体验版形式通过 QQ 群发布，加入群后在群文件中下载对应加载器版本的 jar 包。<strong>平台状态：</strong>CurseForge 与 Modrinth 均已正式上线，可直接搜索 "Block ID" 下载。<strong>版本说明：</strong>Modrinth 与 CurseForge 平台版本会落后 QQ 群抢先体验版一个小版本，最新版本优先在 QQ 群发布。请勿从其他非官方渠道获取，以免获得修改或恶意版本。
     </div>
     <div class="open-source-notice">
       <span class="notice-icon">
@@ -2663,7 +2662,7 @@ code { overflow-wrap: anywhere; }
       </details>
     </div>
     <div class="version-footnote">
-      <strong>说明：</strong>自 <strong>v2.0.0</strong> 版本起新增 Fabric 加载器支持，此前 1.x 系列仅支持 Forge。1.x Alpha 版本为早期测试版，功能不完善且存在已知问题，强烈建议升级至最新 v2.1.2-Release。
+      <strong>说明：</strong>自 <strong>v2.0.0</strong> 版本起新增 Fabric 加载器支持，此前 1.x 系列仅支持 Forge。1.x Alpha 版本为早期测试版，功能不完善且存在已知问题，强烈建议升级至最新 v2.1.2.1-Beta。
     </div>
   </div>
 
@@ -2685,7 +2684,7 @@ code { overflow-wrap: anywhere; }
       <div class="step-number">2</div>
       <div class="step-content">
         <h4>安装前置模组</h4>
-        <p>安装 <code>WorldEdit (Forge版)</code> 和 <code>Cloth Config API (Forge版)</code>，两者均为必需前置。</p>
+        <p>（可选）安装 <code>WorldEdit (Forge版)</code>，用于一键自动执行 <code>//set</code> / <code>//replace</code> 指令；无需安装 Cloth Config API。</p>
       </div>
     </div>
     <div class="install-step reveal reveal-delay-2">
@@ -2709,7 +2708,7 @@ code { overflow-wrap: anywhere; }
       <div class="step-number">2</div>
       <div class="step-content">
         <h4>安装前置模组</h4>
-        <p>安装 <code>Fabric API</code>、<code>WorldEdit (Fabric版)</code> 和 <code>Cloth Config API (Fabric版)</code>。</p>
+        <p>安装 <code>Fabric API</code> 与（可选）<code>WorldEdit (Fabric版)</code>；无需 Cloth Config API。</p>
       </div>
     </div>
     <div class="install-step reveal reveal-delay-2">
@@ -2733,7 +2732,7 @@ code { overflow-wrap: anywhere; }
   <div class="faq-list">
     <div class="faq-item reveal">
       <div class="faq-question">
-        <span><span class="q-label">Q:</span>按下 G/C 键无反应？</span>
+        <span><span class="q-label">Q:</span>按下 G/H 键无反应？</span>
         <div class="faq-toggle"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
       </div>
       <div class="faq-answer">
@@ -2809,7 +2808,7 @@ code { overflow-wrap: anywhere; }
       <span class="sep">|</span>
       <span>配置：.minecraft/config/block_id.json</span>
       <span class="sep">|</span>
-      <span>前置：WorldEdit + Cloth Config API（均必需）</span>
+      <span>前置：WorldEdit（可选）· 无需 Cloth Config</span>
       <span class="sep">|</span>
       <span>下载：QQ群 1121599701</span>
     </div>
