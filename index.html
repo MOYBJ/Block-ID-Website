@@ -2026,7 +2026,7 @@ code { overflow-wrap: anywhere; }
 .section :focus-visible { scroll-margin-bottom: 24px; }
 
 
-/* ============ 版本更新公告弹窗 v2.1.1 Beta（已发布） ============ */
+/* ============ 版本更新公告弹窗 v2.1.2（已发布） ============ */
 .update-box {
   width: min(460px, 92vw); max-height: 92vh;
   border-color: rgba(74,222,128,0.26);
@@ -2064,7 +2064,7 @@ code { overflow-wrap: anywhere; }
   background: linear-gradient(135deg, #4ade80, #6ba8f0 55%, #e8eaf0);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
-/* 主标题行：v2.1.1 Beta 来了！ */
+/* 主标题行：v2.1.2 Release 来了！ */
 .update-ver.announce {
   font-size: 32px; letter-spacing: -0.6px; line-height: 1.25;
 }
@@ -2102,7 +2102,16 @@ code { overflow-wrap: anywhere; }
   .update-body { padding: 20px 18px; }
 }
 
-/* ============ v2.1.1 预告条目 + 历史版本折叠 ============ */
+/* ============ 当前正式版条目 + 历史版本折叠 ============ */
+.version-item.current {
+  position: relative; padding-left: 14px; margin-left: -14px;
+  background: linear-gradient(90deg, rgba(74,222,128,0.07), transparent 72%);
+  border-bottom-color: rgba(74,222,128,0.22);
+}
+.version-item.current::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+  background: linear-gradient(180deg, #4ade80, rgba(74,222,128,0.2));
+}
 .version-item.upcoming {
   position: relative; padding-left: 14px; margin-left: -14px;
   background: linear-gradient(90deg, rgba(217,119,6,0.07), transparent 72%);
@@ -2208,7 +2217,7 @@ code { overflow-wrap: anywhere; }
     <li><a href="changelog.html" class="nav-changelog-link">更新日志 <span class="changelog-badge">NEW</span></a></li>
     <li><a href="#" id="nav-license" class="nav-changelog-link">使用协议</a></li>
   </ul>
-  <div class="nav-version">v2.1.0-Release</div>
+  <div class="nav-version">v2.1.2-Release</div>
 </nav>
 
 <!-- ============ Hero 区 ============ -->
@@ -2501,24 +2510,33 @@ code { overflow-wrap: anywhere; }
   <div class="version-history reveal">
     <div class="version-history-title">Version History · 版本历史</div>
     <div class="version-list">
-      <div class="version-item upcoming">
-        <span class="version-number">v2.1.1-Beta</span>
-        <span class="version-tag beta">Beta</span>
+      <div class="version-item current">
+        <span class="version-number">v2.1.2-Release</span>
+        <span class="version-tag release">Release</span>
         <span class="version-tag latest">已发布</span>
         <span class="version-platforms">
           <span class="version-platform forge">Forge</span>
           <span class="version-platform fabric">Fabric</span>
         </span>
-        <span class="version-status recommended">已发布 · Beta 抢先体验版</span>
+        <span class="version-status recommended">当前正式版</span>
       </div>
       <details class="version-fold" id="version-fold">
         <summary class="version-fold-toggle">
           <span class="fold-arrow" aria-hidden="true">▸</span>
-          <span class="fold-title">历史版本（v2.1.0 及更早 · 共 12 个）</span>
-          <span class="fold-current">当前正式版 v2.1.0-Release</span>
+          <span class="fold-title">历史版本（v2.1.1 及更早 · 共 13 个）</span>
+          <span class="fold-current">当前正式版 v2.1.2-Release</span>
         </summary>
         <div class="version-fold-body">
         <div class="version-fold-inner">
+        <div class="version-item">
+          <span class="version-number">v2.1.1</span>
+          <span class="version-tag beta">Beta</span>
+          <span class="version-platforms">
+            <span class="version-platform forge">Forge</span>
+            <span class="version-platform fabric">Fabric</span>
+          </span>
+          <span class="version-status deprecated">已被 2.1.2 取代</span>
+        </div>
         <div class="version-item">
           <span class="version-number">v2.1.0</span>
           <span class="version-tag release">Release</span>
@@ -2527,7 +2545,7 @@ code { overflow-wrap: anywhere; }
             <span class="version-platform forge">Forge</span>
             <span class="version-platform fabric">Fabric</span>
           </span>
-          <span class="version-status recommended">当前正式版</span>
+          <span class="version-status deprecated">已被 2.1.2 取代</span>
         </div>
         <div class="version-item">
           <span class="version-number">v2.0.3.2</span>
@@ -2635,7 +2653,7 @@ code { overflow-wrap: anywhere; }
       </details>
     </div>
     <div class="version-footnote">
-      <strong>说明：</strong>自 <strong>v2.0.0</strong> 版本起新增 Fabric 加载器支持，此前 1.x 系列仅支持 Forge。1.x Alpha 版本为早期测试版，功能不完善且存在已知问题，强烈建议升级至最新 v2.1.0-Release。
+      <strong>说明：</strong>自 <strong>v2.0.0</strong> 版本起新增 Fabric 加载器支持，此前 1.x 系列仅支持 Forge。1.x Alpha 版本为早期测试版，功能不完善且存在已知问题，强烈建议升级至最新 v2.1.2-Release。
     </div>
   </div>
 
@@ -2664,7 +2682,7 @@ code { overflow-wrap: anywhere; }
       <div class="step-number">3</div>
       <div class="step-content">
         <h4>放入模组文件</h4>
-        <p>将 <code>Block_ID-forge-2.1.0-Release.jar</code> 放入 <code>.minecraft/mods</code> 文件夹，启动游戏即可。</p>
+        <p>将 <code>Block_ID-forge-2.1.2-Release.jar</code> 放入 <code>.minecraft/mods</code> 文件夹，启动游戏即可。</p>
       </div>
     </div>
   </div>
@@ -2688,7 +2706,7 @@ code { overflow-wrap: anywhere; }
       <div class="step-number">3</div>
       <div class="step-content">
         <h4>放入模组文件</h4>
-        <p>将 <code>Block_ID-fabric-2.1.0-Release.jar</code> 放入 <code>.minecraft/mods</code> 文件夹，启动游戏即可。</p>
+        <p>将 <code>Block_ID-fabric-2.1.2-Release.jar</code> 放入 <code>.minecraft/mods</code> 文件夹，启动游戏即可。</p>
       </div>
     </div>
   </div>
@@ -2732,7 +2750,7 @@ code { overflow-wrap: anywhere; }
       </div>
       <div class="faq-answer">
         <div class="faq-answer-inner">
-          <span class="a-label">A:</span>请务必更新至 <code>v2.1.0-Release</code> 或更高版本。此版本已彻底重构底层渲染，内置视口裁剪优化，滚动十分流畅。
+          <span class="a-label">A:</span>请务必更新至 <code>v2.1.2-Release</code> 或更高版本。此版本已彻底重构底层渲染，内置视口裁剪优化，滚动十分流畅。
         </div>
       </div>
     </div>
@@ -2786,7 +2804,7 @@ code { overflow-wrap: anywhere; }
       <span>下载：QQ群 1121599701</span>
     </div>
     <div class="footer-bottom">
-      Block ID v2.1.0-Release · Forge / Fabric · 2026.10.03 · <a href="#" id="footer-license" style="color:var(--accent);">使用协议</a>
+      Block ID v2.1.2-Release · Forge / Fabric · 2026.10.05 · <a href="#" id="footer-license" style="color:var(--accent);">使用协议</a>
     </div>
   </div>
 </footer>
@@ -2872,7 +2890,7 @@ code { overflow-wrap: anywhere; }
         <div class="mtitle"><div class="micon tech">📋</div>模组信息</div>
         <ul class="mlist">
           <li><strong>模组名称</strong>：Block ID（方块ID）</li>
-          <li><strong>当前版本</strong>：v2.1.0-Release</li>
+          <li><strong>当前版本</strong>：v2.1.2-Release</li>
           <li><strong>支持版本</strong>：Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</li>
           <li><strong>官方渠道</strong>：QQ群 1121599701 · GitHub · Modrinth · CurseForge</li>
           <li><strong>协议生效日期</strong>：2026年9月6日</li>
@@ -2897,7 +2915,7 @@ code { overflow-wrap: anywhere; }
 </div>
 
 
-<!-- ============ 版本更新公告弹窗 v2.1.1 Beta ============ -->
+<!-- ============ 版本更新公告弹窗 v2.1.2 ============ -->
 <div class="modal-overlay" id="update-modal" role="dialog" aria-modal="true" aria-labelledby="update-modal-title">
   <div class="modal-box update-box">
     <div class="modal-header update-header">
@@ -2905,18 +2923,17 @@ code { overflow-wrap: anywhere; }
       <button class="modal-close" id="update-modal-close" aria-label="关闭">×</button>
     </div>
     <div class="modal-body update-body">
-      <div class="update-badge"><span class="dot"></span>已发布</div>
-      <div class="update-ver announce">v2.1.1 Beta 来了！</div>
-      <div class="update-name">Block ID 2.1.1 Beta 抢先体验版</div>
-      <p class="update-desc">质量补丁版本，让模组从「装不上」变成「装上就能用」；内置拼音库换为 Apache-2.0，安装包缩小约 190 KB，同时消除协议风险。</p>
+      <div class="update-badge"><span class="dot"></span>正式版已发布</div>
+      <div class="update-ver announce">v2.1.2 Release 来了！</div>
+      <div class="update-name">Block ID 2.1.2 · 阶段 0 收官</div>
+      <p class="update-desc">阶段 0「止血」的收官版本：默认键位调整、补齐四版本统一构建，并新增 WorldEdit 联动。可加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载。</p>
       <div class="update-soon">📋 本版要点</div>
       <ul class="update-list">
-        <li>WorldEdit 改为可选前置，未安装也能正常进游戏</li>
-        <li>修正 Forge 1.19.2 模组元数据，解决加载异常</li>
-        <li>内置拼音库换为 Apache-2.0，安装包缩小约 190 KB</li>
-        <li>移除从未被引用的 Cloth Config 前置</li>
+        <li>默认键位改为 G / H，降低整合包按键冲突</li>
+        <li>修复三个版本漏初始化收藏与历史记录</li>
+        <li>1.20.1 检测到 WorldEdit 时自动执行指令</li>
+        <li>补齐 Forge / Fabric × 1.20.1 / 1.19.2 统一构建</li>
       </ul>
-      <p class="update-note">当前正式版：v2.1.0-Release</p>
       <div class="update-actions">
         <button class="update-btn primary" id="update-modal-changelog">查看更新日志</button>
         <button class="update-btn" id="update-modal-ok">本次不再提醒</button>
@@ -3445,15 +3462,16 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
 });
 
 
-/* ============ 版本更新公告弹窗 v2.1.1 Beta（已发布） ============ */
+/* ============ 版本更新公告弹窗 v2.1.2（已发布） ============ */
 (function() {
-  const UPDATE_KEY = 'blockid_update_211_beta_seen_v2';
+  const UPDATE_KEY = 'blockid_update_212_seen';
 
-  // 迁移 2026-10-03：清除已废弃的旧记录键（等同于删除用户端的弹窗点击记录）
+  // 迁移：清除已废弃的旧记录键（等同于删除用户端的弹窗点击记录）
   function purgeStaleKeys() {
     try {
       localStorage.removeItem('blockid_update_211_seen');
       localStorage.removeItem('blockid_update_211_beta_seen');
+      localStorage.removeItem('blockid_update_211_beta_seen_v2');
     } catch (e) {}
   }
   const modal = document.getElementById('update-modal');
@@ -3501,7 +3519,7 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
   logBtn.addEventListener('click', () => {
     logEvt('update_modal_goto_log');
     close(false);
-    setTimeout(() => { location.href = 'changelog.html#mv-2.1.1'; }, 260);
+    setTimeout(() => { location.href = 'changelog.html#mv-2.1.2'; }, 260);
   });
   closeBtn.addEventListener('click', () => { logEvt('update_modal_close'); close(false); });
   modal.addEventListener('click', e => { if (e.target === modal) { logEvt('update_modal_close'); close(false); } });
@@ -3576,7 +3594,7 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
 (function () {
   var ENDPOINT = 'https://blockid-admin.app.workbuddy.host';
   var KEY = 'wbpk_whwchtrfJEOVB2ElS83PSo_pNItdHl7mGzEsxaNGKlfdvr31AflxWbn';
-  var PAGE_VERSION = 'v2.1.0-Release';
+  var PAGE_VERSION = 'v2.1.2-Release';
   var cloud = null, queue = [], tries = 0;
 
   function flush() {
