@@ -3,3704 +3,474 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Block ID - 更新日志与未来计划</title>
+<title>更新日志 - Block ID</title>
 <link rel="icon" type="image/png" href="https://aka.doubaocdn.com/s/GaYX7u3vKU">
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#eef1f5">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0d1220">
+<meta name="theme-color" content="#0A0E15">
 <link rel="preconnect" href="https://miaoda.feishu.cn" crossorigin>
-<link rel="preconnect" href="https://aka.doubaocdn.com" crossorigin>
-<link rel="dns-prefetch" href="https://miaoda.feishu.cn">
-<link rel="dns-prefetch" href="https://aka.doubaocdn.com">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap">
 <style>
-/* ============ 全局变量与重置 ============ */
-:root {
-  --bg-deep: #eef1f5;
-  --bg-panel: #ffffff;
-  --bg-card: #ffffff;
-  --bg-card-hover: #f8fafc;
-  --border: #e2e8f0;
-  --border-light: #cbd5e1;
-  --green: #16a34a;
-  --green-dim: #15803d;
-  --gold: #d97706;
-  --gold-dim: #b45309;
-  --cyan: #0284c7;
-  --cyan-dim: #0369a1;
-  --red: #dc2626;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  --shadow-sm: 0 1px 3px rgba(15,23,42,0.06);
-  --shadow-md: 0 4px 16px rgba(15,23,42,0.08);
-  --shadow-lg: 0 12px 40px rgba(15,23,42,0.1);
-  --font-mono: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
-  --font-sans: 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', sans-serif;
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: var(--font-sans);
-  background: var(--bg-deep);
-  color: var(--text-primary);
-  line-height: 1.7;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  /* 现代建筑网格底纹（类似建筑图纸/幕墙分格） */
-  background-image:
-    linear-gradient(rgba(15,23,42,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15,23,42,0.025) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-::selection { background: var(--cyan); color: #fff; }
-
-/* ============ 方块粒子背景 Canvas ============ */
-#particle-canvas {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* 鼠标跟随光晕 */
-#cursor-glow {
-  position: fixed;
-  width: 500px; height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(2,132,199,0.08) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 1;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.5s;
-}
-
-/* ============ 导航栏 ============ */
-.navbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  padding: 18px 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: background-color .4s var(--ease-out), padding .4s var(--ease-out), box-shadow .4s var(--ease-out), border-color .4s var(--ease-out);
-  background: transparent;
-}
-.navbar.scrolled {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  padding: 12px 48px;
-}
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-}
-.nav-logo-icon {
-  width: 36px; height: 36px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  box-shadow: 0 0 20px rgba(2,132,199,0.25);
-}
-.nav-logo-icon img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.nav-logo-text {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 18px;
-  color: var(--text-primary);
-  letter-spacing: 0.5px;
-}
-.nav-logo-text span { color: var(--cyan); }
-.nav-links {
-  display: flex;
-  gap: 36px;
-  list-style: none;
-}
-.nav-links a {
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: color 0.4s;
-  position: relative;
-}
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -4px; left: 0;
-  width: 0; height: 2px;
-  background: var(--cyan);
-  transition: width 0.45s;
-}
-.nav-links a:hover { color: var(--cyan); }
-.nav-links a:hover::after { width: 100%; }
-.nav-version {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--gold);
-  border: 1px solid var(--gold);
-  padding: 5px 12px;
-  border-radius: 4px;
-  background: rgba(217,119,6,0.08);
-}
-
-/* ============ Hero 区 ============ */
-.hero {
-  position: relative;
-  z-index: 2;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 96px 24px 72px;
-  background-image:
-    linear-gradient(180deg, rgba(238,241,245,0.72) 0%, rgba(238,241,245,0.85) 50%, rgba(238,241,245,0.97) 100%),
-    url('https://aka.doubaocdn.com/s/5xh24jCRjS');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(ellipse at center, rgba(255,255,255,0.3) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: -1;
-}
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--cyan);
-  border: 1px solid rgba(2,132,199,0.3);
-  background: rgba(2,132,199,0.06);
-  padding: 8px 20px;
-  border-radius: 100px;
-  margin-bottom: 32px;
-  opacity: 0;
-  animation: heroIn 0.6s var(--ease-out) 0.05s both;
-  box-shadow: var(--shadow-sm);
-}
-.hero-badge .dot {
-  width: 8px; height: 8px;
-  background: var(--cyan);
-  border-radius: 50%;
-  animation: blink 1.5s infinite;
-}
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-.hero-title {
-  font-family: var(--font-mono);
-  font-size: clamp(48px, 8vw, 96px);
-  font-weight: 800;
-  line-height: 1.1;
-  margin-bottom: 8px;
-  opacity: 0;
-  animation: heroIn 0.7s var(--ease-out) 0.16s both;
-  text-shadow: 0 2px 20px rgba(255,255,255,0.6);
-}
-.hero-title .block-text {
-  background: linear-gradient(135deg, var(--cyan) 0%, var(--green) 50%, var(--cyan) 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradientFlow 4s linear infinite;
-}
-@keyframes gradientFlow {
-  0% { background-position: 0% center; }
-  100% { background-position: 200% center; }
-}
-.hero-subtitle {
-  font-size: clamp(18px, 2.5vw, 28px);
-  color: var(--text-primary);
-  font-weight: 400;
-  margin-bottom: 16px;
-  opacity: 0;
-  animation: heroIn 0.6s var(--ease-out) 0.3s both;
-  text-shadow: 0 1px 12px rgba(255,255,255,0.8);
-}
-.hero-slogan {
-  font-family: var(--font-mono);
-  font-size: clamp(14px, 1.5vw, 18px);
-  color: var(--gold-dim);
-  margin-bottom: 48px;
-  opacity: 0;
-  animation: heroIn 0.6s var(--ease-out) 0.42s both;
-  text-shadow: 0 1px 8px rgba(255,255,255,0.7);
-  font-weight: 500;
-}
-.hero-slogan::before { content: '> '; color: var(--cyan); }
-.hero-slogan .cursor {
-  display: inline-block;
-  width: 10px;
-  height: 20px;
-  background: var(--gold);
-  margin-left: 4px;
-  vertical-align: middle;
-  animation: cursorBlink 0.9s ease-in-out infinite;
-}
-@keyframes cursorBlink {
-  0%, 45% { opacity: 1; }
-  50%, 95% { opacity: 0; }
-  100% { opacity: 1; }
-}
-.hero-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-  margin-bottom: 48px;
-  opacity: 0;
-  animation: heroIn 0.6s var(--ease-out) 0.54s both;
-}
-.hero-tag {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  padding: 6px 14px;
-  border-radius: 4px;
-  border: 1px solid var(--border-light);
-  background: var(--bg-card);
-  color: var(--text-secondary);
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
-  box-shadow: var(--shadow-sm);
-}
-.hero-tag:hover {
-  border-color: var(--cyan);
-  color: var(--cyan);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-.hero-tag.highlight {
-  border-color: var(--cyan);
-  color: var(--cyan);
-  background: rgba(2,132,199,0.06);
-}
-.hero-tag.warn {
-  border-color: var(--gold);
-  color: var(--gold);
-  background: rgba(217,119,6,0.06);
-}
-.hero-cta {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-  opacity: 0;
-  animation: heroIn 0.6s var(--ease-out) 0.66s both;
-}
-.btn {
-  font-family: var(--font-mono);
-  font-size: 15px;
-  font-weight: 700;
-  padding: 16px 36px;
-  border-radius: 8px;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  border: none;
-  transition: transform .28s var(--ease-out), box-shadow .48s var(--ease-out), border-color .48s var(--ease-out), color .48s var(--ease-out), background-color .48s var(--ease-out);
-  position: relative;
-  overflow: hidden;
-}
-.btn-primary {
-  background: linear-gradient(135deg, var(--cyan), var(--cyan-dim));
-  color: #fff;
-  box-shadow: 0 4px 20px rgba(2,132,199,0.3);
-}
-.btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 32px rgba(2,132,199,0.4);
-}
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-  transition: left 0.7s;
-}
-.btn-primary:hover::before { left: 100%; }
-.btn-secondary {
-  background: var(--bg-card);
-  color: var(--text-primary);
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-sm);
-}
-.btn-secondary:hover {
-  border-color: var(--green);
-  color: var(--green);
-  background: rgba(22,163,74,0.04);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
-.btn-ghost {
-  background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-light);
-}
-.btn-ghost:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-  background: rgba(251,191,36,0.05);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
-
-/* 滚动提示 */
-.scroll-hint {
-  position: absolute;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  opacity: 0;
-  animation: heroIn 0.6s var(--ease-out) 1s both;
-  z-index: 1;
-  transition: opacity 0.6s, transform 0.6s;
-  pointer-events: none;
-}
-.scroll-hint.hidden {
-  opacity: 0 !important;
-  transform: translateX(-50%) translateY(10px);
-}
-.scroll-hint .mouse {
-  width: 24px; height: 38px;
-  border: 2px solid var(--text-muted);
-  border-radius: 12px;
-  position: relative;
-}
-.scroll-hint .mouse::after {
-  content: '';
-  position: absolute;
-  top: 6px; left: 50%;
-  transform: translateX(-50%);
-  width: 4px; height: 8px;
-  background: var(--green);
-  border-radius: 2px;
-  animation: scrollWheel 2.1s cubic-bezier(0.5, 0, 0.9, 0.45) infinite;
-}
-@keyframes scrollWheel {
-  0% { opacity: 0; top: 6px; }
-  18% { opacity: 1; }
-  68% { opacity: 1; top: 13px; }
-  100% { opacity: 0; top: 22px; }
-}
-
-@keyframes fadeInUp {
-  0%   { opacity: 0; transform: translateY(34px) scale(.98); }
-  15%  { opacity: 0; transform: translateY(38px) scale(.975); }
-  50%  { opacity: 1; transform: translateY(-2px) scale(1.01); }
-  75%  { transform: translateY(1px) scale(.997); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* 焦点入场：方块放置式到位（快速、利落、无弹跳） */
-@keyframes heroIn {
-  0%   { opacity: 0; transform: translateY(22px) scale(.985); filter: blur(8px); }
-  12%  { opacity: 0; transform: translateY(26px) scale(.98); filter: blur(8px); }
-  45%  { opacity: 1; transform: translateY(-3px) scale(1.015); filter: blur(2px); }
-  70%  { transform: translateY(1px) scale(.995); filter: blur(0); }
-  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-}
-
-/* ============ 快速跳转卡 ============ */
-.quick-nav {
-  position: relative;
-  z-index: 3;
-  max-width: 1280px;
-  margin: -50px auto 0;
-  padding: 0 48px;
-}
-.quick-nav-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 18px;
-}
-.quick-nav-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 22px 18px;
-  text-decoration: none;
-  color: var(--text-primary);
-  transition: transform .28s var(--ease-out), box-shadow .5s var(--ease-out), border-color .5s var(--ease-out);
-  box-shadow: var(--shadow-md);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-}
-.quick-nav-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--cyan), var(--green));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.5s;
-}
-.quick-nav-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--border-light);
-}
-.quick-nav-card:hover::before {
-  transform: scaleX(1);
-}
-.quick-nav-icon {
-  width: 42px; height: 42px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2px;
-}
-.quick-nav-icon svg { width: 22px; height: 22px; }
-.quick-nav-title {
-  font-size: 15px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.quick-nav-desc {
-  font-size: 12px;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-.quick-nav-arrow {
-  opacity: 0;
-  transform: translateX(-6px);
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
-  color: var(--cyan);
-  flex-shrink: 0;
-}
-.quick-nav-card:hover .quick-nav-arrow {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* ============ 通用 Section ============ */
-.section {
-  position: relative;
-  z-index: 2;
-  padding: 120px 48px;
-  max-width: 1280px;
-  margin: 0 auto;
-}
-.section-header {
-  text-align: center;
-  margin-bottom: 72px;
-}
-.section-label {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--cyan);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-.section-label::before,
-.section-label::after {
-  content: '';
-  width: 32px; height: 1px;
-  background: var(--cyan);
-  opacity: 0.5;
-}
-.section-title {
-  font-size: clamp(32px, 4vw, 48px);
-  font-weight: 900;
-  margin-bottom: 16px;
-  line-height: 1.2;
-  color: var(--text-primary);
-}
-.section-desc {
-  font-size: 17px;
-  color: var(--text-secondary);
-  max-width: 640px;
-  margin: 0 auto;
-}
-
-/* 滚动入场动画 */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.55s var(--ease-out),
-              transform 0.55s var(--ease-out);
-  transition-delay: calc(0.08s + var(--i,0)*0.07s*(1 - var(--i,0)*0.15));
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ============ 模组简介区 ============ */
-.intro-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 48px;
-  align-items: center;
-}
-.intro-text p {
-  font-size: 17px;
-  color: var(--text-secondary);
-  line-height: 1.9;
-  margin-bottom: 20px;
-}
-.intro-text p strong {
-  color: var(--text-primary);
-  font-weight: 700;
-}
-.intro-text .highlight-green { color: var(--green); font-weight: 700; }
-.intro-text .highlight-gold { color: var(--gold); font-weight: 700; }
-.intro-text .highlight-cyan { color: var(--cyan); font-weight: 700; }
-
-.intro-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-.stat-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 28px 24px;
-  text-align: center;
-  transition: transform .3s var(--ease-out), border-color .55s var(--ease-out), box-shadow .55s var(--ease-out);
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--cyan), var(--green));
-  transform: scaleX(0);
-  transition: transform 0.55s;
-}
-.stat-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-light);
-  box-shadow: var(--shadow-lg);
-}
-.stat-card:hover::before { transform: scaleX(1); }
-.stat-number {
-  font-family: var(--font-mono);
-  font-size: 42px;
-  font-weight: 800;
-  color: var(--cyan);
-  line-height: 1;
-  margin-bottom: 8px;
-}
-.stat-card:nth-child(2) .stat-number { color: var(--gold); }
-.stat-card:nth-child(3) .stat-number { color: var(--green); }
-.stat-card:nth-child(4) .stat-number { color: var(--cyan); }
-.stat-label {
-  font-size: 13px;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-}
-
-/* ============ 功能卡片区 ============ */
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-.feature-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 36px 28px;
-  transition: transform .28s var(--ease-out), border-color .5s var(--ease-out), box-shadow .5s var(--ease-out);
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-.feature-card::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(2,132,199,0.06), transparent 60%);
-  opacity: 0;
-  transition: opacity 0.5s;
-  pointer-events: none;
-}
-.feature-card:hover::after { opacity: 1; }
-.feature-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--border-light);
-  box-shadow: var(--shadow-lg);
-}
-.feature-icon {
-  width: 56px; height: 56px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24px;
-  transition: transform 0.55s;
-}
-.feature-card:hover .feature-icon {
-  transform: rotate(-8deg) scale(1.1);
-}
-.feature-icon.green {
-  background: rgba(22,163,74,0.1);
-  border: 1px solid rgba(22,163,74,0.25);
-}
-.feature-icon.gold {
-  background: rgba(217,119,6,0.1);
-  border: 1px solid rgba(217,119,6,0.25);
-}
-.feature-icon.cyan {
-  background: rgba(2,132,199,0.1);
-  border: 1px solid rgba(2,132,199,0.25);
-}
-.feature-icon svg {
-  width: 28px; height: 28px;
-}
-.feature-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--text-primary);
-}
-.feature-title .key-hint {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: var(--bg-deep);
-  border: 1px solid var(--border-light);
-  color: var(--gold);
-  font-weight: 500;
-}
-.feature-desc {
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.8;
-}
-.feature-desc code {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  background: var(--bg-deep);
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: var(--cyan-dim);
-  border: 1px solid var(--border);
-}
-/* ============ 未来规划区 ============ */
-.roadmap-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  align-items: stretch;
-}
-.roadmap-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 28px 26px;
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-}
-.roadmap-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, var(--cyan), #38bdf8);
-  opacity: 0.75;
-}
-.roadmap-card:nth-child(2)::before { background: linear-gradient(90deg, var(--green), #4ade80); }
-.roadmap-card:nth-child(3)::before { background: linear-gradient(90deg, var(--gold), #fbbf24); }
-.roadmap-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--border-light);
-  box-shadow: var(--shadow-lg);
-}
-.roadmap-version {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--cyan);
-  letter-spacing: 1px;
-  margin-bottom: 4px;
-}
-.roadmap-card:nth-child(2) .roadmap-version { color: var(--green); }
-.roadmap-card:nth-child(3) .roadmap-version { color: var(--gold); }
-.roadmap-title {
-  font-size: 19px;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 12px;
-}
-.roadmap-tag {
-  display: inline-block;
-  align-self: flex-start;
-  font-size: 10.5px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 5px;
-  background: rgba(2,132,199,0.1);
-  color: var(--cyan);
-  border: 1px solid rgba(2,132,199,0.25);
-  margin-bottom: 6px;
-}
-.roadmap-card:nth-child(2) .roadmap-tag { background: rgba(22,163,74,0.1); color: var(--green); border-color: rgba(22,163,74,0.25); }
-.roadmap-card:nth-child(3) .roadmap-tag { background: rgba(217,119,6,0.1); color: var(--gold); border-color: rgba(217,119,6,0.25); }
-.roadmap-sub {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-muted);
-  letter-spacing: 2px;
-  margin: 14px 0 4px;
-  border-bottom: 1px dashed var(--border);
-  padding-bottom: 4px;
-}
-.roadmap-list {
-  list-style: none;
-  flex: 1;
-}
-.roadmap-list li {
-  position: relative;
-  padding: 3.5px 0 3.5px 16px;
-  font-size: 13.5px;
-  color: var(--text-secondary);
-  line-height: 1.55;
-}
-.roadmap-list li::before {
-  content: '';
-  position: absolute;
-  left: 2px; top: 12px;
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: var(--cyan);
-}
-.roadmap-card:nth-child(2) .roadmap-list li::before { background: var(--green); }
-.roadmap-card:nth-child(3) .roadmap-list li::before { background: var(--gold); }
-
-
-/* ============ 性能数据区 ============ */
-.perf-section {
-  background: linear-gradient(180deg, transparent, rgba(2,132,199,0.04), transparent);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-.perf-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
-  text-align: center;
-}
-.perf-item {
-  padding: 32px 16px;
-}
-.perf-value {
-  font-family: var(--font-mono);
-  font-size: clamp(36px, 5vw, 56px);
-  font-weight: 800;
-  line-height: 1;
-  margin-bottom: 12px;
-  background: linear-gradient(135deg, var(--cyan), var(--green));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.perf-value .unit {
-  font-size: 0.4em;
-  -webkit-text-fill-color: var(--text-secondary);
-  font-weight: 500;
-}
-.perf-label {
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-.perf-bar {
-  width: 60px;
-  height: 3px;
-  background: var(--border);
-  margin: 16px auto 0;
-  border-radius: 2px;
-  overflow: hidden;
-}
-.perf-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--cyan), var(--green));
-  border-radius: 2px;
-  width: 0;
-  will-change: width;
-}
-
-/* ============ 安装指南区 ============ */
-.install-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 48px;
-}
-.install-tab {
-  font-family: var(--font-mono);
-  font-size: 15px;
-  font-weight: 700;
-  padding: 12px 32px;
-  border-radius: 8px;
-  border: 1px solid var(--border-light);
-  background: var(--bg-card);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
-  box-shadow: var(--shadow-sm);
-}
-.install-tab.active {
-  background: linear-gradient(135deg, var(--cyan), var(--cyan-dim));
-  color: #fff;
-  border-color: transparent;
-  box-shadow: 0 4px 16px rgba(2,132,199,0.3);
-}
-.install-tab:hover:not(.active) {
-  border-color: var(--cyan);
-  color: var(--cyan);
-}
-.install-content {
-  display: none;
-  max-width: 720px;
-  margin: 0 auto;
-}
-.install-content.active {
-  display: block;
-  animation: heroIn 0.45s var(--ease-out) both;
-}
-.install-step {
-  display: flex;
-  gap: 24px;
-  padding: 24px 0;
-  border-bottom: 1px solid var(--border);
-  align-items: flex-start;
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
-}
-.install-step:last-child { border-bottom: none; }
-.install-step:hover .step-content { transform: translateX(8px); }
-.step-content { transition: transform .25s var(--ease-out); }
-.step-number {
-  flex-shrink: 0;
-  width: 44px; height: 44px;
-  border-radius: 10px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-weight: 800;
-  font-size: 18px;
-  color: var(--cyan);
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
-  box-shadow: var(--shadow-sm);
-}
-.install-step:hover .step-number {
-  background: var(--cyan);
-  color: #fff;
-  transform: scale(1.1);
-}
-.step-content h4 {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 6px;
-  color: var(--text-primary);
-}
-.step-content p {
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.7;
-}
-.step-content code {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  background: var(--bg-deep);
-  padding: 2px 8px;
-  border-radius: 4px;
-  color: var(--gold);
-  border: 1px solid var(--border);
-}
-
-/* ============ 下载来源卡片 ============ */
-.download-card {
-  max-width: 720px;
-  margin: 0 auto 48px;
-  background: linear-gradient(135deg, rgba(2,132,199,0.06), rgba(22,163,74,0.04));
-  border: 1px solid rgba(2,132,199,0.25);
-  border-radius: 16px;
-  padding: 32px 36px;
-  position: relative;
-  overflow: hidden;
-  transition: border-color .55s var(--ease-out), box-shadow .55s var(--ease-out);
-  box-shadow: var(--shadow-sm);
-}
-.download-card::before {
-  content: '';
-  position: absolute;
-  top: -50%; right: -20%;
-  width: 300px; height: 300px;
-  background: radial-gradient(circle, rgba(2,132,199,0.1), transparent 70%);
-  pointer-events: none;
-}
-.download-card:hover {
-  border-color: rgba(2,132,199,0.4);
-  box-shadow: var(--shadow-lg);
-}
-.download-card-header {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 20px;
-}
-.download-card-icon {
-  width: 48px; height: 48px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--cyan), var(--cyan-dim));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(2,132,199,0.25);
-}
-.download-card-icon svg { width: 26px; height: 26px; }
-.download-card-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-.download-card-title .badge {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  background: var(--gold);
-  color: #fff;
-  padding: 3px 8px;
-  border-radius: 4px;
-  margin-left: 10px;
-  vertical-align: middle;
-  font-weight: 700;
-}
-.download-qq-group {
-  font-family: var(--font-mono);
-  font-size: 42px;
-  font-weight: 800;
-  color: var(--cyan);
-  letter-spacing: 2px;
-  margin: 8px 0 16px;
-  text-shadow: 0 0 30px rgba(2,132,199,0.2);
-}
-.download-join-tip {
-  font-size: 13px;
-  color: #94a3b8;
-  background: rgba(251,191,36,0.08);
-  border: 1px solid rgba(251,191,36,0.2);
-  border-radius: 8px;
-  padding: 8px 14px;
-  margin: 0 0 16px;
-  text-align: center;
-}
-.download-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 16px;
-}
-.download-meta-item {
-  font-size: 13px;
-  color: var(--text-secondary);
-  background: rgba(255,255,255,0.7);
-  border: 1px solid var(--border);
-  padding: 8px 14px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.download-meta-item .meta-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--gold);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-.download-meta-item .meta-value {
-  color: var(--text-primary);
-}
-.download-note {
-  margin-top: 16px;
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.7;
-  padding-top: 16px;
-  border-top: 1px dashed var(--border);
-}
-.download-note strong { color: var(--cyan); font-weight: 600; }
-.open-source-notice {
-  margin-top: 14px;
-  padding: 12px 16px;
-  background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(245,158,11,0.05));
-  border: 1px solid rgba(251,191,36,0.28);
-  border-radius: 10px;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-.open-source-notice .notice-icon {
-  flex-shrink: 0;
-  width: 20px; height: 20px;
-  color: #fbbf24;
-  margin-top: 2px;
-}
-.open-source-notice .notice-text {
-  font-size: 13px;
-  line-height: 1.65;
-  color: #c8c0a8;
-}
-.open-source-notice .notice-text strong { color: #fbbf24; font-weight: 600; }
-.download-click-hint {
-  margin-top: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 20px;
-  background: linear-gradient(135deg, rgba(2,132,199,0.08), rgba(22,163,74,0.06));
-  border: 1px dashed rgba(2,132,199,0.35);
-  border-radius: 10px;
-  font-size: 13px;
-  color: var(--cyan);
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform .25s var(--ease-out), color .45s var(--ease-out), background-color .45s var(--ease-out), border-color .45s var(--ease-out), box-shadow .45s var(--ease-out), opacity .45s var(--ease-out);
-  animation: hintPulse 2.6s ease-in-out infinite;
-}
-.download-click-hint:hover {
-  background: linear-gradient(135deg, rgba(2,132,199,0.14), rgba(22,163,74,0.1));
-  border-color: rgba(2,132,199,0.6);
-  transform: translateY(-1px);
-}
-.download-click-hint:active {
-  transform: scale(0.97);
-}
-.download-click-hint .hint-icon {
-  display: inline-flex;
-  animation: handTap 1.6s ease-in-out infinite;
-}
-@keyframes hintPulse {
-  0%, 72%, 100% { box-shadow: 0 0 0 0 rgba(2,132,199,0.15); }
-  82% { box-shadow: 0 0 0 0 rgba(2,132,199,0.15); }
-  92% { box-shadow: 0 0 0 10px rgba(2,132,199,0); }
-}
-@keyframes handTap {
-  0%, 60%, 100% { transform: translateY(0) scale(1); }
-  72% { transform: translateY(1px) scale(1); }
-  82% { transform: translateY(-4px) scale(1.18); }
-  92% { transform: translateY(1px) scale(.93); }
-  97% { transform: translateY(0) scale(1.02); }
-}
-
-/* ============ Toast 提示 ============ */
-.toast-overlay {
-  position: fixed;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%) translateY(150%);
-  z-index: 9999;
-  transition: transform 0.45s var(--ease-out);
-  pointer-events: none;
-}
-.toast-overlay.show {
-  transform: translateX(-50%) translateY(0);
-  pointer-events: auto;
-}
-.toast {
-  background: rgba(15, 23, 42, 0.96);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 16px;
-  padding: 18px 22px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  box-shadow: 0 16px 50px rgba(0,0,0,0.35);
-  min-width: 380px;
-  max-width: 92vw;
-}
-.toast-icon {
-  width: 44px; height: 44px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #0284c7, #0ea5e9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(2,132,199,0.4);
-}
-.toast-icon svg { width: 24px; height: 24px; }
-.toast-content { flex: 1; min-width: 0; }
-.toast-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 3px;
-}
-.toast-desc {
-  font-size: 12px;
-  color: #94a3b8;
-  font-family: var(--font-mono);
-}
-.toast-desc .groupId {
-  color: #4ade80;
-  font-weight: 700;
-}
-.toast-actions {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
-.toast-btn {
-  padding: 9px 16px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
-  font-family: var(--font-sans);
-  white-space: nowrap;
-}
-.toast-btn.primary {
-  background: linear-gradient(135deg, #0284c7, #0ea5e9);
-  color: #fff;
-  box-shadow: 0 2px 10px rgba(2,132,199,0.3);
-}
-.toast-btn.primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(2,132,199,0.45);
-}
-.toast-btn.secondary {
-  background: rgba(255,255,255,0.08);
-  color: #e2e8f0;
-  border: 1px solid rgba(255,255,255,0.15);
-}
-.toast-btn.secondary:hover {
-  background: rgba(255,255,255,0.14);
-}
-.toast-close {
-  position: absolute;
-  top: 10px; right: 12px;
-  width: 22px; height: 22px;
-  border-radius: 6px;
-  background: transparent;
-  border: none;
-  color: #64748b;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
-  font-size: 16px;
-  line-height: 1;
-}
-.toast-close:hover {
-  background: rgba(255,255,255,0.1);
-  color: #e2e8f0;
-}
-
-/* ============ 版本历史 ============ */
-.version-history {
-  max-width: 720px;
-  margin: 0 auto 48px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 28px 32px;
-  box-shadow: var(--shadow-sm);
-}
-.version-history-title {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--text-secondary);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.version-history-title::before {
-  content: '';
-  width: 4px; height: 16px;
-  background: var(--gold);
-  border-radius: 2px;
-}
-.version-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-.version-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-  transition: transform .25s var(--ease-out), color .45s var(--ease-out), background-color .45s var(--ease-out), border-color .45s var(--ease-out), box-shadow .45s var(--ease-out), opacity .45s var(--ease-out);
-}
-.version-item:last-child { border-bottom: none; }
-.version-item:hover { transform: translateX(4px); }
-.version-number {
-  font-family: var(--font-mono);
-  font-size: 16px;
-  font-weight: 700;
-  min-width: 110px;
-  color: var(--text-primary);
-}
-.version-tag {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 4px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-.version-tag.beta {
-  background: rgba(22,163,74,0.12);
-  color: var(--green);
-  border: 1px solid rgba(22,163,74,0.3);
-}
-.version-tag.release {
-  background: rgba(59,130,246,0.12);
-  color: #3b82f6;
-  border: 1px solid rgba(59,130,246,0.3);
-}
-.version-tag.alpha {
-  background: rgba(220,38,38,0.08);
-  color: var(--red);
-  border: 1px solid rgba(220,38,38,0.25);
-}
-.version-tag.latest {
-  background: var(--gold);
-  color: #fff;
-  border: 1px solid var(--gold);
-}
-.version-platforms {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-left: auto;
-  display: flex;
-  gap: 6px;
-}
-.version-platform {
-  padding: 2px 8px;
-  border-radius: 4px;
-  border: 1px solid var(--border);
-  background: var(--bg-deep);
-}
-.version-platform.forge { color: var(--cyan); border-color: rgba(2,132,199,0.3); }
-.version-platform.fabric { color: var(--gold); border-color: rgba(217,119,6,0.3); }
-.version-platform.none { color: var(--text-muted); opacity: 0.5; }
-.version-status {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-.version-status.recommended { color: var(--green); font-weight: 600; }
-.version-status.deprecated { color: var(--red); font-size: 11px; }
-.version-divider {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-muted);
-  padding: 14px 0 8px;
-  letter-spacing: 1px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.version-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
-.version-footnote {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px dashed var(--border);
-  font-size: 12px;
-  color: var(--text-secondary);
-  line-height: 1.8;
-}
-.version-footnote strong { color: var(--gold); font-weight: 600; }
-
-/* ============ 更新日志弹窗 ============ */
-.changelog-link-btn { color: var(--accent); }
-.nav-changelog-link { color: var(--accent-2, var(--text-secondary)); position: relative; }
-.changelog-badge {
-  font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
-  background: var(--gold); color: #0b0e14; padding: 1px 6px; border-radius: 8px;
-  vertical-align: super; margin-left: 2px;
-}
-.modal-overlay {
-  position: fixed; inset: 0; z-index: 1000;
-  background: rgba(5,7,12,0.78); backdrop-filter: blur(10px);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none; transition: opacity 0.45s ease;
-  padding: 20px;
-}
-.modal-overlay.open { opacity: 1; pointer-events: auto; }
-.modal-box {
-  width: min(880px, 94vw); max-height: 80vh;
-  background: #161a24;
-  border: 1px solid #2a3145; border-radius: 18px;
-  display: flex; flex-direction: column; overflow: hidden;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
-  transform: translateY(24px) scale(0.97); transition: transform 0.5s var(--ease-out);
-}
-.modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
-.modal-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 20px; border-bottom: 1px solid #2a3145;
-  background: linear-gradient(135deg, rgba(74,138,213,0.1), transparent);
-}
-.modal-header-title { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 10px; color: #e8eaf0; }
-.modal-header-title .rocket { font-size: 20px; }
-.modal-close {
-  width: 34px; height: 34px; border-radius: 10px;
-  border: 1px solid #2a3145; background: #10131c;
-  color: #9aa3b8; font-size: 18px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
-}
-.modal-close:hover { color: #f87171; border-color: #f87171; transform: rotate(90deg); }
-.modal-close:disabled { opacity: 0.3; cursor: not-allowed; }
-.modal-close:disabled:hover { color: #9aa3b8; border-color: #2a3145; transform: none; }
-.license-agree-area {
-  margin-top: 24px; padding-top: 20px;
-  border-top: 1px solid #2a3145;
-  text-align: center;
-}
-.license-scroll-tip {
-  color: #fbbf24; font-size: 13px; margin-bottom: 14px;
-  animation: tipPulse 2.6s ease-in-out infinite;
-}
-.license-agree-btn {
-  width: 100%; max-width: 320px;
-  padding: 12px 24px; font-size: 14px; font-weight: 600;
-}
-.license-agree-btn:disabled {
-  opacity: 0.4; cursor: not-allowed;
-  background: #1e293b !important;
-  border-color: #334155 !important;
-  color: #64748b !important;
-}
-/* ============ 更新日志地铁线路图 ============ */
-.metro-line {
-  width: 300px; flex-shrink: 0;
-  padding: 26px 20px 30px 30px;
-  position: relative;
-  border-right: 1px solid #2a3145;
-  background: #10131c;
-  overflow: hidden;
-}
-.metro-track {
-  position: absolute;
-  left: 45px; top: 24px; bottom: 22px;
-  width: 3px;
-  background: linear-gradient(180deg, #4a8ad5 0%, #38bdf8 55%, #a78bfa 100%);
-  border-radius: 2px;
-  opacity: 0.9;
-}
-.metro-track::after {
-  content: ''; position: absolute; left: 50%; bottom: 0;
-  transform: translateX(-50%);
-  width: 0; height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 9px solid #a78bfa;
-  opacity: 0.7;
-}
-.metro-station {
-  display: flex; align-items: center; gap: 15px;
-  width: 100%; margin: 0 0 7px 0; padding: 7px 8px 7px 0;
-  background: transparent; border: none; cursor: pointer;
-  text-align: left; position: relative; z-index: 2;
-  font-family: var(--font-mono);
-  border-radius: 12px;
-  transition: background 0.45s var(--ease-out);
-}
-.metro-station:hover { background: rgba(74,138,213,0.07); }
-.ms-dot {
-  width: 28px; height: 28px; flex-shrink: 0;
-  border-radius: 50%;
-  border: 3px solid #4a8ad5;
-  background: #10131c;
-  display: flex; align-items: center; justify-content: center;
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
-  position: relative;
-}
-.ms-dot i {
-  width: 9px; height: 9px; border-radius: 50%;
-  background: #4a8ad5;
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
-}
-.ms-body { display: flex; align-items: center; gap: 8px; min-width: 0; flex-wrap: wrap; }
-.ms-ver { font-size: 13px; color: #8b96ab; font-weight: 600; transition: color 0.3s; white-space: nowrap; }
-.ms-tags { display: inline-flex; gap: 5px; }
-.metro-station .tag {
-  font-size: 9px; padding: 1px 6px; border-radius: 5px;
-  background: rgba(74,138,213,0.18); color: #6ba8f0; font-weight: 700; letter-spacing: 0.3px;
-}
-.metro-station .tag.latest { background: #fbbf24; color: #0b0e14; }
-.metro-station .tag.upcoming { background: #d97706; color: #fff; }
-.metro-station.upcoming .ms-dot { border-style: dashed; }
-/* 悬停 */
-.metro-station:hover .ms-dot {
-  border-color: #38bdf8;
-  box-shadow: 0 0 0 6px rgba(56,189,248,0.12), 0 0 20px rgba(56,189,248,0.35);
-  transform: scale(1.08);
-}
-.metro-station:hover .ms-dot i { background: #38bdf8; }
-.metro-station:hover .ms-ver { color: #e8eaf0; }
-/* 激活站点 */
-.metro-station.active {
-  background: rgba(56,189,248,0.08);
-}
-.metro-station.active .ms-dot {
-  border-color: #38bdf8; background: #0e2a3f;
-  box-shadow: 0 0 0 6px rgba(56,189,248,0.15), 0 0 24px rgba(56,189,248,0.4);
-}
-.metro-station.active .ms-dot i { background: #38bdf8; }
-.metro-station.active .ms-ver { color: #7dd3fc; }
-/* 最新版：金色站点 */
-.metro-station.latest .ms-dot { border-color: #fbbf24; }
-.metro-station.latest .ms-dot i { background: #fbbf24; }
-.metro-station.latest.active .ms-dot {
-  border-color: #fbbf24; background: #2a2005;
-  box-shadow: 0 0 0 6px rgba(251,191,36,0.15), 0 0 26px rgba(251,191,36,0.4);
-}
-.metro-station.latest.active .ms-dot i { background: #fbbf24; }
-.metro-station.latest.active .ms-ver { color: #fde68a; }
-/* 重大更新：换乘站样式（大节点 + 内环） */
-.metro-station.major .ms-dot { width: 34px; height: 34px; margin: -3px 0 -3px -3px; }
-.metro-station.major .ms-dot::after {
-  content: ''; position: absolute; inset: -7px;
-  border-radius: 50%;
-  border: 2px dashed rgba(74,138,213,0.45);
-}
-
-/* 地铁列车到站指示 */
-.metro-train {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  transform: translate(-50%, -50%);
-  width: 14px; height: 14px;
-  border-radius: 50%;
-  background: #fbbf24;
-  box-shadow: 0 0 10px rgba(251,191,36,0.85), 0 0 26px rgba(251,191,36,0.4);
-  transition: top 0.7s cubic-bezier(0.45, 0, 0.2, 1);
-  z-index: 3;
-  pointer-events: none;
-}
-/* 激活站点脉冲光环 */
-.metro-station.active .ms-dot::before {
-  content: '';
-  position: absolute;
-  inset: -5px;
-  border-radius: 50%;
-  border: 2px solid rgba(56,189,248,0.55);
-  animation: stationPulse 2.2s ease-out infinite;
-}
-.metro-station.latest.active .ms-dot::before {
-  border-color: rgba(251,191,36,0.55);
-}
-@keyframes stationPulse {
-  0%, 55% { transform: scale(0.8); opacity: 0; }
-  62% { opacity: 0.85; }
-  100% { transform: scale(1.7); opacity: 0; }
-}
-/* 终点站（历史版本） */
-.metro-station.end .ms-dot { border-radius: 50% 50% 6px 6px; }
-.metro-station.end .ms-ver { color: #64748b; font-size: 12px; }
-.modal-body {
-  flex: 1; overflow-y: auto; padding: 14px 20px 20px;
-  background: #161a24;
-}
-.modal-body::-webkit-scrollbar { width: 6px; }
-.modal-body::-webkit-scrollbar-thumb { background: #2a3145; border-radius: 3px; }
-.modal-body::-webkit-scrollbar-track { background: transparent; }
-.mpanel { display: none; }
-.mpanel.active { display: block; animation: mpanelIn 0.4s var(--ease-out) both; }
-.mpanel.leaving { display: block; animation: mpanelOut 0.2s var(--ease-in) forwards; }
-@keyframes mpanelIn {
-  from { opacity: 0; transform: translateY(24px) scale(.97); }
-  55% { opacity: 1; transform: translateY(-2px) scale(1.02); }
-  75% { transform: translateY(1px) scale(.995); }
-  to { opacity: 1; transform: none; }
-}
-@keyframes mpanelOut {
-  from { opacity: 1; transform: none; }
-  to { opacity: 0; transform: translateY(-14px) scale(0.99); }
-}
-.mv-header {
-  background: #10131c; border: 1px solid #2a3145;
-  border-radius: 12px; padding: 12px 18px; margin-bottom: 12px; position: relative; overflow: hidden;
-}
-.mv-header::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, #4a8ad5, #a78bfa);
-}
-.mv-header.latest::before { background: linear-gradient(90deg, #4ade80, #38bdf8); }
-.mv-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 5px; }
-.mv-title { font-size: 18px; font-weight: 800; color: #e8eaf0; }
-.mv-tag {
-  font-size: 9.5px; padding: 1px 7px; border-radius: 5px; font-weight: 700; letter-spacing: 0.5px;
-}
-.mv-tag.beta { background: rgba(251,191,36,0.14); color: #fbbf24; border: 1px solid rgba(251,191,36,0.35); }
-.mv-tag.release { background: rgba(59,130,246,0.14); color: #3b82f6; border: 1px solid rgba(59,130,246,0.35); }
-.mv-tag.alpha { background: rgba(167,139,250,0.14); color: #a78bfa; border: 1px solid rgba(167,139,250,0.35); }
-.mv-tag.hot { background: rgba(56,189,248,0.14); color: #38bdf8; border: 1px solid rgba(56,189,248,0.35); }
-.mv-tag.latest { background: rgba(74,222,128,0.14); color: #4ade80; border: 1px solid rgba(74,222,128,0.35); }
-.mv-tag.upcoming { background: rgba(217,119,6,0.16); color: #f59e0b; border: 1px dashed rgba(217,119,6,0.5); }
-/* ============ 历史版本：正式版本 / 早期版本 两栏归档 ============ */
-/* 配色与日志区固定深色一致：#10131c 容器 / #1c2130 条目 / #2a3145 边框 */
-.archive-columns {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  margin-top: 4px;
-}
-.archive-col {
-  background: #10131c;
-  border: 1px solid #2a3145;
-  border-radius: 14px;
-  padding: 16px 16px 14px;
-  min-width: 0;
-}
-.archive-col-head,
-.archive-col-sub {
-  display: flex; align-items: center; gap: 8px;
-  padding-bottom: 10px; margin-bottom: 10px;
-  border-bottom: 1px solid #2a3145;
-}
-.archive-col-sub {
-  margin-top: 18px; padding-top: 14px;
-  padding-bottom: 0; border-bottom: none;
-}
-.archive-col-icon { font-size: 13px; line-height: 1; }
-.archive-col-title { font-size: 14px; font-weight: 700; color: #e8eaf0; }
-.archive-col-count {
-  margin-left: auto; font-family: var(--font-mono);
-  font-size: 10.5px; font-weight: 600; color: #9aa3b8;
-  padding: 2px 8px; border-radius: 6px; background: rgba(154,163,184,0.12);
-  white-space: nowrap;
-}
-.archive-col-release .archive-col-head { border-bottom-color: rgba(59,130,246,0.28); }
-.archive-col-release .archive-col-count { color: #6ba8f0; background: rgba(59,130,246,0.14); }
-.archive-col-early .archive-col-head { border-bottom-color: rgba(251,191,36,0.3); }
-.archive-col-early .archive-col-count { color: #fbbf24; background: rgba(251,191,36,0.14); }
-
-.archive-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-.archive-item {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center; gap: 10px;
-  padding: 10px 12px; border-radius: 10px;
-  border: 1px solid #2a3145;
-  background: #1c2130;
-  cursor: pointer;
-  transition: transform .25s var(--ease-out), border-color .25s var(--ease-out),
-              box-shadow .25s var(--ease-out), background-color .25s var(--ease-out);
-}
-.archive-item:hover {
-  transform: translateX(3px);
-  border-color: #3d4860;
-  background: #212839;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
-}
-.archive-item:focus-visible { outline: 2px solid #6ba8f0; outline-offset: 2px; }
-.archive-ver {
-  font-family: var(--font-mono); font-size: 12.5px; font-weight: 700;
-  color: #e8eaf0; white-space: nowrap;
-}
-.archive-meta {
-  font-size: 11.5px; color: #9aa3b8;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.archive-arrow {
-  font-size: 16px; line-height: 1; color: #9aa3b8;
-  transition: transform .2s var(--ease-out), color .2s var(--ease-out);
-}
-.archive-item:hover .archive-arrow { transform: translateX(3px); color: #6ba8f0; }
-
-.archive-back {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-bottom: 12px; padding: 7px 14px; border-radius: 9px;
-  border: 1px solid #2a3145; background: #1c2130;
-  color: #a9b6ca; font-size: 12.5px; font-weight: 600;
-  cursor: pointer;
-  transition: color .2s var(--ease-out), border-color .2s var(--ease-out), transform .2s var(--ease-out);
-}
-.archive-back:hover {
-  color: #e8eaf0;
-  border-color: #3d4860;
-  transform: translateX(-2px);
-}
-.archive-back[hidden] { display: none; }
-
-@media (max-width: 900px) {
-  .archive-columns { grid-template-columns: 1fr; }
-}
-@media (max-width: 560px) {
-  .archive-item { grid-template-columns: 1fr auto; }
-  .archive-meta { grid-column: 1 / -1; white-space: normal; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .archive-item, .archive-back, .archive-arrow { transition-duration: .01ms !important; }
-}
-.mv-platforms { margin-left: auto; display: flex; gap: 6px; }
-.mv-platform {
-  font-size: 10.5px; padding: 2px 9px; border-radius: 6px;
-  background: #1c2130; color: #9aa3b8; border: 1px solid #2a3145;
-}
-.mv-desc { color: #9aa3b8; font-size: 12.5px; line-height: 1.55; }
-.msection {
-  background: #1c2130; border: 1px solid #2a3145;
-  border-radius: 10px; padding: 12px 18px; margin-bottom: 10px;
-}
-.mtitle {
-  font-size: 14px; font-weight: 700; margin-bottom: 8px;
-  display: flex; align-items: center; gap: 9px; color: #e8eaf0;
-}
-.micon {
-  width: 22px; height: 22px; border-radius: 6px; font-size: 11px;
-  display: flex; align-items: center; justify-content: center;
-}
-.micon.ui { background: rgba(56,189,248,0.13); }
-.micon.core { background: rgba(74,138,213,0.13); }
-.micon.fix { background: rgba(248,113,113,0.13); }
-.micon.tech { background: rgba(167,139,250,0.13); }
-.mlist { list-style: none; }
-.mlist li {
-  padding: 3.5px 0 3.5px 20px; position: relative;
-  color: #c8cdd8; font-size: 12.5px; line-height: 1.55;
-  border-bottom: 1px solid rgba(42,49,69,0.6);
-}
-.mlist li:last-child { border-bottom: none; }
-.mlist li::before {
-  content: ''; position: absolute; left: 3px; top: 12px;
-  width: 5px; height: 5px; border-radius: 50%; background: #4a8ad5;
-}
-.mlist li code {
-  background: #10131c; padding: 1px 6px; border-radius: 4px;
-  font-size: 12px; color: #6ba8f0; font-family: "Cascadia Code", "Fira Code", monospace;
-}
-.mlist li strong { color: #e8eaf0; font-weight: 600; }
-.mlist li .sub { display: block; padding-left: 14px; color: #8a92a8; font-size: 13px; }
-.msub {
-  font-size: 12.5px; font-weight: 700; color: #6ba8f0;
-  margin: 8px 0 3px; letter-spacing: 1px;
-}
-.msub-item {
-  font-size: 12.5px; font-weight: 600; color: #c8cdd8;
-  margin: 5px 0 2px;
-}
-.mtimeline { position: relative; padding-left: 28px; margin-top: 4px; }
-.mtimeline::before {
-  content: ''; position: absolute; left: 7px; top: 10px; bottom: 10px; width: 2px;
-  background: linear-gradient(to bottom, #4a8ad5, #2a3145);
-}
-.mtl-item {
-  position: relative; padding: 6px 14px; margin-bottom: 5px;
-  background: #1c2130; border: 1px solid #2a3145; border-radius: 10px;
-}
-.mtl-item::before {
-  content: ''; position: absolute; left: -25px; top: 13px;
-  width: 10px; height: 10px; border-radius: 50%;
-  background: #4a8ad5; border: 3px solid #161a24;
-  box-shadow: 0 0 0 2px #4a8ad5;
-}
-.mtl-version { font-weight: 700; font-size: 12.5px; margin-bottom: 2px; color: #e8eaf0; }
-.mtl-desc { color: #6b7388; font-size: 12px; }
-@media (max-width: 640px) {
-  .modal-box { max-height: 92vh; }
-  .mv-title { font-size: 17px; }
-  .mv-platforms { margin-left: 0; }
-  .modal-body { padding: 16px; }
-  .msection { padding: 16px; }
-}
-
-/* Hero 区闭源提示 */
-.hero-open-notice {
-  margin-top: 20px;
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 10px 22px;
-  background: linear-gradient(135deg, rgba(30,25,10,0.88), rgba(45,35,12,0.82));
-  border: 1px solid rgba(251,191,36,0.55);
-  border-radius: 22px;
-  font-size: 13.5px;
-  color: #f5f0e0;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(251,191,36,0.15);
-  opacity: 0;
-  animation: fadeInUp 1.2s 1.3s forwards;
-}
-.hero-open-notice strong { color: #fcd34d; font-weight: 700; }
-.hero-open-notice .notice-dot {
-  width: 7px; height: 7px;
-  background: #fcd34d;
-  border-radius: 50%;
-  flex-shrink: 0;
-  box-shadow: 0 0 10px rgba(252,211,77,0.8);
-}
-/* Hero 区下载提示 */
-.hero-download-hint {
-  margin-top: 28px;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--text-secondary);
-  opacity: 0;
-  animation: fadeInUp 1.2s 1.5s forwards;
-}
-.hero-download-hint .qq-num {
-  color: var(--cyan);
-  font-weight: 700;
-  font-size: 15px;
-}
-
-/* ============ 终端演示区 ============ */
-.terminal-section {
-  max-width: 900px;
-}
-.terminal {
-  background: #0d1117;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  position: relative;
-  max-height: 56px;
-  transition: max-height 1.2s var(--ease-out);
-}
-.terminal.open {
-  max-height: 750px;
-}
-/* 扫描线效果 */
-.terminal::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(74,222,128,0.4), transparent);
-  animation: scanLine 4.5s linear infinite;
-  pointer-events: none;
-  z-index: 2;
-}
-@keyframes scanLine {
-  0% { top: 0; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-.terminal-header {
-  display: flex;
-  align-items: center;
-  padding: 14px 20px;
-  background: #161b22;
-  border-bottom: 1px solid var(--border);
-  gap: 8px;
-}
-.terminal-dot {
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  transition: transform 0.2s;
-}
-.terminal:hover .terminal-dot { transform: scale(1.2); }
-.terminal-dot.red { background: #ff5f56; }
-.terminal-dot.yellow { background: #ffbd2e; }
-.terminal-dot.green {
-  background: #27c93f;
-}
-.terminal-title {
-  margin-left: 12px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-muted);
-}
-.terminal-body {
-  padding: 28px 28px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 2.1;
-  min-height: 460px;
-  position: relative;
-}
-.terminal-line {
-  opacity: 0;
-  transform: scaleX(0);
-  transform-origin: left center;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-.terminal-line.typed {
-  opacity: 1;
-  transform: scaleX(1);
-}
-.terminal-line.stretched {
-  animation: stretchReveal 0.4s var(--ease-out) forwards;
-}
-@keyframes stretchReveal {
-  0% {
-    opacity: 0;
-    transform: scaleX(0);
-    letter-spacing: -0.1em;
-  }
-  55% {
-    opacity: 1;
-    transform: scaleX(1.06);
-    letter-spacing: 0.02em;
-  }
-  85% {
-    opacity: 1;
-    transform: scaleX(0.97);
-    letter-spacing: -0.01em;
-  }
-  100% {
-    opacity: 1;
-    transform: scaleX(1);
-    letter-spacing: normal;
-  }
-}
-.terminal-line .prompt { color: var(--green); }
-.terminal-line .command { color: var(--cyan); }
-.terminal-line .output { color: var(--text-secondary); }
-.terminal-line .success { color: var(--green); }
-.terminal-line .warn { color: var(--gold); }
-.terminal-line .block-id { color: var(--gold); }
-.terminal-cursor {
-  display: inline-block;
-  width: 8px; height: 16px;
-  background: var(--green);
-  vertical-align: middle;
-  animation: cursorBlink 0.9s ease-in-out infinite;
-}
-
-/* ============ FAQ 区 ============ */
-.faq-list {
-  max-width: 800px;
-  margin: 0 auto;
-}
-.faq-item {
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  margin-bottom: 16px;
-  overflow: hidden;
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-sm);
-}
-.faq-item:hover { border-color: var(--border-light); box-shadow: var(--shadow-md); }
-.faq-item.open {
-  border-color: rgba(2,132,199,0.4);
-  box-shadow: var(--shadow-md);
-}
-.faq-question {
-  padding: 22px 28px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  font-weight: 700;
-  font-size: 16px;
-  transition: color 0.4s;
-  color: var(--text-primary);
-}
-.faq-question:hover { color: var(--cyan); }
-.faq-question .q-label {
-  font-family: var(--font-mono);
-  color: var(--gold);
-  margin-right: 10px;
-  font-size: 14px;
-}
-.faq-toggle {
-  flex-shrink: 0;
-  width: 28px; height: 28px;
-  border-radius: 6px;
-  background: var(--bg-deep);
-  border: 1px solid var(--border-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color .15s var(--ease-out), background-color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .15s var(--ease-out), opacity .15s var(--ease-out);
-}
-.faq-item.open .faq-toggle {
-  background: var(--cyan);
-  border-color: var(--cyan);
-  transform: rotate(45deg);
-}
-.faq-toggle svg {
-  width: 14px; height: 14px;
-  stroke: var(--text-secondary);
-  transition: stroke 0.3s;
-}
-.faq-item.open .faq-toggle svg { stroke: #fff; }
-.faq-answer {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.55s var(--ease-out), padding 0.4s;
-}
-.faq-item.open .faq-answer {
-  max-height: 300px;
-}
-.faq-answer-inner {
-  padding: 0 28px 24px;
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.9;
-}
-.faq-answer-inner .a-label {
-  font-family: var(--font-mono);
-  color: var(--green);
-  font-weight: 700;
-  margin-right: 8px;
-}
-.faq-answer-inner code {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  background: var(--bg-deep);
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: var(--cyan-dim);
-  border: 1px solid var(--border);
-}
-
-
-
-/* ============ 原版介绍图展示区 ============ */
-.preview-section {
-  text-align: center;
-}
-.preview-frame {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-lg);
-  transition: transform 0.55s, box-shadow 0.55s;
-}
-.preview-frame:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 30px 60px rgba(2,132,199,0.12);
-}
-.preview-frame img {
-  width: 100%;
-  display: block;
-}
-.preview-caption {
-  margin-top: 20px;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-/* ============ Footer ============ */
-.footer {
-  position: relative;
-  z-index: 2;
-  border-top: 1px solid var(--border);
-  padding: 48px;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.6);
-}
-.footer-content {
-  max-width: 1280px;
-  margin: 0 auto;
-}
-.footer-info {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 32px;
-  margin-bottom: 24px;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--text-muted);
-}
-.footer-info span {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.footer-info .sep { color: var(--border-light); }
-.footer-bottom {
-  font-size: 12px;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-}
-.footer-bottom a {
-  color: var(--cyan);
-  text-decoration: none;
-}
-
-/* ============ 响应式 ============ */
-@media (max-width: 968px) {
-  .navbar { padding: 14px 24px; }
-  .nav-links { display: none; }
-  .section { padding: 80px 24px; }
-  .intro-grid { grid-template-columns: 1fr; gap: 32px; }
-  .features-grid { grid-template-columns: 1fr; }
-  .roadmap-grid { grid-template-columns: 1fr; }
-  .perf-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-  .hero-cta { flex-direction: column; align-items: center; }
-  .btn { width: 100%; max-width: 320px; justify-content: center; }
-  .quick-nav { padding: 0 24px; margin-top: -30px; }
-  .quick-nav-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .quick-nav-card { padding: 16px 14px; }
-  .quick-nav-desc { display: none; }
-}
-@media (max-width: 480px) {
-  .perf-grid { grid-template-columns: 1fr; }
-  .intro-stats { grid-template-columns: 1fr; }
-  .hero-tags { gap: 8px; }
-  .hero-tag { font-size: 11px; padding: 4px 10px; }
-}
-
-/* 尊重 reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  #particle-canvas { display: none; }
-  #cursor-glow { display: none; }
-
-  .reveal {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-    transition: none !important;
-  }
-  .mpanel.leaving, .install-content.leaving {
-    animation: none !important;
-    opacity: 0;
-  }
-  .metro-train { transition: none !important; }
-  [class*="Pulse"], [class*="pulse"], .logo-pulse, .qq-pulse {
-    animation: none !important;
-  }
-}
-
-
-
-/* ============ 副网页专属样式 ============ */
-.changelog-hero {
-  padding: 96px 48px 64px;
-  text-align: center;
-}
-.changelog-hero .hero-title {
-  font-size: clamp(40px, 5vw, 62px);
-  font-weight: 900;
-  color: var(--text-primary);
-  margin: 18px 0 12px;
-  line-height: 1.15;
-}
-.changelog-hero .hero-subtitle {
-  font-size: 18px;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-}
-.changelog-hero .hero-slogan2 {
-  font-size: 15px;
-  color: var(--text-muted);
-  margin-bottom: 30px;
-  opacity: 0;
-  animation: heroIn 0.6s var(--ease-out) 0.42s both;
-}
-.changelog-hero .hero-cta-row {
-  display: flex;
-  gap: 14px;
-  justify-content: center;
-  flex-wrap: wrap;
-  opacity: 0;
-  animation: heroIn 0.6s var(--ease-out) 0.66s both;
-}
-.nav-links a.active {
-  color: var(--cyan);
-  font-weight: 700;
-}
-.changelog-box {
-  background: #161a24;
-  border: 1px solid #2a3145;
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: 0 24px 60px rgba(15,23,42,0.16);
-  display: flex;
-}
-.changelog-box .metro-line {
-  background: #10131c;
-}
-.changelog-box .modal-body {
-  overflow: hidden;
-  max-height: none;
-  padding: 16px 20px 24px;
-  transition: height 0.45s var(--ease-out);
-}
-
-/* 移动端：地铁线保持竖排，线路在上、详情在下 */
-@media (max-width: 900px) {
-  .changelog-box { flex-direction: column; }
-  .changelog-box .metro-line {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #2a3145;
-    padding: 20px 18px;
-    display: block;
-  }
-  .changelog-box .metro-track {
-    left: 45px; top: 18px; bottom: 18px;
-    width: 3px;
-    background: linear-gradient(180deg, #4a8ad5 0%, #38bdf8 55%, #a78bfa 100%);
-  }
-  .changelog-box .metro-track::after {
-    display: block;
-  }
-  .changelog-box .metro-station {
-    flex-direction: row;
-    width: 100%;
-    padding: 6px 8px 6px 0;
-    text-align: left;
-  }
-  .changelog-box .ms-body { flex-direction: row; gap: 8px; }
-  .changelog-box .ms-ver { white-space: nowrap; }
-}
-
-#roadmap .section-header,
-#roadmap .roadmap-grid {
-  position: relative;
-  z-index: 1;
-}
-@media (max-width: 1024px) {
-  .changelog-hero { padding: 140px 24px 40px; }
-  .roadmap-grid { grid-template-columns: 1fr; }
-}
-
-
-
-/* ============ 设计精修 (design-taste-frontend) ============ */
-:root {
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in: cubic-bezier(0.4, 0, 1, 1);
-  --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* 标题字距精修 */
-.section-title,
-.roadmap-title,
-.download-card-title,
-.quick-nav-title {
-  letter-spacing: -0.015em;
-}
-
-/* 全局交互过渡统一（平滑） */
-button,
-.btn,
-a,
-.quick-nav-card,
-.download-card,
-.download-click-hint,
-.roadmap-card,
-.version-item {
-  transition-timing-function: var(--ease-out);
-}
-
-/* 按压物理反馈 */
-button:active,
-.btn:active,
-.quick-nav-card:active,
-.download-click-hint:active,
-.roadmap-card:active,
-.version-item:active {
-  transform: translateY(1px) scale(0.98);
-}
-
-/* 卡片悬停精致提升 */
-.quick-nav-card:hover,
-.download-card:hover,
-.roadmap-card:hover {
-  box-shadow: 0 20px 48px rgba(2, 132, 199, 0.10);
-}
-
-/* 滚动入场更平滑 */
-.reveal {
-  transition-timing-function: var(--ease-out);
-}
-
-/* 键盘焦点可见性 */
-:focus-visible {
-  outline: 2px solid var(--cyan);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-/* 减少动效偏好：尊重系统设置 */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-
-
-/* ============ 浅色主题精修（立体感与高级感） ============ */
-@media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
-:root {
-  --shadow-sm: 0 1px 2px rgba(15,23,42,0.05), 0 3px 10px rgba(15,23,42,0.04);
-  --shadow-md: 0 2px 5px rgba(15,23,42,0.05), 0 14px 30px rgba(15,23,42,0.08);
-  --shadow-lg: 0 4px 10px rgba(15,23,42,0.06), 0 30px 64px rgba(15,23,42,0.13);
-}
-
-/* 页面顶部柔光，向下渐沉 */
-body {
-  background-image:
-    radial-gradient(1000px 500px at 50% -5%, rgba(255,255,255,0.8) 0%, transparent 65%),
-    linear-gradient(rgba(15,23,42,0.022) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15,23,42,0.022) 1px, transparent 1px);
-  background-size: auto, 48px 48px, 48px 48px;
-}
-
-/* hero 顶部聚焦光晕 */
-.hero::before {
-  background: radial-gradient(ellipse 100% 75% at 50% -5%, rgba(255,255,255,0.5) 0%, transparent 70%);
-}
-
-/* 卡片顶部高光（纸张质感） */
-.quick-nav-card,
-.roadmap-card,
-.stat-card,
-.faq-item {
-  background-image: linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 30%);
-}
-
-/* 卡片悬停：轻微上浮 + 层次青色阴影 */
-.quick-nav-card:hover,
-.roadmap-card:hover,
-.stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 2px 6px rgba(15,23,42,0.06), 0 24px 48px rgba(2,132,199,0.10);
-}
-
-/* FAQ 悬停：柔和层次（不上浮，避免干扰展开交互） */
-.faq-item:hover {
-  box-shadow: 0 2px 6px rgba(15,23,42,0.05), 0 16px 32px rgba(15,23,42,0.07);
-}
-
-/* 下载卡：青色层次阴影 + 内高光 */
-.download-card {
-  box-shadow: 0 2px 6px rgba(2,132,199,0.05), 0 18px 44px rgba(2,132,199,0.10), inset 0 1px 0 rgba(255,255,255,0.5);
-}
-
-/* 主按钮立体：顶部高光 + 层次青色阴影 + 内高光 */
-.btn-primary {
-  background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 48%), linear-gradient(135deg, var(--cyan), var(--cyan-dim));
-  box-shadow: 0 1px 2px rgba(2,132,199,0.35), 0 10px 24px rgba(2,132,199,0.28), inset 0 1px 0 rgba(255,255,255,0.22);
-}
-
-/* 次级按钮立体 */
-.btn-secondary {
-  box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 8px 20px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.6);
-}
-
-}
-
-/* ============ 暗色模式（跟随系统主题） ============ */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-deep: #0d1220;
-    --bg-panel: #171e2e;
-    --bg-card: #1a2233;
-    --bg-card-hover: #212b3f;
-    --border: #2b3448;
-    --border-light: #3d4860;
-    --green: #4ade80;
-    --green-dim: #22c55e;
-    --gold: #fbbf24;
-    --gold-dim: #f59e0b;
-    --cyan: #38bdf8;
-    --cyan-dim: #0ea5e9;
-    --red: #f87171;
-    --text-primary: #e8eef7;
-    --text-secondary: #a9b6ca;
-    --text-muted: #72809a;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.35);
-    --shadow-md: 0 4px 16px rgba(0,0,0,0.42);
-    --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
-  }
-
-  body {
-    background-image:
-      linear-gradient(rgba(255,255,255,0.026) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.026) 1px, transparent 1px);
-  }
-
-  /* hero：深色遮罩保留背景图 */
-  .hero {
-    background-image:
-      linear-gradient(180deg, rgba(9,14,25,0.82) 0%, rgba(9,14,25,0.90) 50%, rgba(13,18,32,0.98) 100%),
-      url('https://aka.doubaocdn.com/s/5xh24jCRjS');
-  }
-
-  .hero-title,
-  .hero-subtitle,
-  .hero-slogan {
-    text-shadow: 0 2px 24px rgba(0,0,0,0.45);
-  }
-
-  .navbar.scrolled {
-    background: rgba(11, 16, 28, 0.86);
-  }
-
-  .download-meta-item {
-    background: var(--bg-card-hover);
-  }
-
-  .toast-btn.secondary {
-    background: rgba(255,255,255,0.08);
-  }
-  .toast-btn.secondary:hover {
-    background: rgba(255,255,255,0.14);
-  }
-  .toast-close:hover {
-    background: rgba(255,255,255,0.10);
-  }
-
-  .perf-section {
-    background: linear-gradient(180deg, rgba(56,189,248,0.06) 0%, transparent 60%);
-  }
-
-  #cursor-glow {
-    background: radial-gradient(circle, rgba(56,189,248,0.13) 0%, transparent 70%);
-  }
-
-  .terminal,
-  .changelog-box,
-  .modal-box,
-  .modal-overlay {
-    box-shadow: 0 24px 64px rgba(0,0,0,0.55);
-  }
-
-  .hero::before {
-    background: radial-gradient(ellipse 100% 75% at 50% -5%, rgba(56,189,248,0.10) 0%, transparent 70%);
-  }
-}
-
-/* ============ 动效系统 v2（方块放置语言） ============ */
-#scroll-progress {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  z-index: 300;
-  background: linear-gradient(90deg, var(--cyan), var(--green));
-  transform-origin: 0 50%;
-  transform: scaleX(0);
-  pointer-events: none;
-}
-
-/* Hero 逐词装配（JS 渐进增强；无 JS 时整块入场） */
-.hero-title.split { opacity: 1; animation: none; }
-.hero-title .w,
-.hero-title .w-unit {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(0.4em);
-  filter: blur(4px);
-  animation: wordPlace 0.55s var(--ease-out) both;
-  animation-delay: calc(0.14s + var(--wi,0)*0.08s - var(--wi,0)*var(--wi,0)*0.004s);
-}
-.hero-title .w-unit.block-text {
-  animation: gradientFlow 4s linear infinite, wordPlace 0.55s var(--ease-out) both;
-  animation-delay: 0s, calc(0.14s + var(--wi,0)*0.08s - var(--wi,0)*var(--wi,0)*0.004s);
-}
-@keyframes wordPlace {
-  0%   { opacity: 0; transform: translateY(0.5em) scale(.985); filter: blur(6px); }
-  12%  { opacity: 0; transform: translateY(0.6em) scale(.98); filter: blur(6px); }
-  45%  { opacity: 1; transform: translateY(-0.1em) scale(1.02); filter: blur(1px); }
-  70%  { transform: translateY(0.05em) scale(.995); filter: blur(0); }
-  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-}
-
-/* ============ 排版布局 v3（Vercel Web Interface Guidelines · 只动排版布局，主题不变） ============ */
-:root {
-  --container-max: 1200px;
-  --gutter: clamp(20px, 5vw, 48px);
-  --section-y: clamp(72px, 9vw, 120px);
-  --header-h: 72px;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root { color-scheme: dark; }
-}
-
-/* 触摸：消除双击缩放延迟与灰色点击高亮 */
-button, .btn, a, .hero-tag, .install-tab, .faq-question,
-.quick-nav-card, .feature-card, .stat-card, .download-card,
-.download-click-hint, .version-item, .metro-station {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* 锚点定位：固定导航不遮挡标题 */
-section[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
-
-/* 跳转到主要内容（仅键盘聚焦时可见） */
-.skip-link {
-  position: fixed;
-  top: 12px; left: 12px;
-  z-index: 400;
-  padding: 10px 20px;
-  border-radius: 8px;
-  background: var(--cyan);
-  color: #fff;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  transform: translateY(-160%);
-  transition: transform .25s var(--ease-out), box-shadow .25s var(--ease-out);
-  box-shadow: var(--shadow-lg);
-}
-.skip-link:focus-visible { transform: translateY(0); }
-
-/* ---- 排版系统 ---- */
-h1, h2, h3, h4 { text-wrap: balance; }
-p, li { text-wrap: pretty; overflow-wrap: break-word; }
-.hero-title { letter-spacing: -0.03em; }
-.section-title { letter-spacing: -0.025em; }
-.hero-subtitle { max-width: 30ch; margin-left: auto; margin-right: auto; }
-.hero-slogan, .hero-slogan2 { max-width: 46ch; margin-left: auto; margin-right: auto; }
-.intro-text p { max-width: 62ch; }
-.feature-desc, .step-content p { overflow-wrap: break-word; }
-/* 数字等宽，计数/数据不跳动 */
-.counter, .stat-number, .perf-value, .nav-version, .qq-num,
-.groupId, .hero-tag, .key-hint, .step-number, .ms-ver {
-  font-variant-numeric: tabular-nums;
-}
-
-/* ---- 容器与垂直节奏 ---- */
-.section {
-  max-width: var(--container-max);
-  padding: var(--section-y) var(--gutter);
-}
-.section-header { margin-bottom: clamp(40px, 5.5vw, 68px); }
-.section-desc { max-width: 60ch; }
-.quick-nav {
-  max-width: var(--container-max);
-  padding-left: var(--gutter);
-  padding-right: var(--gutter);
-}
-.footer { padding-left: var(--gutter); padding-right: var(--gutter); }
-.footer-content { max-width: var(--container-max); }
-
-/* 网格间距随视口呼吸 */
-.intro-grid { gap: clamp(32px, 4vw, 56px); }
-.features-grid { gap: clamp(16px, 2.2vw, 24px); }
-.perf-grid { gap: 24px; }
-
-/* 弹性子项允许文本截断，避免长内容撑破布局 */
-.download-card-header > *,
-.feature-title,
-.version-item > * { min-width: 0; }
-code, .terminal-line { overflow-wrap: anywhere; }
-
-/* ---- 弹窗滚动容器：滚动不穿透到页面 ---- */
-.modal-body { overscroll-behavior: contain; }
-
-/* ---- 焦点态：粘性导航不遮挡聚焦元素 ---- */
-.section :focus-visible { scroll-margin-bottom: 24px; }
-
-</style></head>
+:root{
+  --bg:#0A0E15; --bg-alt:#0E131C; --bg-footer:#080B11;
+  --card:#141B27; --card-hover:#1A2130; --card-deep:#0D1219; --card-raise:#101722;
+  --line:#232C3D; --line-strong:#2A3448;
+  --text:#E8EAF0; --text-sub:#A9B6CA; --text-mute:#6B7688; --text-faint:#4A5568;
+  --blue:#6BA8F0; --blue-deep:#4A8AD5; --blue-chip:#1B2C46;
+  --gold:#FBBF24; --gold-bg:#2A2314;
+  --green:#4ADE80; --green-bg:#0F1A16;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --sans:"Noto Sans SC",-apple-system,"Segoe UI",system-ui,sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:rgba(107,168,240,.28)}
+.wrap{max-width:1280px;margin:0 auto;padding:0 40px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:60;background:rgba(10,14,21,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(35,44,61,.7)}
+.nav-in{display:flex;align-items:center;gap:32px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16.5px}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links a{font-size:14px;color:var(--text-sub);transition:color .18s var(--ease)}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.ver-chip{font-family:var(--mono);font-size:11.5px;color:var(--text-sub);background:#111722;border:1px solid var(--line);border-radius:7px;padding:5px 9px}
+.btn{display:inline-flex;align-items:center;justify-content:center;font-size:13.5px;font-weight:600;border-radius:9px;padding:9px 16px;border:1px solid var(--line);background:var(--card-hover);color:var(--text);transition:all .18s var(--ease)}
+.btn-primary{background:var(--blue);border-color:var(--blue);color:#08101c}
+.btn-primary:hover{background:#82b7f4}
+.nav-toggle{display:none;width:36px;height:36px;border:1px solid var(--line);border-radius:8px;align-items:center;justify-content:center}
+.nav-toggle span{display:block;width:16px;height:1.5px;background:var(--text-sub);position:relative}
+.nav-toggle span::before,.nav-toggle span::after{content:"";position:absolute;left:0;width:16px;height:1.5px;background:var(--text-sub)}
+.nav-toggle span::before{top:-5px}.nav-toggle span::after{top:5px}
+
+/* hero */
+.chero{padding:88px 0 40px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:1.8px;color:var(--text-faint);text-transform:uppercase;margin-bottom:16px}
+.chero h1{font-size:clamp(40px,4.6vw,60px);font-weight:900;letter-spacing:-1.6px;line-height:1.2;margin-bottom:14px}
+.chero p{font-size:14.5px;color:var(--text-sub)}
+
+/* 双版本卡 */
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:24px 0 8px}
+.vcard{background:var(--card-raise);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+.vcard.beta-card{background:linear-gradient(160deg,rgba(42,35,20,.85),rgba(20,27,39,.9));border-color:rgba(251,191,36,.22)}
+.vcard-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.pill{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;letter-spacing:.4px}
+.pill.rel{color:var(--blue);background:var(--blue-chip);border:1px solid rgba(107,168,240,.32)}
+.pill.beta{color:var(--gold);background:var(--gold-bg);border:1px solid rgba(251,191,36,.32)}
+.vcard .vnum{font-family:var(--mono);font-size:12px;color:var(--text-mute)}
+.vcard h3{font-size:19px;font-weight:800;margin-bottom:8px}
+.vcard p{font-size:12.5px;color:var(--text-sub);line-height:1.7}
+.vcard .meta{margin-top:14px;font-family:var(--mono);font-size:10.5px;color:var(--text-faint)}
+.vcard .state{margin-top:14px;font-size:11px;color:var(--gold)}
+
+/* 主体 */
+.body-grid{display:grid;grid-template-columns:200px minmax(0,1fr);gap:76px;padding:56px 0 80px;align-items:start}
+.toc{position:sticky;top:88px}
+.toc-t{font-size:10.5px;color:var(--text-faint);font-family:var(--mono);letter-spacing:.8px;margin-bottom:12px}
+.chips{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.chip{font-size:11px;color:var(--text-mute);border:1px solid var(--line);border-radius:6px;padding:4px 9px;transition:all .16s var(--ease)}
+.chip.on{background:var(--blue-chip);border-color:rgba(107,168,240,.45);color:var(--blue)}
+.toc-item{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12.5px;color:var(--text-mute);padding:7px 0;transition:color .16s var(--ease)}
+.toc-item:hover,.toc-item.on{color:var(--text)}
+.i,.dot{width:6px;height:6px;border-radius:50%;display:block;flex:none}
+.dot.release{background:var(--green)}
+.dot.beta{background:var(--gold)}
+.toc-more{margin-top:12px;font-size:11.5px;color:var(--blue)}
+.toc-more:hover{text-decoration:underline}
+
+.entry{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 32px;margin-bottom:16px;scroll-margin-top:88px}
+.entry.older{display:none}
+.entry.show{display:block}
+.entry-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px}
+.entry-head h3{font-family:var(--mono);font-size:23px;font-weight:700;letter-spacing:-.4px}
+.tag{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:5px;font-family:var(--mono)}
+.tag.beta{color:var(--gold);background:var(--gold-bg);border:1px solid rgba(251,191,36,.3)}
+.tag.release{color:var(--green);background:var(--green-bg);border:1px solid rgba(74,222,128,.28)}
+.entry-desc{font-size:13px;color:var(--text-sub);margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid rgba(35,44,61,.7)}
+.group{margin-bottom:18px}
+.glabel{font-size:11px;font-weight:700;letter-spacing:1.2px;margin-bottom:10px}
+.g-green{color:var(--green)}
+.g-blue{color:var(--blue)}
+.g-mute{color:var(--text-faint)}
+.item{margin-bottom:12px}
+.item h4{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:4px}
+.item p{font-size:12.5px;color:var(--text-mute);line-height:1.75}
+.item p.sub{font-size:12px;color:var(--text-faint);margin-top:5px}
+.item code{font-family:var(--mono);font-size:11.5px;color:var(--blue);background:#101722;border-radius:4px;padding:1px 5px}
+.info{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:16px;background:#101722}
+.info.box-green{border-color:rgba(74,222,128,.28);background:rgba(15,26,22,.75)}
+.info-t{font-size:10.5px;font-weight:700;letter-spacing:1.1px;color:var(--text-mute);margin-bottom:8px}
+.info.box-green .info-t{color:var(--green)}
+.info .item{margin-bottom:8px}
+.info .item:last-child{margin-bottom:0}
+.more-wrap{display:flex;justify-content:center;margin-top:6px}
+.more-btn{width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:#101722;color:var(--text-sub);font-size:12.5px}
+.more-btn:hover{border-color:var(--line-strong);color:var(--text)}
+
+/* roadmap */
+.road{padding:0 0 96px}
+.road h2{font-size:clamp(26px,2.6vw,34px);font-weight:900;letter-spacing:-.8px;margin-bottom:22px}
+.road-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 0;border-bottom:1px solid var(--line);font-size:14px}
+.road-row:first-of-type{border-top:1px solid var(--line)}
+.road-st{font-size:11px;font-family:var(--mono)}
+.road-st.doing{color:var(--gold)}
+.road-st.plan{color:var(--text-faint)}
+
+/* footer */
+.foot{background:var(--bg-footer);border-top:1px solid var(--line)}
+.foot-line{height:1px;background:linear-gradient(90deg,transparent,rgba(74,138,213,.55),rgba(74,222,128,.35),transparent)}
+.foot-main{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:30px 0 14px}
+.foot-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.foot-tag{font-size:12px;color:var(--text-faint)}
+.foot-bottom{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px 0 26px;font-family:var(--mono);font-size:11px;color:var(--text-faint)}
+
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+@media (max-width:1080px){
+  .wrap{padding:0 28px}
+  .body-grid{grid-template-columns:1fr;gap:28px}
+  .toc{position:static;min-width:0}
+  .body-grid>main{min-width:0}
+  .toc .toc-list{display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+  .toc-item{white-space:nowrap}
+  .dual{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .nav-links{position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;background:#0B1018;border-bottom:1px solid var(--line);padding:6px 28px 14px;display:none}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:11px 0;border-bottom:1px solid rgba(35,44,61,.6)}
+  .nav-toggle{display:flex}
+  .ver-chip{display:none}
+  .chero{padding:56px 0 24px}
+  .entry{padding:20px 18px}
+  .entry-head h3{font-size:19px}
+  .item p,.item code{overflow-wrap:anywhere;word-break:break-word}
+  .foot-main{flex-direction:column;align-items:flex-start;gap:10px}
+  .foot-bottom{flex-direction:column;align-items:flex-start;gap:6px}
+}
+@media (max-width:480px){.wrap{padding:0 18px}}
+</style>
+</head>
 <body>
 
-<a class="skip-link" href="#changelog">跳到主要内容</a>
-
-<!-- 方块粒子背景 -->
-<canvas id="particle-canvas"></canvas>
-<!-- 鼠标光晕 -->
-<div id="cursor-glow"></div>
-
-<!-- ============ 导航栏 ============ -->
-<nav class="navbar" id="navbar">
-  <a href="index.html" class="nav-logo">
-    <div class="nav-logo-icon"><img src="https://aka.doubaocdn.com/s/GaYX7u3vKU" alt="Block ID Logo" width="36" height="36" fetchpriority="high"></div>
-    <div class="nav-logo-text">Block<span>ID</span></div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="index.html">返回主页</a></li>
-    <li><a href="#changelog" class="active">更新日志</a></li>
-    <li><a href="#roadmap">未来计划</a></li>
-    <li><a href="index.html#faq">常见问题</a></li>
-    <li><a href="index.html">使用协议</a></li>
-  </ul>
-  <div class="nav-version">v2.1.2.2-Beta</div>
-</nav>
-
-<!-- ============ Hero 区 ============ -->
-<section class="hero changelog-hero">
-  <div class="hero-badge">
-    <span class="dot"></span>
-    Block ID 资讯中心
-  </div>
-  <h1 class="hero-title">
-    更新日志<span style="color:var(--text-muted)"> 与 </span><span class="block-text" style="color:var(--cyan)">未来计划</span>
-  </h1>
-  <p class="hero-subtitle">版本迭代记录 · 开发路线图 · 持续进化</p>
-  <p class="hero-slogan2">从 v2.0.0 全面重构到 v2.1.2 收官版本，见证每一步成长</p>
-  <div class="hero-cta-row">
-    <a href="#changelog" class="btn btn-primary">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-      查看更新日志
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="index.html">
+      <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
+        <path d="M16 3 29 10.5 16 18 3 10.5Z" fill="#7FB4F5"/>
+        <path d="M3 10.5 16 18V31L3 23.5Z" fill="#4A8AD5"/>
+        <path d="M29 10.5 16 18V31l13-7.5Z" fill="#2F6AA8"/>
+      </svg>
+      <span>Block ID</span>
     </a>
-    <a href="#roadmap" class="btn btn-secondary">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      查看未来计划
-    </a>
-    <a href="index.html" class="btn btn-ghost">返回主页</a>
-  </div>
-</section>
-
-<!-- ============ 更新日志 ============ -->
-<section class="section" id="changelog">
-  <div class="section-header reveal">
-    <div class="section-label">CHANGELOG</div>
-    <h2 class="section-title">更新日志</h2>
-    <p class="section-desc">所有版本的完整迭代记录，点击标签切换查看</p>
-  </div>
-  <div class="changelog-box reveal">
-    <div class="metro-line">
-      <div class="metro-track"><span class="metro-train"></span></div>
-      <button class="metro-station active latest upcoming" data-mv="2.1.2.2">
-        <span class="ms-dot"><i></i></span>
-        <span class="ms-body">
-          <span class="ms-ver">v2.1.2.2-Beta</span>
-          <span class="ms-tags"><span class="tag latest">已发布</span></span>
-        </span>
-      </button>
-      <button class="metro-station" data-mv="2.1.2.1">
-        <span class="ms-dot"><i></i></span>
-        <span class="ms-body"><span class="ms-ver">v2.1.2.1-Beta</span></span>
-      </button>
-      <button class="metro-station latest" data-mv="2.1.2">
-        <span class="ms-dot"><i></i></span>
-        <span class="ms-body">
-          <span class="ms-ver">v2.1.2-Release</span>
-          <span class="ms-tags"><span class="tag latest">当前正式版</span></span>
-        </span>
-      </button>
-      <button class="metro-station" data-mv="2.1.1">
-        <span class="ms-dot"><i></i></span>
-        <span class="ms-body"><span class="ms-ver">v2.1.1-Beta</span></span>
-      </button>
-      <button class="metro-station end" data-mv="history">
-        <span class="ms-dot"><i></i></span>
-        <span class="ms-body"><span class="ms-ver">历史版本</span></span>
-      </button>
+    <nav class="nav-links" id="nav-links">
+      <a href="index.html#intro">模组介绍</a>
+      <a href="index.html#features">核心功能</a>
+      <a href="index.html#install">安装下载</a>
+      <a href="index.html#faq">常见问题</a>
+      <a href="changelog.html" class="active">更新日志</a>
+      <a href="index.html#license" id="nav-license">使用协议</a>
+    </nav>
+    <div class="nav-right">
+      <span class="ver-chip">v2.1.2.3-Beta</span>
+      <a class="btn btn-primary" href="index.html#install">下载模组</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="展开菜单"><span></span></button>
     </div>
-    <div class="modal-body">
-      <button class="archive-back" id="archive-back" hidden>← 返回历史版本</button>
+  </div>
+</header>
 
-      <!-- v2.1.2.2 -->
-      <div class="mpanel active" id="mv-2.1.2.2">
-        <div class="mv-header latest">
-          <div class="mv-top">
-            <span class="mv-title">🚀 Block_ID 2.1.2.2-Beta</span>
-            <span class="mv-tag beta">Beta</span>
-            <span class="mv-tag latest">已发布</span>
-            <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
-          </div>
-          <div class="mv-desc">修复方块权重无法精确控制的问题：权重改为 WorldEdit 原生的相对权重语义，三个及以上方块也能准确设置 50% / 25% / 25% 这样的比例。</div>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">🐛</div>修复</div>
-          <ul class="mlist">
-            <li><strong>方块权重无法精确控制</strong>：旧逻辑在设置某个方块后，会把剩余配额按其他方块当前值的比例重新分配。逐个输入目标值时，先前设置好的方块会被后续操作反复缩放，任何顺序都无法精确落在目标分布上。
-              <span class="sub">典型场景：三个方块想设为 50% / 25% / 25%，结果总在漂移，怎么调都对不上。</span>
-            </li>
-            <li><strong>改为相对权重语义</strong>：WorldEdit 的 50%stone,25%dirt,25%sand 本就不要求总和为 100，是相对值。现在输入的数值就是该方块的相对权重，各方块独立设置、互不干扰。
-              <span class="sub">三个方块依次输入 50、25、25，即得到精确的 50% / 25% / 25%。</span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon ui">🎛️</div>变更</div>
-          <ul class="mlist">
-            <li><strong>界面权重显示</strong>：显示实际占比（该方块权重 ÷ 组内总权重），与生成指令的真实分布一致</li>
-            <li><strong>权重输入范围</strong>：由 1–99 扩展为 1–9999，支持更悬殊的比例</li>
-            <li><strong>拖拽滑条</strong>：仍按百分比位置操作，内部自动换算为相对权重</li>
-            <li><strong>增删方块</strong>：不再触发全组权重重分配，其余方块保持原值</li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon tech">🧩</div>兼容性</div>
-          <ul class="mlist">
-            <li>全默认状态（未调整权重）生成的指令与旧版完全一致</li>
-            <li>组内任一方块有自定义权重时，全部方块都会带上 N% 前缀（WorldEdit 中无前缀方块的权重为 1，混用会产生错误比例）</li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon ui">🧪</div>验证</div>
-          <ul class="mlist">
-            <li>四版本（Forge / Fabric × 1.20.1 / 1.19.2）compileJava 与 clean build 全部 BUILD SUCCESSFUL</li>
-            <li>旧权重逻辑无残留，四份源码新增方法一致</li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon tech">ℹ️</div>关于本版本</div>
-          <ul class="mlist">
-            <li><strong>版本号</strong>：v2.1.2.2-Beta</li>
-            <li><strong>当前状态</strong>：<strong style="color:#4ade80;">已发布</strong>（Beta 抢先体验版）</li>
-            <li><strong>适用版本</strong>：Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</li>
-            <li><strong>下载方式</strong>：加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</li>
-          </ul>
-        </div>
+<section class="chero">
+  <div class="wrap">
+    <div class="eyebrow">Changelog</div>
+    <h1>更新日志</h1>
+    <p>每一次改动都写在这里 —— 按版本倒序，最新的在最上面。</p>
+    <div class="dual">
+      <div class="vcard">
+        <div class="vcard-top"><span class="pill rel">当前正式版</span><span class="vnum">v2.1.2-Release</span></div>
+        <h3>稳定版本</h3>
+        <p>四个加载器版本齐全，默认推荐给大多数玩家。所有功能已稳定，不含实验性改动。</p>
+        <div class="meta">Forge 47.4.10+ · Fabric 0.15.11+</div>
       </div>
-      <!-- v2.1.2.1 -->
-      <div class="mpanel" id="mv-2.1.2.1">
-        <div class="mv-header latest">
-          <div class="mv-top">
-            <span class="mv-title">🚀 Block_ID 2.1.2.1-Beta</span>
-            <span class="mv-tag beta">Beta</span>
-            <span class="mv-tag latest">已发布</span>
-            <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
-          </div>
-          <div class="mv-desc">阶段 1「合规与工程底座」的第一步落地：统一四版本的映射方案，从源头消除 Forge / Fabric 的类名差异，为后续源码合并铺路。</div>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">🔄</div>变更</div>
-          <ul class="mlist">
-            <li><strong>Fabric 两版切换到 Mojang 官方映射</strong>：build.gradle 从 yarn 映射改为 loom.officialMojangMappings()，并把全部 yarn 类名 / 方法名替换为 mojmap 对等物（约 190 处）。
-              <span class="sub">MinecraftClient→Minecraft、Text→Component、Identifier→ResourceLocation、ButtonWidget→Button、TextFieldWidget→EditBox、KeyBinding→KeyMapping、Formatting→ChatFormatting、wasPressed→consumeClick、getMainHandStack→getMainHandItem、sendMessage→displayClientMessage、Registries.BLOCK.getId→getKey、shouldPause→isPauseScreen。</span>
-              <span class="sub">渲染调用同步替换：drawText→drawString、drawCenteredTextWithShadow→drawCenteredString、drawItem→renderItem 等。</span>
-            </li>
-            <li><strong>1.19.2 渲染写法对齐 Forge 侧</strong>：font.drawWithShadow→font.draw（与 Forge-1.19.2 写法一致，无阴影），itemRenderer.renderInGuiWithOverrides→renderGuiItem。
-              <span class="sub">消除 Fabric / Forge 在同一 MC 版本上的视觉与代码差异。</span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon tech">🛠️</div>工程</div>
-          <ul class="mlist">
-            <li><strong>建立开源副本同步脚本</strong>（阶段 1.2 收尾）：01-源码项目/sync_opensource.py 以主线为唯一真相源，一键把四版本源码同步到 04-开源源码/Block_ID（排除构建产物与私有 CI 配置）。
-              <span class="sub">并在公开副本内自动本地提交，杜绝人工维护两份源码。</span>
-            </li>
-            <li><strong>版本 tag</strong>：GitHub 仓库补打 v2.1.2-Release 标签，与发布包 jar 建立对应关系</li>
-            <li><strong>版本号推进</strong>：2.1.2-Release → 2.1.2.1-Beta</li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon ui">🧪</div>验证</div>
-          <ul class="mlist">
-            <li>四版本 compileJava 与 clean build 全部 BUILD SUCCESSFUL</li>
-            <li>同 MC 版本跨加载器的源码差异从约 700 行降至 282 行（仅剩 import 顺序与注册表访问方式）</li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon tech">📌</div>下个版本预告</div>
-          <ul class="mlist">
-            <li>阶段 1.3 的后两步（绘制适配层、Gradle 多模块拆分）涉及目录结构与 CI 调整，工程量大、需要单独验证窗口，将在下一个版本继续</li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon tech">ℹ️</div>关于本版本</div>
-          <ul class="mlist">
-            <li><strong>版本号</strong>：v2.1.2.1-Beta（阶段 1 启动）</li>
-            <li><strong>当前状态</strong>：<strong style="color:#4ade80;">已发布</strong>（Beta 抢先体验版）</li>
-            <li><strong>适用版本</strong>：Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</li>
-            <li><strong>下载方式</strong>：加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</li>
-          </ul>
-        </div>
+      <div class="vcard beta-card">
+        <div class="vcard-top"><span class="pill beta">预览版 · Beta</span><span class="vnum">v2.1.2.3-Beta</span></div>
+        <h3>图标修复 · 官网改版</h3>
+        <p>模组图标改为真正的 PNG，启动器列表不再破图；权重精确控制延续上一版，官网完成整体改版。</p>
+        <div class="state">已发布 · 建议升级</div>
       </div>
-      <!-- v2.1.2 -->
-      <div class="mpanel" id="mv-2.1.2">
-        <div class="mv-header">
-          <div class="mv-top">
-            <span class="mv-title">🚀 Block_ID 2.1.2-Release</span>
-            <span class="mv-tag release">Release</span>
-            <span class="mv-tag latest">当前正式版</span>
-            <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
-          </div>
-          <div class="mv-desc">阶段 0「止血」的收官版本：完成默认键位调整与文档版本校正，补齐四版本统一构建，并新增一项 WorldEdit 联动能力。</div>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon fix">🐞</div>修复</div>
-          <ul class="mlist">
-            <li><strong>修复三个版本漏初始化收藏与历史记录</strong>：此前只有 Forge-1.20.1 在启动时完整初始化了 ConfigManager / FavoritesManager / HistoryManager，其余三个版本（Forge-1.19.2、Fabric-1.20.1、Fabric-1.19.2）只初始化了配置管理器。
-              <span class="sub">由于两个管理器带有「首次访问时兜底初始化」的逻辑，该问题不会导致崩溃，但「默认收藏」分组不会在启动时写入配置文件，历史记录的初始状态也不可靠。</span>
-              <span class="sub">现四个版本已在启动时统一完成三项初始化。</span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">🔄</div>变更</div>
-          <ul class="mlist">
-            <li><strong>默认键位改为 G / H</strong>：打开方块 ID 管理界面为 G，复制手中方块 ID 为 H。
-              <span class="sub">此前复制键默认绑在 C，该键在整合包中冲突概率较高，故调整。两个键均保留默认绑定，玩家仍可在「选项 → 控制 → 方块ID」中自行修改。</span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">⭐</div>新增</div>
-          <ul class="mlist">
-            <li><strong>检测到 WorldEdit 时直接执行指令</strong>（1.20.1 版本）：生成 //set / //replace 指令后，若检测到环境已安装 WorldEdit，会直接把指令发送执行，省去手动打开聊天栏再粘贴的步骤。
-              <span class="sub">指令始终会先写入剪贴板，因此即便自动发送失败仍可手动粘贴执行，不影响原有用法；未检测到 WorldEdit 时保持原行为：仅复制并提示需要手动执行。</span>
-              <span class="sub">1.19.2 未提供对等的指令发送接口（该版本聊天签名机制与 1.20.1 不同），因此保持「复制到剪贴板」的行为。</span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon tech">🛠️</div>工程</div>
-          <ul class="mlist">
-            <li><strong>补齐四版本统一构建</strong>：此前仅两个 Fabric 目录内带有 workflow 文件，但它们位于仓库子目录，GitHub Actions 不会执行（该服务只识别仓库根目录的 .github/workflows/）。
-              <span class="sub">现已在仓库根目录建立统一的 build.yml，用矩阵任务一次性构建 Forge / Fabric × 1.20.1 / 1.19.2 四个版本并上传产物，同时移除子目录中不会生效的旧配置文件。</span>
-            </li>
-            <li><strong>版本号推进</strong>：2.1.1-Beta → 2.1.2-Release，四处源码配置与四份说明文档同步</li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon tech">ℹ️</div>关于本版本</div>
-          <ul class="mlist">
-            <li><strong>版本号</strong>：v2.1.2-Release（当前正式版 · 阶段 0 完成）</li>
-            <li><strong>当前状态</strong>：<strong style="color:#4ade80;">正式版已发布</strong></li>
-            <li><strong>适用版本</strong>：Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</li>
-            <li><strong>下载方式</strong>：加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</li>
-          </ul>
-        </div>
-      </div>
-      <!-- v2.1.1 -->
-      <div class="mpanel" id="mv-2.1.1">
-        <div class="mv-header">
-          <div class="mv-top">
-            <span class="mv-title">🚀 Block_ID 2.1.1-Beta</span>
-            <span class="mv-tag beta">Beta</span>
-            <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
-          </div>
-          <div class="mv-desc">无需新增功能的质量补丁，目标是让模组从「装不上」变成「装上就能用」；同时替换掉打包在制品中的 GPL 系拼音库，消除协议风险。</div>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon fix">🐞</div>修复</div>
-          <ul class="mlist">
-            <li><strong>WorldEdit 不再被判定为必需前置</strong>：此前模组虽在依赖清单中声明 WorldEdit 为 mandatory=true，但代码里从未调用过它的任何 API，只是把 //set / //replace 字符串写进剪贴板。
-              <span class="sub">没装 WorldEdit 的玩家会直接被判定依赖缺失、游戏读不到模组；崩溃日志中确实存在 requires worldedit 0 or above / Currently, worldedit is not installed。</span>
-              <span class="sub">现已改为可选依赖并增加运行时检测——未安装时功能完全不受影响，仅在提示语中说明指令需手动粘贴执行。</span>
-            </li>
-            <li><strong>移除从未被引用的 Cloth Config 前置</strong>：构建脚本声明了 Cloth Config、说明文档也把它列为必需前置，但源码中零引用。现已彻底移除，减少一项无谓的安装门槛。</li>
-            <li><strong>修正 Forge 1.19.2 的模组元数据</strong>：该版本的 mods.toml 存在三处错误——loaderVersion 键名拼写错误且取值写成了模组自身版本、Forge 版本范围沿用了 1.20.1 的 [47,)、游戏版本范围写成了 [1.20.1]，会导致 1.19.2 的 Forge 包加载异常。
-              <span class="sub">现已修正为 [43,) / [1.19.2]。</span>
-            </li>
-            <li><strong>修正 1.19.2 版本文档描述</strong>：该版本说明文档此前错误地写着 Minecraft 1.20.1、Forge 47+、Fabric 0.15+，现已按实际支持的版本分别更正。</li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">🔄</div>变更</div>
-          <ul class="mlist">
-            <li><strong>替换内置拼音库，消除协议冲突</strong>：此前模组把 pinyin4j 直接打包进主 Jar，该库采用 GPL 系协议，与本项目「允许学习修改、禁止二次发布修改版本」的自有协议直接抵触。
-              <span class="sub">现已替换为 Apache-2.0 协议的 TinyPinyin，并将无需使用的传递依赖一并排除。安装包体积平均减少约 190 KB（Forge 约 −197 KB，Fabric 约 −190 KB）。</span>
-            </li>
-            <li><strong>中文拼音搜索行为保持兼容</strong>：新旧库对 ü 的记法不同——旧库把「绿」记作 lu，新库记作 lv。
-              <span class="sub">为不让惯用 lu 的玩家搜不到方块，已同时生成两种写法的索引，输入 lvbaoshi 或 lubaoshi 都能搜到「绿宝石块」，其余方块名的搜索行为完全一致。</span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon tech">🧹</div>清理</div>
-          <ul class="mlist">
-            <li>删除空实现的 ClientEvents 事件订阅器（四个版本各一份，无任何实际行为）</li>
-            <li>移除构建脚本中随依赖删除而失效的第三方仓库配置</li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon tech">📝</div>文档</div>
-          <ul class="mlist">
-            <li>四个版本的版本号统一为 v2.1.1-Beta，此前说明文档停留在 2.0.3.1，与实际发布的版本对不上</li>
-          </ul>
-        </div>
-
-        <div class="msection">
-          <div class="mtitle"><div class="micon tech">ℹ️</div>关于本版本</div>
-          <ul class="mlist">
-            <li><strong>版本号</strong>：v2.1.1-Beta（已被 v2.1.2-Release 取代）</li>
-            <li><strong>当前状态</strong>：Beta 阶段已结束，已被 <strong>v2.1.2-Release</strong> 取代</li>
-            <li><strong>适用版本</strong>：Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</li>
-            <li><strong>下载方式</strong>：加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</li>
-          </ul>
-        </div>
-      </div>
-      <!-- v2.1.0 -->
-      <div class="mpanel" id="mv-2.1.0">
-        <div class="mv-header">
-          <div class="mv-top">
-            <span class="mv-title">🚀 Block_ID 2.1.0-Release</span>
-            <span class="mv-tag release">Release</span>
-            <span class="mv-tag major">重大更新</span>
-            <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
-          </div>
-          <div class="mv-desc">重大版本更新：新增收藏夹/组系统、历史记录功能，删除常用方块自动统计，UI 交互全面升级，替换模式源方块复制优化。</div>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">⭐</div>收藏夹/组系统</div>
-          <ul class="mlist">
-            <li><strong>多组管理</strong>：支持创建、重命名、删除多个收藏组，每组独立管理方块列表</li>
-            <li><strong>默认收藏组</strong>：内置"默认收藏"组，开箱即用</li>
-            <li><strong>快捷添加</strong>：方块列表右侧点击星标即可添加/移除收藏</li>
-            <li><strong>实时更新</strong>：添加/移除收藏后列表立即刷新，无需重新打开界面</li>
-            <li><strong>数据持久化</strong>：收藏数据保存在配置文件中，重启不丢失</li>
-          </ul>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">📋</div>历史记录</div>
-          <ul class="mlist">
-            <li><strong>自动记录</strong>：每次复制 ID 或指令自动记录到历史</li>
-            <li><strong>最近20条</strong>：保留最近20条复制记录，方便回溯</li>
-            <li><strong>方块名称显示</strong>：历史记录显示方块中文名而非原始 ID，更直观</li>
-            <li><strong>一键重复制</strong>：点击历史记录即可重新复制到剪贴板</li>
-            <li><strong>模式标识</strong>：每条记录标注 ID / Set / Replace 模式</li>
-          </ul>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">🔧</div>替换模式优化</div>
-          <ul class="mlist">
-            <li><strong>源方块无放置比例</strong>：替换模式下源方块不显示放置比例滑块，符合 WorldEdit 语义</li>
-            <li><strong>复制不带比例</strong>：源方块复制结果仅包含 ID 和属性，不带百分比前缀</li>
-            <li><strong>目标方块保留比例</strong>：目标方块仍支持放置比例设置，格式为 <code>50%minecraft:stone</code></li>
-          </ul>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">🔄</div>UI 优化</div>
-          <ul class="mlist">
-            <li><strong>标签切换</strong>：中列增加"收藏夹 / 历史记录"标签切换</li>
-            <li><strong>删除常用方块</strong>：移除原有的常用方块自动统计功能</li>
-            <li><strong>滚轮浏览</strong>：全部方块列表使用滚轮滚动，操作流畅</li>
-            <li><strong>布局稳定</strong>：收藏夹区域组名、按钮、分割线、列表布局经过多轮优化</li>
-          </ul>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">🐞</div>Bug 修复</div>
-          <ul class="mlist">
-            <li><strong>修复收藏夹列表不刷新</strong>：添加/移除收藏后列表立即更新</li>
-            <li><strong>修复源方块复制带比例</strong>：替换模式源方块复制结果不再包含百分比</li>
-            <li><strong>修复历史记录显示 ID</strong>：改为显示方块中文名</li>
-            <li><strong>修复列表消失问题</strong>：修复非替换模式下中列列表异常消失的 Bug</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- v2.0.3.2 -->
-      <div class="mpanel" id="mv-2.0.3.2">
-        <div class="mv-header">
-          <div class="mv-top">
-            <span class="mv-title">🚀 Block_ID 2.0.3.2-Release</span>
-            <span class="mv-tag release">Release</span>
-            <span class="mv-tag major">重大更新</span>
-            <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
-          </div>
-          <div class="mv-desc">重大版本更新：项目结构全面重组，命名格式标准化，源码清理，开源准备完成。</div>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">📦</div>项目结构重组</div>
-          <ul class="mlist">
-            <li><strong>目录分类清晰</strong>：源码项目、网页源文件、发布包、开源源码四大目录分类管理</li>
-            <li><strong>命名格式标准化</strong>：jar 文件采用 MC 模组标准命名格式 <code>Block_ID-&lt;MC版本&gt;-&lt;加载器&gt;-&lt;版本&gt;.jar</code></li>
-            <li><strong>最新版本统一管理</strong>：所有最新版本 jar 统一放到"新版模组"文件夹</li>
-            <li><strong>历史版本归档</strong>：旧版本 jar 统一放到"历史版本"文件夹</li>
-          </ul>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">🧹</div>源码清理</div>
-          <ul class="mlist">
-            <li><strong>删除全部注释代码</strong>：移除所有代码注释，保持源码简洁</li>
-            <li><strong>删除多余文件</strong>：清理临时脚本、构建产物、无用资源文件</li>
-            <li><strong>删除多余模组文件</strong>：保留历史版本，清理重复和无用文件</li>
-          </ul>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">🌐</div>开源准备</div>
-          <ul class="mlist">
-            <li><strong>源码公开至 GitHub</strong>：https://github.com/MOYBJ/Block_ID</li>
-            <li><strong>网页托管至 GitHub Pages</strong>：https://moybj.github.io/Block-ID-Website/</li>
-            <li><strong>使用协议完善</strong>：允许查看、学习、个人修改，禁止修改后二次发布</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- v2.0.3.1 -->
-      <div class="mpanel" id="mv-2.0.3.1">
-        <div class="mv-header">
-          <div class="mv-top">
-            <span class="mv-title">🚀 Block_ID 2.0.3.1-Release</span>
-            <span class="mv-tag release">Release</span>
-            <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
-          </div>
-          <div class="mv-desc">新增 1.19.2 版本支持，更新自定义源码可见协议，版本号规范化。</div>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">⚙️</div>开源准备</div>
-          <ul class="mlist">
-            <li><strong>新增 1.19.2 版本支持</strong>：Forge 和 Fabric 双加载器同步适配 1.19.2</li>
-            <li><strong>自定义源码可见协议</strong>：允许查看、学习、个人修改，禁止修改后二次发布</li>
-            <li><strong>新增 README.md</strong>：项目说明文档，含功能介绍、使用方法、协议说明</li>
-            <li><strong>版本号规范化</strong>：从 2.0.3-Release 改为 2.0.3.1-Release，符合语义化版本规范</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- v2.0.3 -->
-      <div class="mpanel" id="mv-2.0.3">
-        <div class="mv-header">
-          <div class="mv-top">
-            <span class="mv-title">🚀 Block_ID 2.0.3-Release</span>
-            <span class="mv-tag release">Release</span>
-            <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
-          </div>
-          <div class="mv-desc">首个正式版本！从 Beta 升级为 Release，修复滑块交互BUG，添加版权协议，语言文件全面标准化。</div>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">⚙️</div>版本升级</div>
-          <ul class="mlist">
-            <li><strong>正式版发布</strong>：版本号从 2.0.2-Beta 升级为 2.0.3-Release，结束 Beta 测试阶段</li>
-            <li><strong>版权协议</strong>：添加 All Rights Reserved 协议，未经作者书面允许禁止二次修改后公开发布</li>
-            <li><strong>语言文件标准化</strong>：9 种语言（简中/繁中/英/日/法/德/西/葡/俄）全部采用标准 JSON 键值对格式</li>
-          </ul>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon fix">🐞</div>BUG 修复</div>
-          <ul class="mlist">
-            <li>修复放置率滑块点击范围（28px）与拖动范围（26px）不一致，导致点击最右端只能得到 99% 的问题</li>
-            <li>统一滑块点击与拖动的轨道范围，百分比计算精确到 100%</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- v2.0.2 -->
-      <div class="mpanel" id="mv-2.0.2">
-        <div class="mv-header">
-          <div class="mv-top">
-            <span class="mv-title">🚀 Block_ID 2.0.2-Beta</span>
-            <span class="mv-tag beta">Beta</span>
-            <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
-          </div>
-          <div class="mv-desc">在 2.0.0 重构基础上，新增方块属性设置与放置率权重功能，界面全面美化，交互体验大幅提升。</div>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">⚙️</div>核心功能扩展</div>
-          <ul class="mlist">
-            <li><strong>方块属性设置</strong>：已选列表每项新增 ⚙ 按钮，展开属性编辑面板，支持所有 BlockState 属性可视化切换，输出 WorldEdit 格式 <code>minecraft:stone_slab[type=top,waterlogged=false]</code></li>
-            <li><strong>属性中文映射</strong>：内置 50+ 属性名与 60+ 属性值中文翻译，如 facing→朝向、half→半层、north→北</li>
-            <li><strong>放置率权重滑块</strong>：已选列表每项内置迷你滑块，拖动调整放置概率，输出 <code>50%stone,50%grass</code></li>
-            <li><strong>Ctrl+左键精确输入</strong>：按住 Ctrl 点击滑块或百分比文字，弹出数字输入框精确设置 1-100</li>
-            <li><strong>自动归一化</strong>：新增平均分配、调整后按比例补满、删除时重新分配，总和始终保持 100%</li>
-          </ul>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon ui">🎨</div>UI 与交互优化</div>
-          <ul class="mlist">
-            <li><strong>属性面板小卡片化</strong>：改为左下角 230px 小卡片，紧凑不遮挡列表</li>
-            <li><strong>滑块可拖动</strong>：放置率滑块支持按住拖动实时调整</li>
-            <li><strong>三列半透明面板</strong>：添加半透明背景与顶部蓝色高亮边线</li>
-            <li><strong>搜索栏占位文字</strong>：添加"搜索..."提示</li>
-            <li><strong>选中项高亮条</strong>：已选方块左侧添加绿色高亮指示条</li>
-          </ul>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon fix">🐞</div>修复与优化</div>
-          <ul class="mlist">
-            <li>修复空气方块重复显示，双重过滤仅保留 <code>minecraft:air</code></li>
-            <li>修复搜索后滚动条范围计算错误</li>
-            <li>修复替换模式下右列滚动失效</li>
-            <li>修复搜索后 ➕/✔ 图标消失</li>
-            <li>Fabric 版新增常用方块自动收集事件监听</li>
-            <li>修复 FrequentBlockManager 副作用问题</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- v2.0.1 -->
-      <div class="mpanel" id="mv-2.0.1">
-        <div class="mv-header">
-          <div class="mv-top">
-            <span class="mv-title">Block_ID 2.0.1-Beta</span>
-            <span class="mv-tag beta">Beta</span>
-            <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
-          </div>
-          <div class="mv-desc">2.0.0 重构后的稳定性修复版本，主要解决首批用户反馈的交互问题。</div>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon fix">🐞</div>主要修复</div>
-          <ul class="mlist">
-            <li>修复替换模式下标签页按钮位置偏移</li>
-            <li>修复右列标题显示不完整</li>
-            <li>优化列表滚动性能</li>
-            <li>修复部分界面文字重叠</li>
-            <li>提升 Fabric 版本兼容性</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- v2.0.0 -->
-      <div class="mpanel" id="mv-2.0.0">
-        <div class="mv-header">
-          <div class="mv-top">
-            <span class="mv-title">🚀 Block_ID 2.0.0-Beta</span>
-            <span class="mv-tag beta">Beta</span>
-            <span class="mv-tag hot">重大更新</span>
-            <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
-          </div>
-          <div class="mv-desc">从 1.2.0-Alpha 到 2.0.0-Beta，本次更新是一次全面重构。无论是 UI 视觉、交互逻辑还是底层数据管理，都有跨越式的提升。</div>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon ui">🎨</div>UI 与交互优化</div>
-          <ul class="mlist">
-            <li><strong>全新三列布局</strong>：左侧"全部方块"，中间"常用方块"，右侧"已选列表/确认区"，空间利用率大幅提升</li>
-            <li><strong>双模式切换</strong>：顶部按钮支持"复制模式/替换模式"与"ID复制/指令模式"任意组合切换</li>
-            <li><strong>动态图标操作</strong>：
-              <span class="sub">· 左侧/中间列表每行末尾新增 ➕ 图标，点击可手动添加至常用方块</span>
-              <span class="sub">· 已添加的常用方块图标自动变为 ✔（绿色）</span>
-              <span class="sub">· 中间"常用方块"列表每行末尾新增 ➖ 图标，点击可手动移除</span>
-            </li>
-            <li><strong>智能搜索栏</strong>：支持中文名、英文 ID、拼音首字母搜索</li>
-            <li><strong>自适应布局</strong>：全屏/小窗口下所有元素自动计算位置，彻底解决按钮遮挡或列表显示不全</li>
-          </ul>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon core">⚙️</div>核心功能扩展</div>
-          <ul class="mlist">
-            <li><strong>ID复制模式</strong>：复制纯 ID（无指令前缀），支持多选，多个 ID 以逗号分隔；替换模式复制格式为"源ID 目标ID"（含空格）</li>
-            <li><strong>指令复制模式</strong>：一键复制 <code>//set</code> 或 <code>//replace</code> 完整 WorldEdit 指令到剪贴板</li>
-            <li><strong>替换模式优化</strong>：源方块与目标方块分列显示，复制格式严格保持"源ID 目标ID"（含空格）</li>
-            <li><strong>常用方块统计规则</strong>：
-              <span class="sub">· 原版/模组方块放置 15 次自动加入（手动添加也有效）</span>
-              <span class="sub">· WorldEdit 指令使用 3 次自动加入</span>
-              <span class="sub">· 支持手动添加/移除，完全自定义</span>
-            </li>
-          </ul>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon tech">🔧</div>底层与稳定性</div>
-          <ul class="mlist">
-            <li><strong>配置系统重构</strong>：从 ForgeConfigSpec 迁移至 Gson JSON 存储，彻底解决配置文件读写崩溃</li>
-            <li><strong>统计逻辑修复</strong>：双保险策略（右键点击 + 聊天指令监听），确保常用方块统计准确</li>
-            <li><strong>按键响应优化</strong>：修复搜索框焦点死循环、按钮点击无效等遗留 Bug</li>
-            <li><strong>多语言支持</strong>：内置简中、繁中、英、日、法、德、西、葡、俄 9 种语言</li>
-            <li><strong>新增前置依赖</strong>：Cloth Config API（任何版本）</li>
-          </ul>
-        </div>
-        <div class="msection">
-          <div class="mtitle"><div class="micon fix">🐞</div>主要修复（相对 Alpha 1.2.0）</div>
-          <ul class="mlist">
-            <li>修复"替换模式复制格式缺少空格"的 Bug</li>
-            <li>修复"WorldEdit 指令无法被统计"的问题</li>
-            <li>修复"搜索栏无法输入"、"按钮无反应"等交互故障</li>
-            <li>修复"常用方块列表不刷新"的数据同步问题</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- 历史版本 -->
-      <div class="mpanel" id="mv-history">
-        <div class="mv-header">
-          <div class="mv-top">
-            <span class="mv-title">📜 历史版本</span>
-            <span class="mv-tag alpha">Archive</span>
-          </div>
-          <div class="mv-desc">v2.1.0 及更早的版本已归档于此。正式版本为 Release 发行版，早期版本为 Beta / Alpha 测试版，此处仅作存档查阅。</div>
-        </div>
-
-        <div class="archive-columns">
-          <!-- 左栏：正式版本 -->
-          <section class="archive-col archive-col-release">
-            <div class="archive-col-head">
-              <span class="archive-col-icon">✅</span>
-              <span class="archive-col-title">正式版本</span>
-              <span class="archive-col-count">Release · 4 个</span>
-            </div>
-            <ul class="archive-list">
-              <li class="archive-item" data-open="2.1.0" tabindex="0" role="button">
-                <span class="archive-ver">v2.1.0-Release</span>
-                <span class="archive-meta">重大更新 · 收藏夹/组系统、历史记录</span>
-                <span class="archive-arrow" aria-hidden="true">›</span>
-              </li>
-              <li class="archive-item" data-open="2.0.3.2" tabindex="0" role="button">
-                <span class="archive-ver">v2.0.3.2-Release</span>
-                <span class="archive-meta">重大更新 · 项目结构重组、命名标准化</span>
-                <span class="archive-arrow" aria-hidden="true">›</span>
-              </li>
-              <li class="archive-item" data-open="2.0.3.1" tabindex="0" role="button">
-                <span class="archive-ver">v2.0.3.1-Release</span>
-                <span class="archive-meta">新增 1.19.2 支持、协议更新</span>
-                <span class="archive-arrow" aria-hidden="true">›</span>
-              </li>
-              <li class="archive-item" data-open="2.0.3" tabindex="0" role="button">
-                <span class="archive-ver">v2.0.3-Release</span>
-                <span class="archive-meta">首个正式版 · 结束 Beta 阶段</span>
-                <span class="archive-arrow" aria-hidden="true">›</span>
-              </li>
-            </ul>
-          </section>
-
-          <!-- 右栏：早期版本 -->
-          <section class="archive-col archive-col-early">
-            <div class="archive-col-head">
-              <span class="archive-col-icon">🧪</span>
-              <span class="archive-col-title">早期版本</span>
-              <span class="archive-col-count">Beta · 3 个</span>
-            </div>
-            <ul class="archive-list">
-              <li class="archive-item" data-open="2.0.2" tabindex="0" role="button">
-                <span class="archive-ver">v2.0.2-Beta</span>
-                <span class="archive-meta">方块属性设置、放置率权重</span>
-                <span class="archive-arrow" aria-hidden="true">›</span>
-              </li>
-              <li class="archive-item" data-open="2.0.1" tabindex="0" role="button">
-                <span class="archive-ver">v2.0.1-Beta</span>
-                <span class="archive-meta">重构后的稳定性修复</span>
-                <span class="archive-arrow" aria-hidden="true">›</span>
-              </li>
-              <li class="archive-item" data-open="2.0.0" tabindex="0" role="button">
-                <span class="archive-ver">v2.0.0-Beta</span>
-                <span class="archive-meta">全面重构 · UI / 交互 / 数据管理</span>
-                <span class="archive-arrow" aria-hidden="true">›</span>
-              </li>
-            </ul>
-
-            <div class="archive-col-sub">
-              <span class="archive-col-icon">🧩</span>
-              <span class="archive-col-title">1.x Alpha</span>
-              <span class="archive-col-count">5 个</span>
-            </div>
-            <div class="mtimeline">
-              <div class="mtl-item"><div class="mtl-version">v1.2.0-Alpha</div><div class="mtl-desc">早期测试版 · 仅支持 Forge · 基础 ID 复制与搜索功能</div></div>
-              <div class="mtl-item"><div class="mtl-version">v1.1.1-Alpha</div><div class="mtl-desc">早期测试版 · 仅支持 Forge · Bug 修复</div></div>
-              <div class="mtl-item"><div class="mtl-version">v1.1.0-Alpha</div><div class="mtl-desc">早期测试版 · 仅支持 Forge · 新增常用方块功能</div></div>
-              <div class="mtl-item"><div class="mtl-version">v1.0.1-Alpha</div><div class="mtl-desc">早期测试版 · 仅支持 Forge · 初始功能完善</div></div>
-              <div class="mtl-item"><div class="mtl-version">v1.0.0-Alpha</div><div class="mtl-desc">初始版本 · 仅支持 Forge · 基础方块 ID 查看与复制</div></div>
-            </div>
-          </section>
-        </div>
-
-        <div class="msection" style="margin-top:10px;">
-          <div class="mtitle"><div class="micon tech">ℹ️</div>说明</div>
-          <ul class="mlist">
-            <li>自 <strong>v2.0.0</strong> 起新增 Fabric 加载器支持，1.x 系列仅支持 Forge</li>
-            <li>1.x Alpha 为早期测试版，强烈建议升级至最新 v2.1.2.2-Beta</li>
-            <li>前置说明：WorldEdit 可选（用于一键执行 //set //replace 指令），自 v2.1.1 起已移除 Cloth Config API 依赖</li>
-            <li>点击带 <strong>›</strong> 的版本可展开查看该版本的完整更新日志</li>
-          </ul>
-        </div>
-      </div>
-
-
     </div>
   </div>
 </section>
 
-<!-- ============ 未来规划 ============ -->
-<!-- ============ 未来规划 ============ -->
-<section class="section" id="roadmap">
-  <div class="section-header reveal">
-    <div class="section-label">ROADMAP</div>
-    <h2 class="section-title">未来开发规划</h2>
-    <p class="section-desc">持续迭代的方向与计划，具体内容可能根据实际开发情况调整</p>
+<div class="wrap body-grid">
+  <aside class="toc">
+    <div class="toc-t">版本目录</div>
+    <div class="chips">
+      <button class="chip on" data-filter="all">全部</button>
+      <button class="chip" data-filter="release">正式版</button>
+      <button class="chip" data-filter="beta">Beta</button>
+    </div>
+    <div class="toc-list">
+      <a class="toc-item on" href="#mv-2.1.2.3" data-v="2.1.2.3"><i class="dot beta"></i>v2.1.2.3-Beta</a>
+      <a class="toc-item" href="#mv-2.1.2.2" data-v="2.1.2.2"><i class="dot beta"></i>v2.1.2.2-Beta</a>
+      <a class="toc-item" href="#mv-2.1.2.1" data-v="2.1.2.1"><i class="dot beta"></i>v2.1.2.1-Beta</a>
+      <a class="toc-item" href="#mv-2.1.2" data-v="2.1.2"><i class="dot release"></i>v2.1.2-Release</a>
+      <a class="toc-item" href="#mv-2.1.1" data-v="2.1.1"><i class="dot beta"></i>v2.1.1-Beta</a>
+      <a class="toc-item older" href="#mv-2.1.0" data-v="2.1.0"><i class="dot release"></i>v2.1.0-Release</a>
+      <a class="toc-item older" href="#mv-2.0.3.2" data-v="2.0.3.2"><i class="dot release"></i>v2.0.3.2-Release</a>
+      <a class="toc-item older" href="#mv-2.0.3.1" data-v="2.0.3.1"><i class="dot release"></i>v2.0.3.1-Release</a>
+      <a class="toc-item older" href="#mv-2.0.3" data-v="2.0.3"><i class="dot release"></i>v2.0.3-Release</a>
+      <a class="toc-item older" href="#mv-2.0.2" data-v="2.0.2"><i class="dot beta"></i>v2.0.2-Beta</a>
+      <a class="toc-item older" href="#mv-2.0.1" data-v="2.0.1"><i class="dot beta"></i>v2.0.1-Beta</a>
+      <a class="toc-item older" href="#mv-2.0.0" data-v="2.0.0"><i class="dot beta"></i>v2.0.0-Beta</a>
+    </div>
+    <a class="toc-more" href="#" id="toc-more">查看全部历史版本 →</a>
+  </aside>
+
+  <main id="entries">
+<article class="entry" id="mv-2.1.2.3" data-kind="beta">
+  <div class="entry-head">
+    <h3>v2.1.2.3-Beta</h3>
+    <span class="tag beta">Beta</span>
   </div>
-  <div class="roadmap-grid">
-    <div class="roadmap-card reveal reveal-delay-1">
-      <div class="roadmap-version">v2.1 → v2.2</div>
-      <div class="roadmap-title">收藏夹与历史增强</div>
-      <div class="roadmap-tag">近期规划</div>
-      <div class="roadmap-sub">新增功能</div>
-      <ul class="roadmap-list">
-        <li>收藏夹方块拖拽排序，调整组内顺序</li>
-        <li>组导出 / 导入，分享方块组配置</li>
-        <li>组颜色标签，快速区分用途</li>
-        <li>历史条目可直接加入收藏夹</li>
-        <li>历史记录单条删除 / 一键清空</li>
-        <li>历史记录持久化，重启不丢失</li>
-      </ul>
-      <div class="roadmap-sub">优化与打磨</div>
-      <ul class="roadmap-list">
-        <li>输入框焦点与滚动边界优化</li>
-        <li>权重输入容错，自动修正非法值</li>
-        <li>修复复杂方块状态属性复制丢失</li>
-      </ul>
-    </div>
-    <div class="roadmap-card reveal reveal-delay-2">
-      <div class="roadmap-version">v2.3 → v2.4</div>
-      <div class="roadmap-title">分组管理与预览</div>
-      <div class="roadmap-tag">中期规划</div>
-      <div class="roadmap-sub">新增功能</div>
-      <ul class="roadmap-list">
-        <li>分组分类标签与折叠</li>
-        <li>方块批量移动至其他分组</li>
-        <li>方块悬浮预览与状态预览</li>
-        <li>多组合并导出与注释支持</li>
-      </ul>
-      <div class="roadmap-sub">优化与打磨</div>
-      <ul class="roadmap-list">
-        <li>分组列表滚动独立控制</li>
-        <li>右键菜单归类整理</li>
-        <li>配置自动备份与导入选择</li>
-      </ul>
-    </div>
-    <div class="roadmap-card reveal reveal-delay-3">
-      <div class="roadmap-version">v2.4 → v2.5</div>
-      <div class="roadmap-title">高级指令与偏好</div>
-      <div class="roadmap-tag">远期规划</div>
-      <div class="roadmap-sub">新增功能</div>
-      <ul class="roadmap-list">
-        <li>批量生成 WorldEdit 多区域指令</li>
-        <li>指令格式自定义模板与预校验</li>
-        <li>全局权重规则切换</li>
-        <li>自定义快捷键与主题保存</li>
-      </ul>
-      <div class="roadmap-sub">优化与打磨</div>
-      <ul class="roadmap-list">
-        <li>全局设置独立弹窗</li>
-        <li>列表缓存优化，提升渲染速度</li>
-        <li>配置文件拆分与版本迁移</li>
-      </ul>
-    </div>
+  <p class="entry-desc">修复模组图标在部分启动器显示为破图；同版本完成官网整体改版。</p>
+  <div class="group"><div class="glabel g-green">修复</div>
+    <div class="item"><h4>模组图标显示为破图</h4><p>原 <code>icon.png</code> 实际是 JPEG 编码（文件头 FF D8 FF），只是扩展名写成了 .png。宽容的启动器能识别，严格按扩展名解析 PNG 的就会显示破图。</p><p class="sub">现已将 4 个版本共 6 份图标统一转为真正的 PNG（512×512，RGBA），配置中的 icon 路径不变。</p></div>
+  </div>
+  <div class="group"><div class="glabel g-blue">变更</div>
+    <div class="item"><h4>官网两页整体改版</h4><p>新的视觉体系、信息结构与响应式布局；弹窗、埋点与版本跟随逻辑保持不变。</p></div>
+  </div>
+  <div class="info box-neutral"><div class="info-t">工程</div>
+    <div class="item"><p>版本号推进 2.1.2.2 → 2.1.2.3；四版本重新构建并更新发布包。</p></div>
+  </div>
+</article><article class="entry" id="mv-2.1.2.2" data-kind="beta">
+  <div class="entry-head">
+    <h3>v2.1.2.2-Beta</h3>
+    <span class="tag beta">Beta</span>
+  </div>
+  <p class="entry-desc">修复方块权重无法精确控制的问题：权重改为 WorldEdit 原生的相对权重语义，三个及以上方块也能准确设置 50% / 25% / 25% 这样的比例。</p>
+  <div class="group"><div class="glabel g-green">修复</div><div class="item"><h4>方块权重无法精确控制</h4><p>旧逻辑在设置某个方块后，会把剩余配额按其他方块当前值的比例重新分配。逐个输入目标值时，先前设置好的方块会被后续操作反复缩放，任何顺序都无法精确落在目标分布上。</p><p class="sub">典型场景：三个方块想设为 50% / 25% / 25%，结果总在漂移，怎么调都对不上。</p></div><div class="item"><h4>改为相对权重语义</h4><p>WorldEdit 的 50%stone,25%dirt,25%sand 本就不要求总和为 100，是相对值。现在输入的数值就是该方块的相对权重，各方块独立设置、互不干扰。</p><p class="sub">三个方块依次输入 50、25、25，即得到精确的 50% / 25% / 25%。</p></div></div><div class="group"><div class="glabel g-blue">变更</div><div class="item"><h4>界面权重显示</h4><p>显示实际占比（该方块权重 ÷ 组内总权重），与生成指令的真实分布一致</p></div><div class="item"><h4>权重输入范围</h4><p>由 1–99 扩展为 1–9999，支持更悬殊的比例</p></div><div class="item"><h4>拖拽滑条</h4><p>仍按百分比位置操作，内部自动换算为相对权重</p></div><div class="item"><h4>增删方块</h4><p>不再触发全组权重重分配，其余方块保持原值</p></div></div><div class="info box-green"><div class="info-t">兼容性</div><div class="item bare"><p>全默认状态（未调整权重）生成的指令与旧版完全一致</p></div><div class="item bare"><p>组内任一方块有自定义权重时，全部方块都会带上 N% 前缀（WorldEdit 中无前缀方块的权重为 1，混用会产生错误比例）</p></div></div><div class="group"><div class="glabel g-mute">验证</div><div class="item bare"><p>四版本（Forge / Fabric × 1.20.1 / 1.19.2）compileJava 与 clean build 全部 BUILD SUCCESSFUL</p></div><div class="item bare"><p>旧权重逻辑无残留，四份源码新增方法一致</p></div></div><div class="group"><div class="glabel g-mute">关于本版本</div><div class="item"><h4>版本号</h4><p>v2.1.2.2-Beta</p></div><div class="item"><h4>当前状态</h4><p><strong style="color:#4ade80;">已发布（Beta 抢先体验版）</p></div><div class="item"><h4>适用版本</h4><p>Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</p></div><div class="item"><h4>下载方式</h4><p>加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</p></div></div>
+</article>
+<article class="entry" id="mv-2.1.2.1" data-kind="beta">
+  <div class="entry-head">
+    <h3>v2.1.2.1-Beta</h3>
+    <span class="tag beta">Beta</span>
+  </div>
+  <p class="entry-desc">阶段 1「合规与工程底座」的第一步落地：统一四版本的映射方案，从源头消除 Forge / Fabric 的类名差异，为后续源码合并铺路。</p>
+  <div class="group"><div class="glabel g-blue">变更</div><div class="item"><h4>Fabric 两版切换到 Mojang 官方映射</h4><p>build.gradle 从 yarn 映射改为 loom.officialMojangMappings()，并把全部 yarn 类名 / 方法名替换为 mojmap 对等物（约 190 处）。</p><p class="sub">MinecraftClient→Minecraft、Text→Component、Identifier→ResourceLocation、ButtonWidget→Button、TextFieldWidget→EditBox、KeyBinding→KeyMapping、Formatting→ChatFormatting、wasPressed→consumeClick、getMainHandStack→getMainHandItem、sendMessage→displayClientMessage、Registries.BLOCK.getId→getKey、shouldPause→isPauseScreen。</p><p class="sub">渲染调用同步替换：drawText→drawString、drawCenteredTextWithShadow→drawCenteredString、drawItem→renderItem 等。</p></div><div class="item"><h4>1.19.2 渲染写法对齐 Forge 侧</h4><p>font.drawWithShadow→font.draw（与 Forge-1.19.2 写法一致，无阴影），itemRenderer.renderInGuiWithOverrides→renderGuiItem。</p><p class="sub">消除 Fabric / Forge 在同一 MC 版本上的视觉与代码差异。</p></div></div><div class="info box-neutral"><div class="info-t">工程</div><div class="item"><h4>建立开源副本同步脚本</h4><p>（阶段 1.2 收尾）：01-源码项目/sync_opensource.py 以主线为唯一真相源，一键把四版本源码同步到 04-开源源码/Block_ID（排除构建产物与私有 CI 配置）。</p><p class="sub">并在公开副本内自动本地提交，杜绝人工维护两份源码。</p></div><div class="item"><h4>版本 tag</h4><p>GitHub 仓库补打 v2.1.2-Release 标签，与发布包 jar 建立对应关系</p></div><div class="item"><h4>版本号推进</h4><p>2.1.2-Release → 2.1.2.1-Beta</p></div></div><div class="group"><div class="glabel g-mute">验证</div><div class="item bare"><p>四版本 compileJava 与 clean build 全部 BUILD SUCCESSFUL</p></div><div class="item bare"><p>同 MC 版本跨加载器的源码差异从约 700 行降至 282 行（仅剩 import 顺序与注册表访问方式）</p></div></div><div class="group"><div class="glabel g-mute">下个版本预告</div><div class="item bare"><p>阶段 1.3 的后两步（绘制适配层、Gradle 多模块拆分）涉及目录结构与 CI 调整，工程量大、需要单独验证窗口，将在下一个版本继续</p></div></div><div class="group"><div class="glabel g-mute">关于本版本</div><div class="item"><h4>版本号</h4><p>v2.1.2.1-Beta（阶段 1 启动）</p></div><div class="item"><h4>当前状态</h4><p><strong style="color:#4ade80;">已发布（Beta 抢先体验版）</p></div><div class="item"><h4>适用版本</h4><p>Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</p></div><div class="item"><h4>下载方式</h4><p>加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</p></div></div>
+</article>
+<article class="entry" id="mv-2.1.2" data-kind="release">
+  <div class="entry-head">
+    <h3>v2.1.2-Release</h3>
+    <span class="tag release">Release</span>
+  </div>
+  <p class="entry-desc">阶段 0「止血」的收官版本：完成默认键位调整与文档版本校正，补齐四版本统一构建，并新增一项 WorldEdit 联动能力。</p>
+  <div class="group"><div class="glabel g-green">修复</div><div class="item"><h4>修复三个版本漏初始化收藏与历史记录</h4><p>此前只有 Forge-1.20.1 在启动时完整初始化了 ConfigManager / FavoritesManager / HistoryManager，其余三个版本（Forge-1.19.2、Fabric-1.20.1、Fabric-1.19.2）只初始化了配置管理器。</p><p class="sub">由于两个管理器带有「首次访问时兜底初始化」的逻辑，该问题不会导致崩溃，但「默认收藏」分组不会在启动时写入配置文件，历史记录的初始状态也不可靠。</p><p class="sub">现四个版本已在启动时统一完成三项初始化。</p></div></div><div class="group"><div class="glabel g-blue">变更</div><div class="item"><h4>默认键位改为 G / H</h4><p>打开方块 ID 管理界面为 G，复制手中方块 ID 为 H。</p><p class="sub">此前复制键默认绑在 C，该键在整合包中冲突概率较高，故调整。两个键均保留默认绑定，玩家仍可在「选项 → 控制 → 方块ID」中自行修改。</p></div></div><div class="group"><div class="glabel g-blue">新增</div><div class="item"><h4>检测到 WorldEdit 时直接执行指令</h4><p>（1.20.1 版本）：生成 //set / //replace 指令后，若检测到环境已安装 WorldEdit，会直接把指令发送执行，省去手动打开聊天栏再粘贴的步骤。</p><p class="sub">指令始终会先写入剪贴板，因此即便自动发送失败仍可手动粘贴执行，不影响原有用法；未检测到 WorldEdit 时保持原行为：仅复制并提示需要手动执行。</p><p class="sub">1.19.2 未提供对等的指令发送接口（该版本聊天签名机制与 1.20.1 不同），因此保持「复制到剪贴板」的行为。</p></div></div><div class="info box-neutral"><div class="info-t">工程</div><div class="item"><h4>补齐四版本统一构建</h4><p>此前仅两个 Fabric 目录内带有 workflow 文件，但它们位于仓库子目录，GitHub Actions 不会执行（该服务只识别仓库根目录的 .github/workflows/）。</p><p class="sub">现已在仓库根目录建立统一的 build.yml，用矩阵任务一次性构建 Forge / Fabric × 1.20.1 / 1.19.2 四个版本并上传产物，同时移除子目录中不会生效的旧配置文件。</p></div><div class="item"><h4>版本号推进</h4><p>2.1.1-Beta → 2.1.2-Release，四处源码配置与四份说明文档同步</p></div></div><div class="group"><div class="glabel g-mute">关于本版本</div><div class="item"><h4>版本号</h4><p>v2.1.2-Release（当前正式版 · 阶段 0 完成）</p></div><div class="item"><h4>当前状态</h4><p><strong style="color:#4ade80;">正式版已发布</p></div><div class="item"><h4>适用版本</h4><p>Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</p></div><div class="item"><h4>下载方式</h4><p>加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</p></div></div>
+</article>
+<article class="entry" id="mv-2.1.1" data-kind="beta">
+  <div class="entry-head">
+    <h3>v2.1.1-Beta</h3>
+    <span class="tag beta">Beta</span>
+  </div>
+  <p class="entry-desc">无需新增功能的质量补丁，目标是让模组从「装不上」变成「装上就能用」；同时替换掉打包在制品中的 GPL 系拼音库，消除协议风险。</p>
+  <div class="group"><div class="glabel g-green">修复</div><div class="item"><h4>WorldEdit 不再被判定为必需前置</h4><p>此前模组虽在依赖清单中声明 WorldEdit 为 mandatory=true，但代码里从未调用过它的任何 API，只是把 //set / //replace 字符串写进剪贴板。</p><p class="sub">没装 WorldEdit 的玩家会直接被判定依赖缺失、游戏读不到模组；崩溃日志中确实存在 requires worldedit 0 or above / Currently, worldedit is not installed。</p><p class="sub">现已改为可选依赖并增加运行时检测——未安装时功能完全不受影响，仅在提示语中说明指令需手动粘贴执行。</p></div><div class="item"><h4>移除从未被引用的 Cloth Config 前置</h4><p>构建脚本声明了 Cloth Config、说明文档也把它列为必需前置，但源码中零引用。现已彻底移除，减少一项无谓的安装门槛。</p></div><div class="item"><h4>修正 Forge 1.19.2 的模组元数据</h4><p>该版本的 mods.toml 存在三处错误——loaderVersion 键名拼写错误且取值写成了模组自身版本、Forge 版本范围沿用了 1.20.1 的 [47,)、游戏版本范围写成了 [1.20.1]，会导致 1.19.2 的 Forge 包加载异常。</p><p class="sub">现已修正为 [43,) / [1.19.2]。</p></div><div class="item"><h4>修正 1.19.2 版本文档描述</h4><p>该版本说明文档此前错误地写着 Minecraft 1.20.1、Forge 47+、Fabric 0.15+，现已按实际支持的版本分别更正。</p></div></div><div class="group"><div class="glabel g-blue">变更</div><div class="item"><h4>替换内置拼音库，消除协议冲突</h4><p>此前模组把 pinyin4j 直接打包进主 Jar，该库采用 GPL 系协议，与本项目「允许学习修改、禁止二次发布修改版本」的自有协议直接抵触。</p><p class="sub">现已替换为 Apache-2.0 协议的 TinyPinyin，并将无需使用的传递依赖一并排除。安装包体积平均减少约 190 KB（Forge 约 −197 KB，Fabric 约 −190 KB）。</p></div><div class="item"><h4>中文拼音搜索行为保持兼容</h4><p>新旧库对 ü 的记法不同——旧库把「绿」记作 lu，新库记作 lv。</p><p class="sub">为不让惯用 lu 的玩家搜不到方块，已同时生成两种写法的索引，输入 lvbaoshi 或 lubaoshi 都能搜到「绿宝石块」，其余方块名的搜索行为完全一致。</p></div></div><div class="group"><div class="glabel g-blue">清理</div><div class="item bare"><p>删除空实现的 ClientEvents 事件订阅器（四个版本各一份，无任何实际行为）</p></div><div class="item bare"><p>移除构建脚本中随依赖删除而失效的第三方仓库配置</p></div></div><div class="group"><div class="glabel g-blue">文档</div><div class="item bare"><p>四个版本的版本号统一为 v2.1.1-Beta，此前说明文档停留在 2.0.3.1，与实际发布的版本对不上</p></div></div><div class="group"><div class="glabel g-mute">关于本版本</div><div class="item"><h4>版本号</h4><p>v2.1.1-Beta（已被 v2.1.2-Release 取代）</p></div><div class="item"><h4>当前状态</h4><p>Beta 阶段已结束，已被 <strong>v2.1.2-Release 取代</p></div><div class="item"><h4>适用版本</h4><p>Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</p></div><div class="item"><h4>下载方式</h4><p>加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</p></div></div>
+</article>
+<article class="entry older" id="mv-2.1.0" data-kind="release">
+  <div class="entry-head">
+    <h3>v2.1.0-Release</h3>
+    <span class="tag release">Release</span>
+  </div>
+  <p class="entry-desc">重大版本更新：新增收藏夹/组系统、历史记录功能，删除常用方块自动统计，UI 交互全面升级，替换模式源方块复制优化。</p>
+  <div class="group"><div class="glabel g-blue">收藏夹/组系统</div><div class="item"><h4>多组管理</h4><p>支持创建、重命名、删除多个收藏组，每组独立管理方块列表</p></div><div class="item"><h4>默认收藏组</h4><p>内置"默认收藏"组，开箱即用</p></div><div class="item"><h4>快捷添加</h4><p>方块列表右侧点击星标即可添加/移除收藏</p></div><div class="item"><h4>实时更新</h4><p>添加/移除收藏后列表立即刷新，无需重新打开界面</p></div><div class="item"><h4>数据持久化</h4><p>收藏数据保存在配置文件中，重启不丢失</p></div></div><div class="group"><div class="glabel g-blue">历史记录</div><div class="item"><h4>自动记录</h4><p>每次复制 ID 或指令自动记录到历史</p></div><div class="item"><h4>最近20条</h4><p>保留最近20条复制记录，方便回溯</p></div><div class="item"><h4>方块名称显示</h4><p>历史记录显示方块中文名而非原始 ID，更直观</p></div><div class="item"><h4>一键重复制</h4><p>点击历史记录即可重新复制到剪贴板</p></div><div class="item"><h4>模式标识</h4><p>每条记录标注 ID / Set / Replace 模式</p></div></div><div class="group"><div class="glabel g-blue">替换模式优化</div><div class="item"><h4>源方块无放置比例</h4><p>替换模式下源方块不显示放置比例滑块，符合 WorldEdit 语义</p></div><div class="item"><h4>复制不带比例</h4><p>源方块复制结果仅包含 ID 和属性，不带百分比前缀</p></div><div class="item"><h4>目标方块保留比例</h4><p>目标方块仍支持放置比例设置，格式为 <code>50%minecraft:stone</p></div></div><div class="group"><div class="glabel g-blue">UI 优化</div><div class="item"><h4>标签切换</h4><p>中列增加"收藏夹 / 历史记录"标签切换</p></div><div class="item"><h4>删除常用方块</h4><p>移除原有的常用方块自动统计功能</p></div><div class="item"><h4>滚轮浏览</h4><p>全部方块列表使用滚轮滚动，操作流畅</p></div><div class="item"><h4>布局稳定</h4><p>收藏夹区域组名、按钮、分割线、列表布局经过多轮优化</p></div></div><div class="group"><div class="glabel g-green">Bug 修复</div><div class="item"><h4>修复收藏夹列表不刷新</h4><p>添加/移除收藏后列表立即更新</p></div><div class="item"><h4>修复源方块复制带比例</h4><p>替换模式源方块复制结果不再包含百分比</p></div><div class="item"><h4>修复历史记录显示 ID</h4><p>改为显示方块中文名</p></div><div class="item"><h4>修复列表消失问题</h4><p>修复非替换模式下中列列表异常消失的 Bug</p></div></div>
+</article>
+<article class="entry older" id="mv-2.0.3.2" data-kind="release">
+  <div class="entry-head">
+    <h3>v2.0.3.2-Release</h3>
+    <span class="tag release">Release</span>
+  </div>
+  <p class="entry-desc">重大版本更新：项目结构全面重组，命名格式标准化，源码清理，开源准备完成。</p>
+  <div class="group"><div class="glabel g-blue">项目结构重组</div><div class="item"><h4>目录分类清晰</h4><p>源码项目、网页源文件、发布包、开源源码四大目录分类管理</p></div><div class="item"><h4>命名格式标准化</h4><p>jar 文件采用 MC 模组标准命名格式 <code>Block_ID-&lt;MC版本&gt;-&lt;加载器&gt;-&lt;版本&gt;.jar</p></div><div class="item"><h4>最新版本统一管理</h4><p>所有最新版本 jar 统一放到"新版模组"文件夹</p></div><div class="item"><h4>历史版本归档</h4><p>旧版本 jar 统一放到"历史版本"文件夹</p></div></div><div class="group"><div class="glabel g-blue">源码清理</div><div class="item"><h4>删除全部注释代码</h4><p>移除所有代码注释，保持源码简洁</p></div><div class="item"><h4>删除多余文件</h4><p>清理临时脚本、构建产物、无用资源文件</p></div><div class="item"><h4>删除多余模组文件</h4><p>保留历史版本，清理重复和无用文件</p></div></div><div class="group"><div class="glabel g-blue">开源准备</div><div class="item"><h4>源码公开至 GitHub</h4><p>https://github.com/MOYBJ/Block_ID</p></div><div class="item"><h4>网页托管至 GitHub Pages</h4><p>https://moybj.github.io/Block-ID-Website/</p></div><div class="item"><h4>使用协议完善</h4><p>允许查看、学习、个人修改，禁止修改后二次发布</p></div></div>
+</article>
+<article class="entry older" id="mv-2.0.3.1" data-kind="release">
+  <div class="entry-head">
+    <h3>v2.0.3.1-Release</h3>
+    <span class="tag release">Release</span>
+  </div>
+  <p class="entry-desc">新增 1.19.2 版本支持，更新自定义源码可见协议，版本号规范化。</p>
+  <div class="group"><div class="glabel g-blue">开源准备</div><div class="item"><h4>新增 1.19.2 版本支持</h4><p>Forge 和 Fabric 双加载器同步适配 1.19.2</p></div><div class="item"><h4>自定义源码可见协议</h4><p>允许查看、学习、个人修改，禁止修改后二次发布</p></div><div class="item"><h4>新增 README.md</h4><p>项目说明文档，含功能介绍、使用方法、协议说明</p></div><div class="item"><h4>版本号规范化</h4><p>从 2.0.3-Release 改为 2.0.3.1-Release，符合语义化版本规范</p></div></div>
+</article>
+<article class="entry older" id="mv-2.0.3" data-kind="release">
+  <div class="entry-head">
+    <h3>v2.0.3-Release</h3>
+    <span class="tag release">Release</span>
+  </div>
+  <p class="entry-desc">首个正式版本！从 Beta 升级为 Release，修复滑块交互BUG，添加版权协议，语言文件全面标准化。</p>
+  <div class="group"><div class="glabel g-blue">版本升级</div><div class="item"><h4>正式版发布</h4><p>版本号从 2.0.2-Beta 升级为 2.0.3-Release，结束 Beta 测试阶段</p></div><div class="item"><h4>版权协议</h4><p>添加 All Rights Reserved 协议，未经作者书面允许禁止二次修改后公开发布</p></div><div class="item"><h4>语言文件标准化</h4><p>9 种语言（简中/繁中/英/日/法/德/西/葡/俄）全部采用标准 JSON 键值对格式</p></div></div><div class="group"><div class="glabel g-green">BUG 修复</div><div class="item bare"><p>修复放置率滑块点击范围（28px）与拖动范围（26px）不一致，导致点击最右端只能得到 99% 的问题</p></div><div class="item bare"><p>统一滑块点击与拖动的轨道范围，百分比计算精确到 100%</p></div></div>
+</article>
+<article class="entry older" id="mv-2.0.2" data-kind="beta">
+  <div class="entry-head">
+    <h3>v2.0.2-Beta</h3>
+    <span class="tag beta">Beta</span>
+  </div>
+  <p class="entry-desc">在 2.0.0 重构基础上，新增方块属性设置与放置率权重功能，界面全面美化，交互体验大幅提升。</p>
+  <div class="group"><div class="glabel g-blue">核心功能扩展</div><div class="item"><h4>方块属性设置</h4><p>已选列表每项新增 ⚙ 按钮，展开属性编辑面板，支持所有 BlockState 属性可视化切换，输出 WorldEdit 格式 <code>minecraft:stone_slab[type=top,waterlogged=false]</p></div><div class="item"><h4>属性中文映射</h4><p>内置 50+ 属性名与 60+ 属性值中文翻译，如 facing→朝向、half→半层、north→北</p></div><div class="item"><h4>放置率权重滑块</h4><p>已选列表每项内置迷你滑块，拖动调整放置概率，输出 <code>50%stone,50%grass</p></div><div class="item"><h4>Ctrl+左键精确输入</h4><p>按住 Ctrl 点击滑块或百分比文字，弹出数字输入框精确设置 1-100</p></div><div class="item"><h4>自动归一化</h4><p>新增平均分配、调整后按比例补满、删除时重新分配，总和始终保持 100%</p></div></div><div class="group"><div class="glabel g-blue">UI 与交互优化</div><div class="item"><h4>属性面板小卡片化</h4><p>改为左下角 230px 小卡片，紧凑不遮挡列表</p></div><div class="item"><h4>滑块可拖动</h4><p>放置率滑块支持按住拖动实时调整</p></div><div class="item"><h4>三列半透明面板</h4><p>添加半透明背景与顶部蓝色高亮边线</p></div><div class="item"><h4>搜索栏占位文字</h4><p>添加"搜索..."提示</p></div><div class="item"><h4>选中项高亮条</h4><p>已选方块左侧添加绿色高亮指示条</p></div></div><div class="group"><div class="glabel g-green">修复与优化</div><div class="item bare"><p>修复空气方块重复显示，双重过滤仅保留 <code>minecraft:air</p></div><div class="item bare"><p>修复搜索后滚动条范围计算错误</p></div><div class="item bare"><p>修复替换模式下右列滚动失效</p></div><div class="item bare"><p>修复搜索后 ➕/✔ 图标消失</p></div><div class="item bare"><p>Fabric 版新增常用方块自动收集事件监听</p></div><div class="item bare"><p>修复 FrequentBlockManager 副作用问题</p></div></div>
+</article>
+<article class="entry older" id="mv-2.0.1" data-kind="beta">
+  <div class="entry-head">
+    <h3>v2.0.1-Beta</h3>
+    <span class="tag beta">Beta</span>
+  </div>
+  <p class="entry-desc">2.0.0 重构后的稳定性修复版本，主要解决首批用户反馈的交互问题。</p>
+  <div class="group"><div class="glabel g-green">主要修复</div><div class="item bare"><p>修复替换模式下标签页按钮位置偏移</p></div><div class="item bare"><p>修复右列标题显示不完整</p></div><div class="item bare"><p>优化列表滚动性能</p></div><div class="item bare"><p>修复部分界面文字重叠</p></div><div class="item bare"><p>提升 Fabric 版本兼容性</p></div></div>
+</article>
+<article class="entry older" id="mv-2.0.0" data-kind="beta">
+  <div class="entry-head">
+    <h3>v2.0.0-Beta</h3>
+    <span class="tag beta">Beta</span>
+  </div>
+  <p class="entry-desc">从 1.2.0-Alpha 到 2.0.0-Beta，本次更新是一次全面重构。无论是 UI 视觉、交互逻辑还是底层数据管理，都有跨越式的提升。</p>
+  <div class="group"><div class="glabel g-blue">UI 与交互优化</div><div class="item"><h4>全新三列布局</h4><p>左侧"全部方块"，中间"常用方块"，右侧"已选列表/确认区"，空间利用率大幅提升</p></div><div class="item"><h4>双模式切换</h4><p>顶部按钮支持"复制模式/替换模式"与"ID复制/指令模式"任意组合切换</p></div><div class="item"><h4>动态图标操作</h4><p></p><p class="sub">· 左侧/中间列表每行末尾新增 ➕ 图标，点击可手动添加至常用方块</p><p class="sub">· 已添加的常用方块图标自动变为 ✔（绿色）</p><p class="sub">· 中间"常用方块"列表每行末尾新增 ➖ 图标，点击可手动移除</p></div><div class="item"><h4>智能搜索栏</h4><p>支持中文名、英文 ID、拼音首字母搜索</p></div><div class="item"><h4>自适应布局</h4><p>全屏/小窗口下所有元素自动计算位置，彻底解决按钮遮挡或列表显示不全</p></div></div><div class="group"><div class="glabel g-blue">核心功能扩展</div><div class="item"><h4>ID复制模式</h4><p>复制纯 ID（无指令前缀），支持多选，多个 ID 以逗号分隔；替换模式复制格式为"源ID 目标ID"（含空格）</p></div><div class="item"><h4>指令复制模式</h4><p>一键复制 <code>//set 或 <code>//replace 完整 WorldEdit 指令到剪贴板</p></div><div class="item"><h4>替换模式优化</h4><p>源方块与目标方块分列显示，复制格式严格保持"源ID 目标ID"（含空格）</p></div><div class="item"><h4>常用方块统计规则</h4><p></p><p class="sub">· 原版/模组方块放置 15 次自动加入（手动添加也有效）</p><p class="sub">· WorldEdit 指令使用 3 次自动加入</p><p class="sub">· 支持手动添加/移除，完全自定义</p></div></div><div class="group"><div class="glabel g-blue">底层与稳定性</div><div class="item"><h4>配置系统重构</h4><p>从 ForgeConfigSpec 迁移至 Gson JSON 存储，彻底解决配置文件读写崩溃</p></div><div class="item"><h4>统计逻辑修复</h4><p>双保险策略（右键点击 + 聊天指令监听），确保常用方块统计准确</p></div><div class="item"><h4>按键响应优化</h4><p>修复搜索框焦点死循环、按钮点击无效等遗留 Bug</p></div><div class="item"><h4>多语言支持</h4><p>内置简中、繁中、英、日、法、德、西、葡、俄 9 种语言</p></div><div class="item"><h4>新增前置依赖</h4><p>Cloth Config API（任何版本）</p></div></div><div class="group"><div class="glabel g-green">主要修复（相对 Alpha 1.2.0）</div><div class="item bare"><p>修复"替换模式复制格式缺少空格"的 Bug</p></div><div class="item bare"><p>修复"WorldEdit 指令无法被统计"的问题</p></div><div class="item bare"><p>修复"搜索栏无法输入"、"按钮无反应"等交互故障</p></div><div class="item bare"><p>修复"常用方块列表不刷新"的数据同步问题</p></div></div><div class="group"><div class="glabel g-mute">说明</div><div class="item bare"><p>自 <strong>v2.0.0 起新增 Fabric 加载器支持，1.x 系列仅支持 Forge</p></div><div class="item bare"><p>1.x Alpha 为早期测试版，强烈建议升级至最新 v2.1.2.2-Beta</p></div><div class="item bare"><p>前置说明：WorldEdit 可选（用于一键执行 //set //replace 指令），自 v2.1.1 起已移除 Cloth Config API 依赖</p></div><div class="item bare"><p>点击带 <strong>› 的版本可展开查看该版本的完整更新日志</p></div></div>
+</article>
+    <div class="more-wrap"><button class="more-btn" id="load-older">加载更早的历史版本</button></div>
+  </main>
+</div>
+
+<section class="road">
+  <div class="wrap">
+    <div class="eyebrow">Roadmap</div>
+    <h2>接下来做什么</h2>
+    <div class="road-row"><span>绘制适配层与多模块拆分</span><span class="road-st doing">进行中</span></div>
+    <div class="road-row"><span>四版本源码合并为单一主线</span><span class="road-st plan">计划中</span></div>
+    <div class="road-row"><span>更多方块属性与语言支持</span><span class="road-st plan">计划中</span></div>
   </div>
 </section>
 
-<!-- ============ Footer ============ -->
-<footer class="footer">
-  <div class="footer-content">
-    <div class="footer-info">
-      <span>客户端 · 服务端免装</span>
-      <span class="sep">|</span>
-      <span>配置：.minecraft/config/block_id.json</span>
-      <span class="sep">|</span>
-      <span>前置：WorldEdit（可选）· 无需 Cloth Config</span>
-      <span class="sep">|</span>
-      <span>下载：QQ群 1121599701</span>
+<footer class="foot">
+  <div class="foot-line"></div>
+  <div class="wrap">
+    <div class="foot-main">
+      <div class="foot-brand">
+        <svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true">
+          <path d="M16 3 29 10.5 16 18 3 10.5Z" fill="#7FB4F5"/>
+          <path d="M3 10.5 16 18V31L3 23.5Z" fill="#4A8AD5"/>
+          <path d="M29 10.5 16 18V31l13-7.5Z" fill="#2F6AA8"/>
+        </svg>
+        <span>Block ID</span>
+      </div>
+      <span class="foot-tag">打中文，出方块。</span>
     </div>
-    <div class="footer-bottom">
-      Block ID v2.1.2.2-Beta · Forge / Fabric · 2026.10.31 · <a href="index.html" style="color:var(--accent);">使用协议</a>
+    <div class="foot-bottom">
+      <span>Copyright 2026 Block ID · 保留所有权利</span>
+      <span>v2.1.2.3-Beta · Forge / Fabric · 2026.10.31</span>
     </div>
   </div>
 </footer>
 
 <script>
-/* ============ 方块粒子背景 ============ */
-(function() {
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const canvas = document.getElementById('particle-canvas');
-  const ctx = canvas.getContext('2d');
-  let particles = [];
-  const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const COLORS = isDark
-    ? ['#38bdf8', '#94a3b8', '#cbd5e1', '#7dd3fc', '#4ade80', '#fbbf24']
-    : ['#0284c7', '#64748b', '#94a3b8', '#0ea5e9', '#16a34a', '#d97706'];
-  function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
-    canvas.style.width = window.innerWidth + 'px';
-    canvas.style.height = window.innerHeight + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-  resize();
-  window.addEventListener('resize', resize);
-  class BlockParticle {
-    constructor(idx, total) { this.idx = idx; this.total = total; this.reset(true); }
-    reset(initial) {
-      const frac = this.idx / this.total;
-      let depth;
-      if (frac < 0.33) depth = 2;
-      else if (frac < 0.66) depth = 1;
-      else depth = 0;
-      this.depth = depth;
-      const baseSpeed = [0.55, 0.30, 0.12][depth];
-      const baseSpeedX = [0.40, 0.25, 0.12][depth];
-      this.size = Math.random() * 18 + 4;
-      this.x = Math.random() * canvas.width;
-      this.y = initial ? Math.random() * canvas.height : canvas.height + this.size;
-      this.speedY = -(baseSpeed + Math.random() * 0.12);
-      this.speedX = (Math.random() - 0.5) * baseSpeedX;
-      this.rotation = Math.random() * Math.PI * 2;
-      this.rotationSpeed = (Math.random() - 0.5) * 0.02;
-      this.targetOpacity = Math.random() * (isDark ? 0.16 : 0.13) + (isDark ? 0.05 : 0.03);
-      this.opacity = initial ? this.targetOpacity * Math.random() : 0;
-      this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
-      this.pulse = Math.random() * Math.PI * 2 + this.idx * 0.3;
-      this.fadeOut = false;
-    }
-    update() {
-      if (this.opacity < this.targetOpacity && !this.fadeOut) {
-        this.opacity += 0.015;
-        if (this.opacity > this.targetOpacity) this.opacity = this.targetOpacity;
-      }
-      this.y += this.speedY;
-      this.x += this.speedX;
-      this.rotation += this.rotationSpeed;
-      this.pulse += 0.014;
-      if (this.y < -this.size) this.fadeOut = true;
-      if (this.fadeOut) {
-        this.opacity -= 0.04;
-        if (this.opacity <= 0) this.reset(false);
-      }
-    }
-    draw() {
-      ctx.save();
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.rotation);
-      const breath = 0.88 + 0.12 * Math.sin(this.pulse * 2);
-      ctx.scale(breath, breath);
-      ctx.globalAlpha = Math.max(0, this.opacity * (0.7 + 0.3 * Math.sin(this.pulse)));
-      ctx.fillStyle = this.color;
-      if (isDark && this.opacity > 0.02) { ctx.shadowColor = this.color; ctx.shadowBlur = 12; }
-      const s = this.size;
-      ctx.fillRect(-s/2, -s/2, s, s);
-      ctx.globalAlpha *= 0.5;
-      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(-s/2, -s/2, s, s);
-      ctx.beginPath();
-      ctx.moveTo(-s/2, 0); ctx.lineTo(s/2, 0);
-      ctx.moveTo(0, -s/2); ctx.lineTo(0, s/2);
-      ctx.stroke();
-      ctx.restore();
-    }
-  }
-  const count = Math.min(80, Math.floor(window.innerWidth / 26));
-  for (let i = 0; i < count; i++) particles.push(new BlockParticle(i, count));
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => { p.update(); p.draw(); });
-    requestAnimationFrame(animate);
-  }
-  animate();
+/* 导航 */
+(function(){
+  var t=document.getElementById('nav-toggle'), l=document.getElementById('nav-links');
+  if(!t||!l) return;
+  t.addEventListener('click',function(){ l.classList.toggle('open'); });
 })();
 
-/* ============ 鼠标跟随光晕（触屏/reduced-motion 禁用，静止即停） ============ */
-(function() {
-  const glow = document.getElementById('cursor-glow');
-  if (!glow) return;
-  if (window.matchMedia('(hover: none)').matches ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    glow.style.display = 'none';
-    return;
-  }
-  let mx = window.innerWidth / 2, my = window.innerHeight / 2;
-  let cx = mx, cy = my, raf = null;
-  function loop() {
-    cx += (mx - cx) * 0.08;
-    cy += (my - cy) * 0.08;
-    glow.style.transform = 'translate3d(' + cx + 'px,' + cy + 'px,0) translate(-50%,-50%)';
-    if (Math.abs(mx - cx) < 0.1 && Math.abs(my - cy) < 0.1) { raf = null; return; }
-    raf = requestAnimationFrame(loop);
-  }
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    if (!raf) raf = requestAnimationFrame(loop);
-  }, { passive: true });
-})();
-
-/* ============ 导航栏滚动效果 + 阅读进度条（rAF 节流） ============ */
-(function() {
-  const navbar = document.getElementById('navbar');
-  const progress = document.createElement('div');
-  progress.id = 'scroll-progress';
-  document.body.appendChild(progress);
-  let ticking = false;
-  const onScroll = () => {
-    ticking = false;
-    if (window.scrollY > 50) navbar.classList.add('scrolled');
-    else navbar.classList.remove('scrolled');
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    progress.style.transform = 'scaleX(' + (max > 0 ? Math.min(window.scrollY / max, 1) : 0) + ')';
-  };
-  window.addEventListener('scroll', () => {
-    if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
-  }, { passive: true });
-  onScroll();
-})();
-
-/* ============ 滚动入场动画 ============ */
-(function() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-  const revealEls = document.querySelectorAll('.reveal');
-  revealEls.forEach((el) => {
-    // 按同级兄弟分组编号，使 cascade 延迟只在同一行/同一组内生效
-    const group = el.parentElement
-      ? el.parentElement.querySelectorAll(':scope > .reveal')
-      : null;
-    const i = group ? Array.prototype.indexOf.call(group, el) : 0;
-    el.style.setProperty('--i', i);
-    observer.observe(el);
-  });
-})();
-
-/* ============ 更新日志地铁切换（进出过渡 + 列车到站） ============ */
-(function() {
-  const tabs = document.querySelectorAll('.metro-station');
-  const line = document.querySelector('.metro-line');
-  const train = document.querySelector('.metro-train');
-  let switching = false;
-
-  function moveTrain(tab) {
-    if (!train || !line) return;
-    const dot = tab.querySelector('.ms-dot');
-    if (!dot) return;
-    const lr = line.getBoundingClientRect();
-    const dr = dot.getBoundingClientRect();
-    train.style.top = (dr.top - lr.top + dr.height / 2) + 'px';
-  }
-
-  function activate(tab) {
-    const mv = tab.dataset.mv;
-    tabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    const next = document.getElementById('mv-' + mv);
-    if (!next) { switching = false; return; }
-    const current = document.querySelector('.mpanel.active');
-    const body = document.querySelector('.changelog-box .modal-body');
-    if (current && current !== next) {
-      const oldH = body ? body.scrollHeight : 0;
-      if (body) body.style.height = oldH + 'px';
-      current.classList.add('leaving');
-      setTimeout(() => {
-        current.classList.remove('active', 'leaving');
-        next.classList.add('active');
-        if (body) {
-          body.style.height = 'auto';
-          const newH = body.scrollHeight;
-          body.style.height = oldH + 'px';
-          requestAnimationFrame(() => {
-            body.style.height = newH + 'px';
-          });
-          setTimeout(() => { body.style.height = ''; }, 540);
-        }
-        switching = false;
-      }, 240);
-    } else {
-      next.classList.add('active');
-      switching = false;
-    }
-    moveTrain(tab);
-  }
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      if (switching) return;
-      switching = true;
-      activate(tab);
-    });
-  });
-
-  window.addEventListener('resize', () => {
-    const active = document.querySelector('.metro-station.active');
-    if (active) moveTrain(active);
-  });
-
-  const initial = document.querySelector('.metro-station.active') || tabs[0];
-  if (initial) moveTrain(initial);
-})();
-
-/* ============ 平滑锚点滚动 ============ */
-(function() {
-  document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener('click', e => {
-      const target = document.querySelector(link.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        const top = target.getBoundingClientRect().top + window.scrollY - 80;
-        window.scrollTo({ top, behavior: 'smooth' });
-      }
-    });
-  });
-})();
-
-/* ============ 无限动画离屏暂停 (impeccable) ============ */
-(function() {
-  const pulseSelector = '[class*="Pulse"], [class*="pulse"], .hero-badge .dot, .hero-open-notice .notice-dot, .logo-pulse, .qq-pulse, .badge-pulse, .hint-pulse, .dot-pulse';
-  const pulseEls = document.querySelectorAll(pulseSelector);
-  if (pulseEls.length === 0) return;
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      entry.target.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
-    });
-  }, { threshold: 0.01 });
-  pulseEls.forEach(el => observer.observe(el));
-})();
-
-/* ============ Hero 标题逐词装配（渐进增强，reduced-motion 直出） ============ */
-(function() {
-  const title = document.querySelector('.hero-title');
-  if (!title) return;
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let wi = 0;
-  Array.from(title.childNodes).forEach(node => {
-    if (node.nodeType === 3) {
-      const frag = document.createDocumentFragment();
-      node.textContent.split(/(\s+)/).forEach(part => {
-        if (!part) return;
-        if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
-        const span = document.createElement('span');
-        span.className = 'w';
-        span.style.setProperty('--wi', wi++);
-        span.textContent = part;
-        frag.appendChild(span);
+/* 筛选 */
+(function(){
+  var chips=document.querySelectorAll('.chip'), entries=document.querySelectorAll('.entry');
+  chips.forEach(function(c){
+    c.addEventListener('click',function(){
+      chips.forEach(function(x){ x.classList.toggle('on', x===c); });
+      var f=c.dataset.filter;
+      entries.forEach(function(e){
+        var ok = (f==='all') || (e.dataset.kind===f);
+        e.style.display = ok ? '' : 'none';
       });
-      title.replaceChild(frag, node);
-    } else if (node.nodeType === 1) {
-      node.classList.add('w-unit');
-      node.style.setProperty('--wi', wi++);
-    }
-  });
-  if (wi > 0) title.classList.add('split');
-})();
-
-/* ============ 装饰性图标对辅助技术隐藏（Vercel Web Interface Guidelines） ============ */
-document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon svg').forEach(s => {
-  if (!s.hasAttribute('aria-label') && !s.hasAttribute('role')) s.setAttribute('aria-hidden', 'true');
-});
-
-/* ============ 历史版本两栏：展开指定版本日志 / 返回归档 ============ */
-(function() {
-  const back = document.getElementById('archive-back');
-  const items = document.querySelectorAll('.archive-item[data-open]');
-  const body = document.querySelector('.changelog-box .modal-body');
-  if (!back || !items.length) return;
-
-  function scrollTop() { if (body) body.scrollTop = 0; }
-
-  function showVersion(id) {
-    const target = document.getElementById('mv-' + id);
-    const current = document.querySelector('.mpanel.active');
-    if (!target || target === current) return;
-    if (current) current.classList.remove('active');
-    target.classList.add('active');
-    back.hidden = false;
-    scrollTop();
-  }
-
-  function backToArchive() {
-    const current = document.querySelector('.mpanel.active');
-    const archive = document.getElementById('mv-history');
-    if (current) current.classList.remove('active');
-    if (archive) archive.classList.add('active');
-    back.hidden = true;
-    scrollTop();
-  }
-
-  items.forEach(item => {
-    const open = () => showVersion(item.dataset.open);
-    item.addEventListener('click', open);
-    item.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+      document.querySelectorAll('.toc-item').forEach(function(a){
+        var el=document.getElementById('mv-'+a.dataset.v);
+        a.style.display = (el && el.style.display!=='none') ? '' : 'none';
+      });
     });
   });
-
-  back.addEventListener('click', backToArchive);
-
-  // 一旦改由地铁图导航，就隐藏返回按钮
-  document.querySelectorAll('.metro-station').forEach(tab => {
-    tab.addEventListener('click', () => { back.hidden = true; });
-  });
 })();
 
+/* 目录点击 + 滚动高亮 */
+(function(){
+  var links=document.querySelectorAll('.toc-item');
+  links.forEach(function(a){
+    a.addEventListener('click',function(ev){
+      var el=document.getElementById(a.getAttribute('href').slice(1));
+      if(!el) return;
+      ev.preventDefault();
+      el.classList.add('show');
+      el.style.display='';
+      window.scrollTo({top: el.getBoundingClientRect().top + window.scrollY - 88, behavior:'smooth'});
+    });
+  });
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(!en.isIntersecting) return;
+      links.forEach(function(a){ a.classList.toggle('on', a.getAttribute('href')==='#'+en.target.id); });
+    });
+  },{rootMargin:'-90px 0px -70% 0px'});
+  document.querySelectorAll('.entry').forEach(function(e){ io.observe(e); });
+})();
+
+/* 加载更早 */
+(function(){
+  var btn=document.getElementById('load-older');
+  var tocMore=document.getElementById('toc-more');
+  window.__revealAll=function(){
+    document.querySelectorAll('.entry.older').forEach(function(e){ e.classList.add('show'); });
+    document.querySelectorAll('.toc-item.older').forEach(function(a){ a.style.display=''; });
+    if(btn) btn.parentElement.style.display='none';
+  };
+  if(btn) btn.addEventListener('click',window.__revealAll);
+  if(tocMore) tocMore.addEventListener('click',function(e){ e.preventDefault(); window.__revealAll(); });
+})();
+
+/* 深链：从主页弹窗跳 #mv-x 时，先展开历史条目再滚动 */
+(function(){
+  function jump(){
+    var h=location.hash.slice(1);
+    if(!h) return;
+    var el=document.getElementById(h);
+    if(!el) return;
+    if(el.classList.contains('older') && !el.classList.contains('show')){
+      document.querySelectorAll('.entry.older').forEach(function(e){ e.classList.add('show'); });
+      document.querySelectorAll('.toc-item.older').forEach(function(a){ a.style.display=''; });
+      var b=document.getElementById('load-older');
+      if(b) b.parentElement.style.display='none';
+    }
+    setTimeout(function(){
+      window.scrollTo({top: el.getBoundingClientRect().top + window.scrollY - 88, behavior:'auto'});
+    },40);
+  }
+  jump();
+  window.addEventListener('hashchange', jump);
+})();
+
+/* 入场动画 */
+(function(){
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)) return;
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  },{threshold:.1});
+  els.forEach(function(e){ io.observe(e); });
+})();
 </script>
 
-<!-- ===== Block ID 站点统计（匿名埋点，失败静默，不影响页面） ===== -->
+<!-- ============ 站点统计（匿名埋点，失败静默） ============ -->
 <script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js" defer></script>
 <script>
 (function () {
   var ENDPOINT = 'https://blockid-admin.app.workbuddy.host';
   var KEY = 'wbpk_whwchtrfJEOVB2ElS83PSo_pNItdHl7mGzEsxaNGKlfdvr31AflxWbn';
-  var PAGE_VERSION = 'v2.1.2.2-Beta';
+  var PAGE_VERSION = 'v2.1.2.3-Beta';
   var cloud = null, queue = [], tries = 0;
 
   function flush() {
