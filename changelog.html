@@ -2600,7 +2600,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
     <li><a href="index.html#faq">常见问题</a></li>
     <li><a href="index.html">使用协议</a></li>
   </ul>
-  <div class="nav-version">v2.1.2.1-Beta</div>
+  <div class="nav-version">v2.1.2.2-Beta</div>
 </nav>
 
 <!-- ============ Hero 区 ============ -->
@@ -2637,12 +2637,16 @@ code, .terminal-line { overflow-wrap: anywhere; }
   <div class="changelog-box reveal">
     <div class="metro-line">
       <div class="metro-track"><span class="metro-train"></span></div>
-      <button class="metro-station active latest upcoming" data-mv="2.1.2.1">
+      <button class="metro-station active latest upcoming" data-mv="2.1.2.2">
         <span class="ms-dot"><i></i></span>
         <span class="ms-body">
-          <span class="ms-ver">v2.1.2.1-Beta</span>
+          <span class="ms-ver">v2.1.2.2-Beta</span>
           <span class="ms-tags"><span class="tag latest">已发布</span></span>
         </span>
+      </button>
+      <button class="metro-station" data-mv="2.1.2.1">
+        <span class="ms-dot"><i></i></span>
+        <span class="ms-body"><span class="ms-ver">v2.1.2.1-Beta</span></span>
       </button>
       <button class="metro-station latest" data-mv="2.1.2">
         <span class="ms-dot"><i></i></span>
@@ -2663,8 +2667,68 @@ code, .terminal-line { overflow-wrap: anywhere; }
     <div class="modal-body">
       <button class="archive-back" id="archive-back" hidden>← 返回历史版本</button>
 
+      <!-- v2.1.2.2 -->
+      <div class="mpanel active" id="mv-2.1.2.2">
+        <div class="mv-header latest">
+          <div class="mv-top">
+            <span class="mv-title">🚀 Block_ID 2.1.2.2-Beta</span>
+            <span class="mv-tag beta">Beta</span>
+            <span class="mv-tag latest">已发布</span>
+            <div class="mv-platforms"><span class="mv-platform">Forge</span><span class="mv-platform">Fabric</span></div>
+          </div>
+          <div class="mv-desc">修复方块权重无法精确控制的问题：权重改为 WorldEdit 原生的相对权重语义，三个及以上方块也能准确设置 50% / 25% / 25% 这样的比例。</div>
+        </div>
+
+        <div class="msection">
+          <div class="mtitle"><div class="micon core">🐛</div>修复</div>
+          <ul class="mlist">
+            <li><strong>方块权重无法精确控制</strong>：旧逻辑在设置某个方块后，会把剩余配额按其他方块当前值的比例重新分配。逐个输入目标值时，先前设置好的方块会被后续操作反复缩放，任何顺序都无法精确落在目标分布上。
+              <span class="sub">典型场景：三个方块想设为 50% / 25% / 25%，结果总在漂移，怎么调都对不上。</span>
+            </li>
+            <li><strong>改为相对权重语义</strong>：WorldEdit 的 50%stone,25%dirt,25%sand 本就不要求总和为 100，是相对值。现在输入的数值就是该方块的相对权重，各方块独立设置、互不干扰。
+              <span class="sub">三个方块依次输入 50、25、25，即得到精确的 50% / 25% / 25%。</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="msection">
+          <div class="mtitle"><div class="micon ui">🎛️</div>变更</div>
+          <ul class="mlist">
+            <li><strong>界面权重显示</strong>：显示实际占比（该方块权重 ÷ 组内总权重），与生成指令的真实分布一致</li>
+            <li><strong>权重输入范围</strong>：由 1–99 扩展为 1–9999，支持更悬殊的比例</li>
+            <li><strong>拖拽滑条</strong>：仍按百分比位置操作，内部自动换算为相对权重</li>
+            <li><strong>增删方块</strong>：不再触发全组权重重分配，其余方块保持原值</li>
+          </ul>
+        </div>
+
+        <div class="msection">
+          <div class="mtitle"><div class="micon tech">🧩</div>兼容性</div>
+          <ul class="mlist">
+            <li>全默认状态（未调整权重）生成的指令与旧版完全一致</li>
+            <li>组内任一方块有自定义权重时，全部方块都会带上 N% 前缀（WorldEdit 中无前缀方块的权重为 1，混用会产生错误比例）</li>
+          </ul>
+        </div>
+
+        <div class="msection">
+          <div class="mtitle"><div class="micon ui">🧪</div>验证</div>
+          <ul class="mlist">
+            <li>四版本（Forge / Fabric × 1.20.1 / 1.19.2）compileJava 与 clean build 全部 BUILD SUCCESSFUL</li>
+            <li>旧权重逻辑无残留，四份源码新增方法一致</li>
+          </ul>
+        </div>
+
+        <div class="msection">
+          <div class="mtitle"><div class="micon tech">ℹ️</div>关于本版本</div>
+          <ul class="mlist">
+            <li><strong>版本号</strong>：v2.1.2.2-Beta</li>
+            <li><strong>当前状态</strong>：<strong style="color:#4ade80;">已发布</strong>（Beta 抢先体验版）</li>
+            <li><strong>适用版本</strong>：Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</li>
+            <li><strong>下载方式</strong>：加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</li>
+          </ul>
+        </div>
+      </div>
       <!-- v2.1.2.1 -->
-      <div class="mpanel active" id="mv-2.1.2.1">
+      <div class="mpanel" id="mv-2.1.2.1">
         <div class="mv-header latest">
           <div class="mv-top">
             <span class="mv-title">🚀 Block_ID 2.1.2.1-Beta</span>
@@ -3203,7 +3267,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
           <div class="mtitle"><div class="micon tech">ℹ️</div>说明</div>
           <ul class="mlist">
             <li>自 <strong>v2.0.0</strong> 起新增 Fabric 加载器支持，1.x 系列仅支持 Forge</li>
-            <li>1.x Alpha 为早期测试版，强烈建议升级至最新 v2.1.2.1-Beta</li>
+            <li>1.x Alpha 为早期测试版，强烈建议升级至最新 v2.1.2.2-Beta</li>
             <li>前置说明：WorldEdit 可选（用于一键执行 //set //replace 指令），自 v2.1.1 起已移除 Cloth Config API 依赖</li>
             <li>点击带 <strong>›</strong> 的版本可展开查看该版本的完整更新日志</li>
           </ul>
@@ -3296,7 +3360,7 @@ code, .terminal-line { overflow-wrap: anywhere; }
       <span>下载：QQ群 1121599701</span>
     </div>
     <div class="footer-bottom">
-      Block ID v2.1.2.1-Beta · Forge / Fabric · 2026.10.05 · <a href="index.html" style="color:var(--accent);">使用协议</a>
+      Block ID v2.1.2.2-Beta · Forge / Fabric · 2026.10.31 · <a href="index.html" style="color:var(--accent);">使用协议</a>
     </div>
   </div>
 </footer>
@@ -3636,7 +3700,7 @@ document.querySelectorAll('a svg, button svg, .feature-icon svg, .quick-nav-icon
 (function () {
   var ENDPOINT = 'https://blockid-admin.app.workbuddy.host';
   var KEY = 'wbpk_whwchtrfJEOVB2ElS83PSo_pNItdHl7mGzEsxaNGKlfdvr31AflxWbn';
-  var PAGE_VERSION = 'v2.1.2.1-Beta';
+  var PAGE_VERSION = 'v2.1.2.2-Beta';
   var cloud = null, queue = [], tries = 0;
 
   function flush() {
