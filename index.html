@@ -288,6 +288,32 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
 .feat:nth-child(2){--ac:var(--violet)}
 .feat:nth-child(3){--ac:var(--cyan)}
 .feat:nth-child(4){--ac:var(--amber)}
+.feat:nth-child(5){--ac:var(--pink)}
+
+/* 通栏功能卡：不打开界面也能用 */
+.feat.wide{grid-column:1 / -1;flex-direction:row;align-items:stretch}
+.feat.wide .feat-vis{
+  flex:none;width:300px;display:flex;align-items:center;justify-content:center;
+  border-bottom:none;border-right:1px solid var(--line);min-height:0;padding:24px;
+}
+.feat.wide .feat-txt{display:flex;flex-direction:column;justify-content:center;padding:24px 30px}
+.keys{display:flex;gap:18px;align-items:flex-start}
+.key{display:flex;flex-direction:column;align-items:center;gap:9px}
+.key .k{
+  width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:800;color:var(--text-sub);
+  background:linear-gradient(180deg,#1C2636,#121A26);
+  border:1px solid var(--line-strong);
+  box-shadow:0 3px 0 rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.03) inset;
+}
+.key .lb{font-size:11.5px;color:var(--text-faint);white-space:nowrap}
+.key.on .k{
+  color:#081422;
+  background:linear-gradient(180deg,#95C9FB,#5A9AE8);
+  border-color:transparent;
+  box-shadow:0 3px 0 #2C6098,0 0 0 4px rgba(124,180,247,.15),0 6px 18px rgba(90,154,232,.42);
+}
+.key.on .lb{color:var(--blue-soft);font-weight:600}
 .feat-vis{
   padding:22px;min-height:158px;border-bottom:1px solid var(--line);
   background:
@@ -303,6 +329,7 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
   box-shadow:0 0 10px color-mix(in srgb,var(--ac) 70%,transparent);
 }
 .feat-txt p{font-size:14.5px;color:var(--text-mute);line-height:1.72}
+.feat-txt p b{color:var(--text);font-weight:700}
 
 /* 功能卡内示意 */
 .mini-search{display:flex;align-items:center;gap:8px;padding:9px 11px;background:#0C1320;border:1px solid rgba(124,180,247,.26);border-radius:9px;margin-bottom:12px}
@@ -635,6 +662,8 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
   .hero{padding:82px 0 48px}
   .sec{padding:68px 0}
   .how-grid,.feat-grid,.matrix,.chan{grid-template-columns:1fr}
+  .feat.wide{flex-direction:column}
+  .feat.wide .feat-vis{width:auto;border-right:none;border-bottom:1px solid var(--line);padding:22px}
   .qq-card{grid-template-columns:1fr;gap:22px;padding:24px 22px}
   .qq-right{align-items:flex-start}
   .qq-num{font-size:27px}
@@ -796,8 +825,8 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
 <section class="sec" id="features">
   <div class="wrap">
     <div class="eyebrow reveal v">Features</div>
-    <h2 class="sec-title reveal">四件真正省时间的事</h2>
-    <p class="sec-sub reveal">不是功能清单，是每天建造都会用到的四个动作。</p>
+    <h2 class="sec-title reveal">五件真正省时间的事</h2>
+    <p class="sec-sub reveal">不是功能清单，是每天建造都会用到的五个动作。</p>
     <div class="feat-grid">
 
       <article class="feat reveal">
@@ -873,6 +902,25 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
         </div>
       </article>
 
+      <article class="feat wide reveal">
+        <div class="feat-vis">
+          <div class="keys">
+            <div class="key">
+              <span class="k">G</span>
+              <span class="lb">打开面板</span>
+            </div>
+            <div class="key on">
+              <span class="k">H</span>
+              <span class="lb">复制手持方块</span>
+            </div>
+          </div>
+        </div>
+        <div class="feat-txt">
+          <h3>不开界面，也能拿到 ID</h3>
+          <p>主手拿着方块按一下 <b>H</b>，ID 直接进剪贴板，动作栏还会给你回执 —— 不用开面板、不用切窗口、不打断手上的活。手里拿的不是方块时它会提醒你，而不是默默复制一个空值。</p>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
@@ -906,13 +954,13 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
         <ol class="steps" data-steps="forge">
           <li><span class="no">01</span><span>装好对应版本的 Forge 47.4.10+（或 Fabric 0.15.11+）</span></li>
           <li><span class="no">02</span><span>把 jar 放进 .minecraft/mods 文件夹</span></li>
-          <li><span class="no">03</span><span>启动游戏，按 G 打开面板开始搜方块</span></li>
+          <li><span class="no">03</span><span>启动游戏，按 G 开面板搜方块；拿着方块按 H 可直接复制 ID</span></li>
           <li><span class="no">04</span><span>可选：装 WorldEdit，解锁 //set 一键执行</span></li>
         </ol>
         <ol class="steps" data-steps="fabric" hidden>
           <li><span class="no">01</span><span>装好对应版本的 Fabric Loader 0.15.11+（或 Forge 47.4.10+）</span></li>
           <li><span class="no">02</span><span>把 jar 放进 .minecraft/mods 文件夹</span></li>
-          <li><span class="no">03</span><span>启动游戏，按 G 打开面板开始搜方块</span></li>
+          <li><span class="no">03</span><span>启动游戏，按 G 开面板搜方块；拿着方块按 H 可直接复制 ID</span></li>
           <li><span class="no">04</span><span>可选：装 WorldEdit，解锁 //set 一键执行</span></li>
         </ol>
       </div>
@@ -959,6 +1007,10 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
       <div class="faq-item">
         <button class="faq-q">会和别的界面模组冲突吗？<span class="pm"></span></button>
         <div class="faq-a"><p>目前未发现冲突。打开面板默认是 <code>G</code>、复制 ID 是 <code>H</code>；如与其它模组键位重复，到 设置 → 控制 → 按键绑定 的「方块ID」分类里重绑即可。</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">不打开界面也能复制方块 ID 吗？<span class="pm"></span></button>
+        <div class="faq-a"><p>可以。主手拿着方块按 <code>H</code>，方块 ID 直接进系统剪贴板，动作栏提示「已复制手持方块ID: xxx」—— 不打开面板、不暂停游戏、不打断手上的活。手里拿的不是方块时（剑、食物之类）它会提示「手持物不是方块！」，不会让你粘一串空值。</p></div>
       </div>
     </div>
   </div>
