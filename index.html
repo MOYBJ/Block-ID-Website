@@ -790,7 +790,7 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
         <span class="sep">/</span>
         <a href="https://github.com/MOYBJ/Block_ID" target="_blank" rel="noopener">GitHub</a>
       </div>
-      <div class="hero-note">正式版 <b>v2.1.2-Release</b> · v2.1.2.3-Beta 已弃用</div>
+      <div class="hero-note">正式版 <b>v2.1.2-Release</b> · 最新 <b>v2.1.2.5-Beta</b></div>
     </div>
 
     <div class="win" role="img" aria-label="Block ID 方块选择器界面示意">
@@ -1119,7 +1119,7 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
     </div>
     <div class="foot-bottom">
       <span>Copyright 2026 Block ID · 保留所有权利</span>
-      <span>Forge / Fabric · 1.20.1 / 1.19.2 · 更新于 2026.10.31</span>
+      <span>Forge / Fabric · 1.20.1 / 1.19.2 · 更新于 2026.11.01</span>
     </div>
   </div>
 </footer>
@@ -1210,26 +1210,27 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
   </div>
 </div>
 
-<!-- ============ 版本弃用公告 · 灵动岛 v2.1.2.3 / v2.1.0 ============ -->
-<aside class="dyn-island dep" id="update-modal" role="status" aria-live="polite">
+<!-- ============ 新版本公告 · 灵动岛 v2.1.2.5 ============ -->
+<aside class="dyn-island" id="update-modal" role="status" aria-live="polite">
   <button class="di-bar" id="di-toggle" aria-expanded="false" aria-controls="di-body">
     <span class="di-dot" aria-hidden="true"></span>
-    <span class="di-ver">v2.1.2.3-Beta</span>
+    <span class="di-ver">v2.1.2.5-Beta</span>
     <span class="di-sep" aria-hidden="true"></span>
-    <span class="di-name">已弃用 · 请勿下载</span>
+    <span class="di-name">已发布 · 比例与预览框修复</span>
     <svg class="di-chev" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
       <path d="M2 4.5 6 8.5 10 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
   <div class="di-body" id="di-body">
     <div class="di-inner">
-      <p class="di-desc">该版本存在已知的严重问题，已在更新日志中标记为弃用，请勿下载安装。</p>
+      <p class="di-desc">比例改为直接输入 1–100（填完按回车确认），底部新增可编辑的指令/ID 预览框；同时修掉 v2.1.2.3-Beta 的收藏组乱码与比例回弹。</p>
       <ul class="di-list">
-        <li>v2.1.2.3-Beta 与 v2.1.0-Release 均已标记为弃用</li>
-        <li>建议回退至 v2.1.2.2-Beta</li>
+        <li>比例输入什么就存什么，全 100 即等概率随机</li>
+        <li>预览框可直接改指令，格式不对会红字拦下</li>
+        <li>v2.1.2.3-Beta 与 v2.1.0-Release 仍为弃用状态</li>
       </ul>
       <div class="di-actions">
-        <a class="btn btn-primary" id="update-modal-changelog" href="changelog.html#mv-2.1.2.3">查看弃用说明</a>
+        <a class="btn btn-primary" id="update-modal-changelog" href="changelog.html#mv-2.1.2.5">查看更新日志</a>
         <button class="btn" id="update-modal-ok">知道了</button>
       </div>
     </div>
@@ -1243,8 +1244,8 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
     <span class="sn-title">v2.1.2.3-Beta 不建议下载</span>
     <button class="sn-x" id="sn-x" aria-label="关闭提醒">×</button>
   </div>
-  <p>该版本存在已知严重问题，建议回退至 <b>v2.1.2.2-Beta</b>。</p>
-  <a class="sn-link" href="changelog.html#mv-2.1.2.2">查看 v2.1.2.2-Beta 更新日志 →</a>
+  <p>该版本存在已知严重问题，请改用 <b>v2.1.2.5-Beta</b>；暂时不用新版可回退至 <b>v2.1.2.2-Beta</b>。</p>
+  <a class="sn-link" href="changelog.html#mv-2.1.2.5">查看 v2.1.2.5-Beta 更新日志 →</a>
 </aside>
 
 <script>
@@ -1454,7 +1455,7 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
 (function() {
   // 语义变了（从「新版本发布」变成「该版本弃用」），必须换键，
   // 否则已经点过「知道了」的人看不到这条警告。
-  const UPDATE_KEY = 'blockid_update_2123_dep_seen';
+  const UPDATE_KEY = 'blockid_update_2125_seen';
 
   // 迁移：清除已废弃的旧记录键（等同于删除用户端的弹窗点击记录）
   function purgeStaleKeys() {
@@ -1466,6 +1467,7 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
       localStorage.removeItem('blockid_update_2121_seen');
       localStorage.removeItem('blockid_update_2122_seen');
       localStorage.removeItem('blockid_update_2123_seen');
+      localStorage.removeItem('blockid_update_2123_dep_seen');
     } catch (e) {}
   }
   const island = document.getElementById('update-modal');
