@@ -420,7 +420,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
     <h3>v2.1.2.4-Beta</h3>
     <div class="tags"><span class="tag beta">Beta</span></div>
   </div>
-  <p class="entry-desc">修掉 v2.1.2.3-Beta 反馈的两处缺陷：默认收藏组名称乱码、权重比例拖不动；权重交互从拖滑块改为直接输入百分比，并在生成后自动校验指令格式。</p>
+  <p class="entry-desc">修掉 v2.1.2.3-Beta 反馈的两处缺陷：默认收藏组名称乱码、比例填完又被改回去；比例改为直接输入 1–100，并新增可编辑的指令/ID 预览框。</p>
   <div class="group">
     <div class="glabel g-green">修复</div>
     <div class="item">
@@ -429,25 +429,37 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
       <p class="sub">现在读写统一 UTF-8，读取失败自动退回 GBK 兼容旧文件，并对已经写坏的组名做一次还原。</p>
     </div>
     <div class="item">
-      <h4>权重比例拖不动</h4>
-      <p>可拖动的细条只有 26 像素宽，百分比数字画在它右边 40 像素处，玩家基本都拖在数字上；Fabric 与 1.19.2 侧还把百分比直接当成原始权重写入，结果和显示对不上。</p>
-      <p class="sub">已去掉拖动，改为点击百分比方框直接输入：认「50」也认「50%」，多选时上限 99%，清空即回到默认。</p>
+      <h4>比例填完被改回原值</h4>
+      <p>旧实现把输入值当成「占总量的百分比」，再按其他方块的权重反推一次原始权重，反推后一取整就和输入值对不上，看起来就是刚填完又被改回去。</p>
+      <p class="sub">现在比例是 1–100 的相对权重：输入什么就存什么、指令里就是什么，不再二次换算，也不要求各项加起来等于 100。</p>
+    </div>
+    <div class="item">
+      <h4>比例拖不动</h4>
+      <p>可拖动的细条只有 26 像素宽，百分比数字画在它右边 40 像素处，玩家基本都拖在数字上；Fabric 与 1.19.2 侧还把百分比直接当成原始权重写入。</p>
+      <p class="sub">已去掉拖动，改为点击比例方框直接输入：认「50」也认「50%」，清空即回到 100。</p>
+    </div>
+  </div>
+  <div class="group">
+    <div class="glabel g-blue">新增</div>
+    <div class="item">
+      <h4>指令 / ID 预览框</h4>
+      <p>界面底部实时显示当前会输出的完整内容，可以直接在框里改；点复制时以框里的内容为准。切换方块、改比例、改方块状态后会重新生成预览。</p>
     </div>
   </div>
   <div class="group">
     <div class="glabel g-blue">变更</div>
     <div class="item">
-      <h4>生成后自动校验指令格式</h4>
-      <p>方块 ID、权重数字、方块状态写法、以及「权重全带或全不带」都会检查；不合法时列表下方红字提示，并不写入剪贴板。</p>
+      <h4>比例全为 100 时不输出百分比</h4>
+      <p>所有方块都是默认比例时直接输出 <code>//set stone,dirt</code>，交给 WorldEdit 等概率随机；只要有方块改过比例，就把各自的数值原样带上。</p>
     </div>
     <div class="item">
-      <h4>全等权重不再输出百分比</h4>
-      <p>旧逻辑只要有一项不等于 100 就给全部方块加前缀，等权重也会写成 <code>340%a,340%b</code>；现在直接输出 <code>//set stone,dirt</code>。权重不等时按百分比归一到合计 100%，输出 <code>50%stone,25%dirt,25%sand</code>。</p>
+      <h4>输出前自动校验</h4>
+      <p>方块 ID、比例数字、方块状态写法、以及「比例全带或全不带」都会检查；不通过时预览框下方红字提示<b>「当前指令格式/方块ID不正确」</b>，并禁止复制与输出，动作栏同时指出是哪一段不对。</p>
     </div>
   </div>
   <div class="info box-neutral">
     <div class="info-t">状态</div>
-    <div class="item"><p>四个版本已构建完成，等 QQ 群分发；现在就要用的话，建议继续停在 v2.1.2.2-Beta。</p></div>
+    <div class="item"><p>四个版本已构建完成，等 QQ 群分发；现在就要用的话，建议先停在 v2.1.2.2-Beta。</p></div>
   </div>
 </article>
 <article class="entry" id="mv-2.1.2.3" data-kind="deprecated">
