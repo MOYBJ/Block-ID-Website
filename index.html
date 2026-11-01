@@ -643,6 +643,32 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
   background:linear-gradient(135deg,var(--green),var(--cyan));
 }
 .dyn-island.dep .di-list li::before{background:linear-gradient(135deg,var(--red),#DC2626)}
+
+/* 右下角版本提醒：不遮挡正文、不锁滚动，可直接关掉 */
+.side-notice{
+  position:fixed;right:18px;bottom:22px;z-index:60;width:278px;
+  background:rgba(22,17,19,.95);
+  backdrop-filter:blur(18px) saturate(160%);
+  border:1px solid rgba(248,113,113,.40);border-left:3px solid var(--red);
+  border-radius:12px;padding:13px 15px 12px;
+  box-shadow:0 18px 44px rgba(0,0,0,.56),0 0 26px rgba(239,68,68,.14);
+  opacity:0;transform:translateY(16px);pointer-events:none;
+  transition:opacity .34s var(--ease),transform .34s var(--ease);
+}
+.side-notice.show{opacity:1;transform:none;pointer-events:auto}
+.sn-head{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.sn-dot{width:6px;height:6px;border-radius:50%;flex:none;background:var(--red);
+  box-shadow:0 0 8px rgba(248,113,113,.95);animation:snPulse 2.2s var(--ease) infinite}
+@keyframes snPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.82)}}
+.sn-title{font-size:13.5px;font-weight:800;color:#FECACA;letter-spacing:.2px}
+.sn-x{margin-left:auto;flex:none;color:var(--text-faint);font-size:16px;line-height:1;
+  padding:1px 5px 3px;border-radius:6px;transition:color .16s var(--ease),background .16s var(--ease)}
+.sn-x:hover{color:var(--text);background:rgba(255,255,255,.08)}
+.side-notice p{font-size:12.5px;line-height:1.62;color:var(--text-mute)}
+.side-notice p b{color:var(--text);font-weight:700}
+.sn-link{display:inline-block;margin-top:7px;font-size:12.5px;font-weight:700;color:#FCA5A5}
+.sn-link:hover{color:#FECACA}
+@media (max-width:860px){ .side-notice{display:none} }
 .di-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 20px 20px}
 .di-actions .btn{width:100%;justify-content:center;height:42px;font-size:14px;border-radius:10px}
 
@@ -1178,7 +1204,7 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
       <p class="di-desc">该版本存在已知的严重问题，已在更新日志中标记为弃用，请勿下载安装。</p>
       <ul class="di-list">
         <li>v2.1.2.3-Beta 与 v2.1.0-Release 均已标记为弃用</li>
-        <li>需要现在使用，请挑更新日志里没标弃用的版本</li>
+        <li>建议回退至 v2.1.2.2-Beta</li>
       </ul>
       <div class="di-actions">
         <a class="btn btn-primary" id="update-modal-changelog" href="changelog.html#mv-2.1.2.3">查看弃用说明</a>
@@ -1186,6 +1212,17 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
       </div>
     </div>
   </div>
+</aside>
+
+<!-- ============ 右下角版本提醒（不打断阅读） ============ -->
+<aside class="side-notice" id="side-notice" role="note" aria-label="版本提醒">
+  <div class="sn-head">
+    <span class="sn-dot" aria-hidden="true"></span>
+    <span class="sn-title">v2.1.2.3-Beta 不建议下载</span>
+    <button class="sn-x" id="sn-x" aria-label="关闭提醒">×</button>
+  </div>
+  <p>该版本存在已知严重问题，建议回退至 <b>v2.1.2.2-Beta</b>。</p>
+  <a class="sn-link" href="changelog.html#mv-2.1.2.2">查看 v2.1.2.2-Beta 更新日志 →</a>
 </aside>
 
 <script>
@@ -1539,6 +1576,28 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
   });
 
   boot();
+})();
+</script>
+
+<script>
+/* ============ 右下角版本提醒 ============ */
+(function(){
+  var box = document.getElementById('side-notice');
+  var btn = document.getElementById('sn-x');
+  if (!box) return;
+  var KEY = 'blockid_side_notice_2123_dep';
+
+  try { if (localStorage.getItem(KEY) === '1') return; } catch (e) {}
+
+  // 比顶部灵动岛晚一点出现，避免两条提示同时抢注意力
+  setTimeout(function(){ box.classList.add('show'); }, 2200);
+
+  if (btn) btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    box.classList.remove('show');
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    try { if (window.BlockIDTrack) window.BlockIDTrack('side_notice_dismiss'); } catch (e) {}
+  });
 })();
 </script>
 
