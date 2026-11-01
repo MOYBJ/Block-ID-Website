@@ -21,6 +21,7 @@
   --gold:#FBBF24; --gold-bg:#2B2312;
   --green:#4ADE80; --green-bg:#0F1D18;
   --pink:#F57FB6;
+  --red:#F87171; --red-deep:#EF4444; --red-soft:#FCA5A5;
   --sans:"Noto Sans SC",-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   --ease:cubic-bezier(.22,.61,.36,1);
 }
@@ -129,6 +130,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .vcard .meta{margin-top:14px;font-size:12.5px;color:var(--text-faint);font-variant-numeric:tabular-nums}
 .vcard .state{margin-top:14px;font-size:12.5px;color:#FCD679;font-weight:600}
 
+/* 弃用态版本卡（红） */
+.vcard.dep-card{
+  background:linear-gradient(180deg,rgba(248,113,113,.14),rgba(239,68,68,.05) 45%,var(--card-raise) 78%);
+  border-color:rgba(248,113,113,.40);
+}
+.vcard.dep-card::after{background:radial-gradient(circle,rgba(248,113,113,.24),transparent 70%)}
+.vcard.dep-card:hover{border-color:rgba(248,113,113,.62);box-shadow:0 18px 44px rgba(239,68,68,.18)}
+.pill.dep{color:var(--red-soft);background:rgba(248,113,113,.14);border:1px solid rgba(248,113,113,.45)}
+.vcard .state.dep{color:var(--red-soft)}
+
 /* 主体 */
 .body-grid{display:grid;grid-template-columns:200px minmax(0,1fr);gap:76px;padding:58px 0 80px;align-items:start}
 .toc{position:sticky;top:88px}
@@ -140,6 +151,14 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   background:linear-gradient(135deg,rgba(124,180,247,.24),rgba(172,143,250,.18));
   border-color:rgba(124,180,247,.55);color:#D3E5FD;
 }
+/* 弃用版筛选：红色系，激活态与普通筛选区分开 */
+.chip.dep{color:var(--red-soft);border-color:rgba(248,113,113,.34)}
+.chip.dep:hover{color:#FECACA;border-color:rgba(248,113,113,.56)}
+.chip.dep.on{
+  background:linear-gradient(135deg,rgba(248,113,113,.28),rgba(239,68,68,.16));
+  border-color:rgba(248,113,113,.62);color:#FECACA;
+  box-shadow:0 0 0 1px rgba(248,113,113,.14),0 6px 18px rgba(239,68,68,.18);
+}
 .toc-item{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--text-mute);padding:8px 0;max-height:40px;overflow:hidden;font-variant-numeric:tabular-nums;
   transition:color .16s var(--ease),max-height .28s cubic-bezier(.32,.72,0,1),opacity .2s var(--ease),padding .28s cubic-bezier(.32,.72,0,1)}
 .toc-item.hide{max-height:0;padding:0;opacity:0;pointer-events:none}
@@ -147,6 +166,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .i,.dot{width:7px;height:7px;border-radius:50%;display:block;flex:none}
 .dot.release{background:linear-gradient(135deg,#4ADE80,#22B573);box-shadow:0 0 8px rgba(74,222,128,.5)}
 .dot.beta{background:linear-gradient(135deg,#FBBF24,#F59E0B);box-shadow:0 0 8px rgba(251,191,36,.5)}
+.dot.dep{background:linear-gradient(135deg,#F87171,#DC2626);box-shadow:0 0 9px rgba(248,113,113,.65)}
+.toc-item.dep{color:var(--red-soft)}
+.toc-item.dep:hover,.toc-item.dep.on{color:#FECACA}
+.toc-dep{
+  margin-left:auto;flex:none;
+  font-size:10px;font-weight:800;letter-spacing:.4px;
+  color:var(--red-soft);background:rgba(248,113,113,.14);
+  border:1px solid rgba(248,113,113,.40);border-radius:4px;padding:1px 5px;
+}
 .toc-more{margin-top:14px;font-size:13px;color:var(--blue)}
 .toc-more:hover{color:var(--cyan)}
 
@@ -171,6 +199,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 .entry[data-kind="beta"]{--ac:var(--gold)}
 .entry[data-kind="release"]{--ac:var(--green)}
+.entry[data-kind="deprecated"]{
+  --ac:var(--red);
+  border-color:rgba(248,113,113,.30);
+  background:
+    radial-gradient(560px 220px at 92% -14%,rgba(248,113,113,.11),transparent 70%),
+    var(--card);
+}
+.entry[data-kind="deprecated"]:hover{
+  border-color:rgba(248,113,113,.54);
+  box-shadow:0 16px 40px rgba(239,68,68,.18);
+}
 .entry:hover{border-color:color-mix(in srgb,var(--ac) 42%,var(--line));box-shadow:0 16px 40px rgba(0,0,0,.34)}
 .entry-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px}
 .entry-head h3{font-size:24px;font-weight:800;letter-spacing:-.4px;color:var(--text);font-variant-numeric:tabular-nums}
@@ -182,6 +221,35 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .tag{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:6px}
 .tag.beta{color:var(--gold);background:var(--gold-bg);border:1px solid rgba(251,191,36,.36)}
 .tag.release{color:#8DE6B4;background:var(--green-bg);border:1px solid rgba(74,222,128,.34)}
+.tags{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+/* 弃用标签：红色 + 呼吸圆点，一眼能认出是危险版本 */
+.tag.dep{
+  display:inline-flex;align-items:center;gap:6px;
+  color:#FECACA;background:rgba(248,113,113,.14);border:1px solid rgba(248,113,113,.48);
+  box-shadow:0 0 0 1px rgba(248,113,113,.08),0 4px 14px rgba(239,68,68,.16);
+}
+.tag.dep::before{
+  content:"";width:6px;height:6px;border-radius:50%;flex:none;
+  background:var(--red);box-shadow:0 0 8px rgba(248,113,113,.95);
+  animation:depPulse 2.2s var(--ease) infinite;
+}
+@keyframes depPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.82)}}
+/* 条目内弃用警示条 */
+.dep-note{
+  display:flex;gap:13px;align-items:flex-start;
+  border:1px solid rgba(248,113,113,.40);border-radius:12px;
+  background:linear-gradient(120deg,rgba(248,113,113,.14),rgba(239,68,68,.05) 70%);
+  padding:15px 18px;margin-bottom:20px;
+}
+.dep-note .dn-ico{
+  flex:none;width:23px;height:23px;border-radius:50%;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:var(--red-soft);
+  background:rgba(248,113,113,.18);border:1px solid rgba(248,113,113,.55);
+}
+.dep-note .dn-t{font-size:14.5px;font-weight:800;color:#FECACA;margin-bottom:4px}
+.dep-note p{font-size:14px;color:var(--text-sub);line-height:1.75}
+.dep-note p b{color:var(--text);font-weight:700}
 .entry-desc{font-size:14.5px;color:var(--text-sub);margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid rgba(58,75,103,.65);line-height:1.78}
 .group{margin-bottom:20px}
 .glabel{font-size:12.5px;font-weight:800;letter-spacing:1.4px;margin-bottom:11px}
@@ -259,6 +327,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   .chero{padding:56px 0 24px}
   .entry{padding:22px 20px}
   .entry-head h3{font-size:20px}
+  .entry-head{flex-wrap:wrap;gap:10px}
+  .tags{justify-content:flex-start;margin-top:2px}
+  .dep-note{padding:13px 15px;gap:10px}
   .item p,.item code{overflow-wrap:anywhere;word-break:break-word}
   .foot-main{flex-direction:column;align-items:flex-start;gap:10px}
   .foot-bottom{flex-direction:column;align-items:flex-start;gap:6px}
@@ -287,7 +358,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
       <a href="index.html#license" id="nav-license">使用协议</a>
     </nav>
     <div class="nav-right">
-      <span class="ver-chip">v2.1.2.3-Beta</span>
+      <span class="ver-chip">v2.1.2-Release</span>
       <a class="btn btn-primary" href="index.html#qq">加入 QQ 群</a>
       <button class="nav-toggle" id="nav-toggle" aria-label="展开菜单"><span></span></button>
     </div>
@@ -306,11 +377,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
         <p>四个加载器版本齐全，默认推荐给大多数玩家。所有功能已稳定，不含实验性改动。</p>
         <div class="meta">Forge 47.4.10+ · Fabric 0.15.11+</div>
       </div>
-      <div class="vcard beta-card">
-        <div class="vcard-top"><span class="pill beta">预览版 · Beta</span><span class="vnum">v2.1.2.3-Beta</span></div>
-        <h3>图标修复 · 官网改版</h3>
-        <p>模组图标改为真正的 PNG，启动器列表不再破图；权重精确控制延续上一版，官网完成整体改版。</p>
-        <div class="state">已发布 · 建议升级</div>
+      <div class="vcard dep-card">
+        <div class="vcard-top"><span class="pill dep">已弃用 · 勿使用</span><span class="vnum">v2.1.2.3-Beta</span></div>
+        <h3>存在已知严重问题</h3>
+        <p>该版本已停止推荐，下载前请先看下方版本的弃用说明。需要现在使用请选左侧的正式版。</p>
+        <div class="state dep">已弃用 · 不建议下载安装</div>
       </div>
     </div>
   </div>
@@ -323,14 +394,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
       <button class="chip on" data-filter="all">全部</button>
       <button class="chip" data-filter="release">正式版</button>
       <button class="chip" data-filter="beta">Beta</button>
+      <button class="chip dep" data-filter="deprecated">弃用版</button>
     </div>
     <div class="toc-list">
-      <a class="toc-item on" href="#mv-2.1.2.3" data-v="2.1.2.3"><i class="dot beta"></i>v2.1.2.3-Beta</a>
+      <a class="toc-item dep" href="#mv-2.1.2.3" data-v="2.1.2.3"><i class="dot dep"></i>v2.1.2.3-Beta<span class="toc-dep">弃用</span></a>
       <a class="toc-item" href="#mv-2.1.2.2" data-v="2.1.2.2"><i class="dot beta"></i>v2.1.2.2-Beta</a>
       <a class="toc-item" href="#mv-2.1.2.1" data-v="2.1.2.1"><i class="dot beta"></i>v2.1.2.1-Beta</a>
       <a class="toc-item" href="#mv-2.1.2" data-v="2.1.2"><i class="dot release"></i>v2.1.2-Release</a>
       <a class="toc-item" href="#mv-2.1.1" data-v="2.1.1"><i class="dot beta"></i>v2.1.1-Beta</a>
-      <a class="toc-item older" href="#mv-2.1.0" data-v="2.1.0"><i class="dot release"></i>v2.1.0-Release</a>
+      <a class="toc-item older dep" href="#mv-2.1.0" data-v="2.1.0"><i class="dot dep"></i>v2.1.0-Release<span class="toc-dep">弃用</span></a>
       <a class="toc-item older" href="#mv-2.0.3.2" data-v="2.0.3.2"><i class="dot release"></i>v2.0.3.2-Release</a>
       <a class="toc-item older" href="#mv-2.0.3.1" data-v="2.0.3.1"><i class="dot release"></i>v2.0.3.1-Release</a>
       <a class="toc-item older" href="#mv-2.0.3" data-v="2.0.3"><i class="dot release"></i>v2.0.3-Release</a>
@@ -342,12 +414,22 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   </aside>
 
   <main id="entries">
-<article class="entry" id="mv-2.1.2.3" data-kind="beta">
+<article class="entry" id="mv-2.1.2.3" data-kind="deprecated">
   <div class="entry-head">
     <h3>v2.1.2.3-Beta</h3>
-    <span class="tag beta">Beta</span>
+    <div class="tags">
+      <span class="tag dep">已知严重 BUG · 已弃用</span>
+      <span class="tag beta">Beta</span>
+    </div>
   </div>
   <p class="entry-desc">修复模组图标在部分启动器显示为破图；同版本完成官网整体改版。</p>
+  <div class="dep-note">
+    <div class="dn-ico">!</div>
+    <div>
+      <div class="dn-t">此版本已标记为弃用</div>
+      <p>该版本存在<b>已知的严重问题</b>，已停止推荐，请勿下载安装。需要现在使用，请选择未标弃用的版本。</p>
+    </div>
+  </div>
   <div class="group"><div class="glabel g-green">修复</div>
     <div class="item"><h4>模组图标显示为破图</h4><p>原 <code>icon.png</code> 实际是 JPEG 编码（文件头 FF D8 FF），只是扩展名写成了 .png。宽容的启动器能识别，严格按扩展名解析 PNG 的就会显示破图。</p><p class="sub">现已将 4 个版本共 6 份图标统一转为真正的 PNG（512×512，RGBA），配置中的 icon 路径不变。</p></div>
   </div>
@@ -389,12 +471,22 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   <p class="entry-desc">无需新增功能的质量补丁，目标是让模组从「装不上」变成「装上就能用」；同时替换掉打包在制品中的 GPL 系拼音库，消除协议风险。</p>
   <div class="group"><div class="glabel g-green">修复</div><div class="item"><h4>WorldEdit 不再被判定为必需前置</h4><p>此前模组虽在依赖清单中声明 WorldEdit 为 mandatory=true，但代码里从未调用过它的任何 API，只是把 //set / //replace 字符串写进剪贴板。</p><p class="sub">没装 WorldEdit 的玩家会直接被判定依赖缺失、游戏读不到模组；崩溃日志中确实存在 requires worldedit 0 or above / Currently, worldedit is not installed。</p><p class="sub">现已改为可选依赖并增加运行时检测——未安装时功能完全不受影响，仅在提示语中说明指令需手动粘贴执行。</p></div><div class="item"><h4>移除从未被引用的 Cloth Config 前置</h4><p>构建脚本声明了 Cloth Config、说明文档也把它列为必需前置，但源码中零引用。现已彻底移除，减少一项无谓的安装门槛。</p></div><div class="item"><h4>修正 Forge 1.19.2 的模组元数据</h4><p>该版本的 mods.toml 存在三处错误——loaderVersion 键名拼写错误且取值写成了模组自身版本、Forge 版本范围沿用了 1.20.1 的 [47,)、游戏版本范围写成了 [1.20.1]，会导致 1.19.2 的 Forge 包加载异常。</p><p class="sub">现已修正为 [43,) / [1.19.2]。</p></div><div class="item"><h4>修正 1.19.2 版本文档描述</h4><p>该版本说明文档此前错误地写着 Minecraft 1.20.1、Forge 47+、Fabric 0.15+，现已按实际支持的版本分别更正。</p></div></div><div class="group"><div class="glabel g-blue">变更</div><div class="item"><h4>替换内置拼音库，消除协议冲突</h4><p>此前模组把 pinyin4j 直接打包进主 Jar，该库采用 GPL 系协议，与本项目「允许学习修改、禁止二次发布修改版本」的自有协议直接抵触。</p><p class="sub">现已替换为 Apache-2.0 协议的 TinyPinyin，并将无需使用的传递依赖一并排除。安装包体积平均减少约 190 KB（Forge 约 −197 KB，Fabric 约 −190 KB）。</p></div><div class="item"><h4>中文拼音搜索行为保持兼容</h4><p>新旧库对 ü 的记法不同——旧库把「绿」记作 lu，新库记作 lv。</p><p class="sub">为不让惯用 lu 的玩家搜不到方块，已同时生成两种写法的索引，输入 lvbaoshi 或 lubaoshi 都能搜到「绿宝石块」，其余方块名的搜索行为完全一致。</p></div></div><div class="group"><div class="glabel g-blue">清理</div><div class="item bare"><p>删除空实现的 ClientEvents 事件订阅器（四个版本各一份，无任何实际行为）</p></div><div class="item bare"><p>移除构建脚本中随依赖删除而失效的第三方仓库配置</p></div></div><div class="group"><div class="glabel g-blue">文档</div><div class="item bare"><p>四个版本的版本号统一为 v2.1.1-Beta，此前说明文档停留在 2.0.3.1，与实际发布的版本对不上</p></div></div><div class="group"><div class="glabel g-mute">关于本版本</div><div class="item"><h4>版本号</h4><p>v2.1.1-Beta（已被 v2.1.2-Release 取代）</p></div><div class="item"><h4>当前状态</h4><p>Beta 阶段已结束，已被 <strong>v2.1.2-Release 取代</p></div><div class="item"><h4>适用版本</h4><p>Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</p></div><div class="item"><h4>下载方式</h4><p>加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</p></div></div>
 </article>
-<article class="entry older" id="mv-2.1.0" data-kind="release">
+<article class="entry older" id="mv-2.1.0" data-kind="deprecated">
   <div class="entry-head">
     <h3>v2.1.0-Release</h3>
-    <span class="tag release">Release</span>
+    <div class="tags">
+      <span class="tag dep">已知严重 BUG · 已弃用</span>
+      <span class="tag release">Release</span>
+    </div>
   </div>
   <p class="entry-desc">重大版本更新：新增收藏夹/组系统、历史记录功能，删除常用方块自动统计，UI 交互全面升级，替换模式源方块复制优化。</p>
+  <div class="dep-note">
+    <div class="dn-ico">!</div>
+    <div>
+      <div class="dn-t">此版本已标记为弃用</div>
+      <p>该版本存在<b>已知的严重问题</b>，已停止推荐，请勿下载安装。需要现在使用，请选择未标弃用的版本。</p>
+    </div>
+  </div>
   <div class="group"><div class="glabel g-blue">收藏夹/组系统</div><div class="item"><h4>多组管理</h4><p>支持创建、重命名、删除多个收藏组，每组独立管理方块列表</p></div><div class="item"><h4>默认收藏组</h4><p>内置"默认收藏"组，开箱即用</p></div><div class="item"><h4>快捷添加</h4><p>方块列表右侧点击星标即可添加/移除收藏</p></div><div class="item"><h4>实时更新</h4><p>添加/移除收藏后列表立即刷新，无需重新打开界面</p></div><div class="item"><h4>数据持久化</h4><p>收藏数据保存在配置文件中，重启不丢失</p></div></div><div class="group"><div class="glabel g-blue">历史记录</div><div class="item"><h4>自动记录</h4><p>每次复制 ID 或指令自动记录到历史</p></div><div class="item"><h4>最近20条</h4><p>保留最近20条复制记录，方便回溯</p></div><div class="item"><h4>方块名称显示</h4><p>历史记录显示方块中文名而非原始 ID，更直观</p></div><div class="item"><h4>一键重复制</h4><p>点击历史记录即可重新复制到剪贴板</p></div><div class="item"><h4>模式标识</h4><p>每条记录标注 ID / Set / Replace 模式</p></div></div><div class="group"><div class="glabel g-blue">替换模式优化</div><div class="item"><h4>源方块无放置比例</h4><p>替换模式下源方块不显示放置比例滑块，符合 WorldEdit 语义</p></div><div class="item"><h4>复制不带比例</h4><p>源方块复制结果仅包含 ID 和属性，不带百分比前缀</p></div><div class="item"><h4>目标方块保留比例</h4><p>目标方块仍支持放置比例设置，格式为 <code>50%minecraft:stone</p></div></div><div class="group"><div class="glabel g-blue">UI 优化</div><div class="item"><h4>标签切换</h4><p>中列增加"收藏夹 / 历史记录"标签切换</p></div><div class="item"><h4>删除常用方块</h4><p>移除原有的常用方块自动统计功能</p></div><div class="item"><h4>滚轮浏览</h4><p>全部方块列表使用滚轮滚动，操作流畅</p></div><div class="item"><h4>布局稳定</h4><p>收藏夹区域组名、按钮、分割线、列表布局经过多轮优化</p></div></div><div class="group"><div class="glabel g-green">Bug 修复</div><div class="item"><h4>修复收藏夹列表不刷新</h4><p>添加/移除收藏后列表立即更新</p></div><div class="item"><h4>修复源方块复制带比例</h4><p>替换模式源方块复制结果不再包含百分比</p></div><div class="item"><h4>修复历史记录显示 ID</h4><p>改为显示方块中文名</p></div><div class="item"><h4>修复列表消失问题</h4><p>修复非替换模式下中列列表异常消失的 Bug</p></div></div>
 </article>
 <article class="entry older" id="mv-2.0.3.2" data-kind="release">
@@ -518,6 +610,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
       chips.forEach(function(x){ x.classList.toggle('on', x===c); });
       var f=c.dataset.filter;
       pairs.forEach(function(p){
+        // 弃用版是单独的收纳架：命中的历史条目直接展开，不受「先点查看全部」的限制
+        if(f==='deprecated' && p.el.dataset.kind==='deprecated' && p.el.classList.contains('older')){
+          p.el.classList.add('show');
+        }
         var ok=(f==='all')||(p.el.dataset.kind===f);
         if(ok && p.el.classList.contains('older') && !p.el.classList.contains('show')) ok=false;
         p.slot.classList.toggle('closed', !ok);
