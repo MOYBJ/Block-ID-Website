@@ -380,7 +380,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
       <div class="vcard dep-card">
         <div class="vcard-top"><span class="pill dep">已弃用 · 勿使用</span><span class="vnum">v2.1.2.3-Beta</span></div>
         <h3>存在已知严重问题</h3>
-        <p>该版本已停止推荐，下载前请先看下方版本的弃用说明。需要现在使用请选左侧的正式版。</p>
+        <p>该版本已停止推荐，下载前请先看下方版本的弃用说明。建议回退至 v2.1.2.2-Beta。</p>
         <div class="state dep">已弃用 · 不建议下载安装</div>
       </div>
     </div>
@@ -397,6 +397,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
       <button class="chip dep" data-filter="deprecated">弃用版</button>
     </div>
     <div class="toc-list">
+      <a class="toc-item on" href="#mv-2.1.2.4" data-v="2.1.2.4"><i class="dot beta"></i>v2.1.2.4-Beta</a>
       <a class="toc-item dep" href="#mv-2.1.2.3" data-v="2.1.2.3"><i class="dot dep"></i>v2.1.2.3-Beta<span class="toc-dep">弃用</span></a>
       <a class="toc-item" href="#mv-2.1.2.2" data-v="2.1.2.2"><i class="dot beta"></i>v2.1.2.2-Beta</a>
       <a class="toc-item" href="#mv-2.1.2.1" data-v="2.1.2.1"><i class="dot beta"></i>v2.1.2.1-Beta</a>
@@ -414,6 +415,41 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   </aside>
 
   <main id="entries">
+<article class="entry" id="mv-2.1.2.4" data-kind="beta">
+  <div class="entry-head">
+    <h3>v2.1.2.4-Beta</h3>
+    <div class="tags"><span class="tag beta">Beta</span></div>
+  </div>
+  <p class="entry-desc">修掉 v2.1.2.3-Beta 反馈的两处缺陷：默认收藏组名称乱码、权重比例拖不动；权重交互从拖滑块改为直接输入百分比，并在生成后自动校验指令格式。</p>
+  <div class="group">
+    <div class="glabel g-green">修复</div>
+    <div class="item">
+      <h4>默认收藏组名称乱码</h4>
+      <p>配置文件读写用的是平台默认编码，中文 Windows 上是 GBK。一旦配置曾在 UTF-8 环境写过（例如用 Java 21 的启动器跑过一次），读回来就是「榛樿鏀惰棌」这类乱码，还会被原样存回文件。</p>
+      <p class="sub">现在读写统一 UTF-8，读取失败自动退回 GBK 兼容旧文件，并对已经写坏的组名做一次还原。</p>
+    </div>
+    <div class="item">
+      <h4>权重比例拖不动</h4>
+      <p>可拖动的细条只有 26 像素宽，百分比数字画在它右边 40 像素处，玩家基本都拖在数字上；Fabric 与 1.19.2 侧还把百分比直接当成原始权重写入，结果和显示对不上。</p>
+      <p class="sub">已去掉拖动，改为点击百分比方框直接输入：认「50」也认「50%」，多选时上限 99%，清空即回到默认。</p>
+    </div>
+  </div>
+  <div class="group">
+    <div class="glabel g-blue">变更</div>
+    <div class="item">
+      <h4>生成后自动校验指令格式</h4>
+      <p>方块 ID、权重数字、方块状态写法、以及「权重全带或全不带」都会检查；不合法时列表下方红字提示，并不写入剪贴板。</p>
+    </div>
+    <div class="item">
+      <h4>全等权重不再输出百分比</h4>
+      <p>旧逻辑只要有一项不等于 100 就给全部方块加前缀，等权重也会写成 <code>340%a,340%b</code>；现在直接输出 <code>//set stone,dirt</code>。权重不等时按百分比归一到合计 100%，输出 <code>50%stone,25%dirt,25%sand</code>。</p>
+    </div>
+  </div>
+  <div class="info box-neutral">
+    <div class="info-t">状态</div>
+    <div class="item"><p>四个版本已构建完成，等 QQ 群分发；现在就要用的话，建议继续停在 v2.1.2.2-Beta。</p></div>
+  </div>
+</article>
 <article class="entry" id="mv-2.1.2.3" data-kind="deprecated">
   <div class="entry-head">
     <h3>v2.1.2.3-Beta</h3>
@@ -427,7 +463,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
     <div class="dn-ico">!</div>
     <div>
       <div class="dn-t">此版本已标记为弃用</div>
-      <p>该版本存在<b>已知的严重问题</b>，已停止推荐，请勿下载安装。需要现在使用，请选择未标弃用的版本。</p>
+      <p>该版本存在<b>已知的严重问题</b>，已停止推荐，请勿下载安装。建议回退至 <b>v2.1.2.2-Beta</b>。</p>
     </div>
   </div>
   <div class="group"><div class="glabel g-green">修复</div>
@@ -484,7 +520,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
     <div class="dn-ico">!</div>
     <div>
       <div class="dn-t">此版本已标记为弃用</div>
-      <p>该版本存在<b>已知的严重问题</b>，已停止推荐，请勿下载安装。需要现在使用，请选择未标弃用的版本。</p>
+      <p>该版本存在<b>已知的严重问题</b>，已停止推荐，请勿下载安装。建议回退至 <b>v2.1.2.2-Beta</b>。</p>
     </div>
   </div>
   <div class="group"><div class="glabel g-blue">收藏夹/组系统</div><div class="item"><h4>多组管理</h4><p>支持创建、重命名、删除多个收藏组，每组独立管理方块列表</p></div><div class="item"><h4>默认收藏组</h4><p>内置"默认收藏"组，开箱即用</p></div><div class="item"><h4>快捷添加</h4><p>方块列表右侧点击星标即可添加/移除收藏</p></div><div class="item"><h4>实时更新</h4><p>添加/移除收藏后列表立即刷新，无需重新打开界面</p></div><div class="item"><h4>数据持久化</h4><p>收藏数据保存在配置文件中，重启不丢失</p></div></div><div class="group"><div class="glabel g-blue">历史记录</div><div class="item"><h4>自动记录</h4><p>每次复制 ID 或指令自动记录到历史</p></div><div class="item"><h4>最近20条</h4><p>保留最近20条复制记录，方便回溯</p></div><div class="item"><h4>方块名称显示</h4><p>历史记录显示方块中文名而非原始 ID，更直观</p></div><div class="item"><h4>一键重复制</h4><p>点击历史记录即可重新复制到剪贴板</p></div><div class="item"><h4>模式标识</h4><p>每条记录标注 ID / Set / Replace 模式</p></div></div><div class="group"><div class="glabel g-blue">替换模式优化</div><div class="item"><h4>源方块无放置比例</h4><p>替换模式下源方块不显示放置比例滑块，符合 WorldEdit 语义</p></div><div class="item"><h4>复制不带比例</h4><p>源方块复制结果仅包含 ID 和属性，不带百分比前缀</p></div><div class="item"><h4>目标方块保留比例</h4><p>目标方块仍支持放置比例设置，格式为 <code>50%minecraft:stone</p></div></div><div class="group"><div class="glabel g-blue">UI 优化</div><div class="item"><h4>标签切换</h4><p>中列增加"收藏夹 / 历史记录"标签切换</p></div><div class="item"><h4>删除常用方块</h4><p>移除原有的常用方块自动统计功能</p></div><div class="item"><h4>滚轮浏览</h4><p>全部方块列表使用滚轮滚动，操作流畅</p></div><div class="item"><h4>布局稳定</h4><p>收藏夹区域组名、按钮、分割线、列表布局经过多轮优化</p></div></div><div class="group"><div class="glabel g-green">Bug 修复</div><div class="item"><h4>修复收藏夹列表不刷新</h4><p>添加/移除收藏后列表立即更新</p></div><div class="item"><h4>修复源方块复制带比例</h4><p>替换模式源方块复制结果不再包含百分比</p></div><div class="item"><h4>修复历史记录显示 ID</h4><p>改为显示方块中文名</p></div><div class="item"><h4>修复列表消失问题</h4><p>修复非替换模式下中列列表异常消失的 Bug</p></div></div>
