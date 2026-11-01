@@ -330,6 +330,21 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
 }
 .feat-txt p{font-size:14.5px;color:var(--text-mute);line-height:1.72}
 .feat-txt p b{color:var(--text);font-weight:700}
+/* 需要用户动手的关键操作：做成醒目的提示块 */
+.feat-note{
+  display:inline-flex;align-items:center;gap:9px;flex-wrap:wrap;
+  margin-top:13px;padding:8px 13px;border-radius:10px;
+  background:linear-gradient(120deg,rgba(251,191,36,.16),rgba(251,191,36,.05));
+  border:1px solid rgba(251,191,36,.46);
+  box-shadow:0 0 0 1px rgba(251,191,36,.08) inset;
+  font-size:13.5px;font-weight:700;color:#FCD679;line-height:1.5;
+}
+.feat-note kbd{
+  display:inline-block;padding:2px 9px;border-radius:6px;flex:none;
+  font-family:var(--sans);font-size:12px;font-weight:800;letter-spacing:.6px;
+  color:#221703;background:linear-gradient(180deg,#FDE68A,#FBBF24);
+  box-shadow:0 2px 0 #A87A0C;
+}
 
 /* 功能卡内示意 */
 .mini-search{display:flex;align-items:center;gap:8px;padding:9px 11px;background:#0C1320;border:1px solid rgba(124,180,247,.26);border-radius:9px;margin-bottom:12px}
@@ -340,6 +355,7 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
 .mini-row .id{font-size:11px;color:var(--text-faint)}
 .mini-row .chk{margin-left:auto;color:var(--green);font-size:13px}
 .wbar-lb{font-size:12px;color:var(--text-mute);margin-bottom:10px}
+.wbar-lb b{color:var(--gold);font-weight:800}
 .wbar{display:flex;height:28px;border-radius:7px;overflow:hidden;gap:2px;margin-bottom:12px}
 .wbar span{display:block;height:100%}
 .wbar .s1{flex:50;background:linear-gradient(180deg,#9CC7FA,#5A9AE8)}
@@ -893,13 +909,14 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
 
       <article class="feat reveal">
         <div class="feat-vis">
-          <div class="wbar-lb">相对权重 · 输入值即实际比例</div>
+          <div class="wbar-lb">相对权重 · 填完按 <b>回车</b> 生效</div>
           <div class="wbar"><span class="s1"></span><span class="s2"></span><span class="s3"></span></div>
           <div class="wbar-legend"><span>石头 50</span><span>圆石 25</span><span>沙砾 25</span></div>
         </div>
         <div class="feat-txt">
           <h3>权重精确控制</h3>
           <p>三个方块输入 50 / 25 / 25，就是精确的 50% / 25% / 25%。采用 WorldEdit 原生相对权重语义，互不干扰。</p>
+          <div class="feat-note"><kbd>Enter</kbd> 比例填完要按回车确认，才算真正写进去</div>
         </div>
       </article>
 
@@ -997,13 +1014,13 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
         <ol class="steps" data-steps="forge">
           <li><span class="no">01</span><span>装好对应版本的 Forge 47.4.10+（或 Fabric 0.15.11+）</span></li>
           <li><span class="no">02</span><span>把 jar 放进 .minecraft/mods 文件夹</span></li>
-          <li><span class="no">03</span><span>启动游戏，按 G 开面板搜方块；拿着方块按 H 可直接复制 ID</span></li>
+          <li><span class="no">03</span><span>启动游戏，按 G 开面板搜方块；拿着方块按 H 可直接复制 ID；填比例后记得按 <b>回车</b> 确认</span></li>
           <li><span class="no">04</span><span>可选：装 WorldEdit，解锁 //set 一键执行</span></li>
         </ol>
         <ol class="steps" data-steps="fabric" hidden>
           <li><span class="no">01</span><span>装好对应版本的 Fabric Loader 0.15.11+（或 Forge 47.4.10+）</span></li>
           <li><span class="no">02</span><span>把 jar 放进 .minecraft/mods 文件夹</span></li>
-          <li><span class="no">03</span><span>启动游戏，按 G 开面板搜方块；拿着方块按 H 可直接复制 ID</span></li>
+          <li><span class="no">03</span><span>启动游戏，按 G 开面板搜方块；拿着方块按 H 可直接复制 ID；填比例后记得按 <b>回车</b> 确认</span></li>
           <li><span class="no">04</span><span>可选：装 WorldEdit，解锁 //set 一键执行</span></li>
         </ol>
       </div>
@@ -1054,6 +1071,11 @@ h2.sec-title{font-size:clamp(30px,3.1vw,42px);font-weight:900;line-height:1.26;l
       <div class="faq-item">
         <button class="faq-q">不打开界面也能复制方块 ID 吗？<span class="pm"></span></button>
         <div class="faq-a"><p>可以。主手拿着方块按 <code>H</code>，方块 ID 直接进系统剪贴板，动作栏提示「已复制手持方块ID: xxx」—— 不打开面板、不暂停游戏、不打断手上的活。手里拿的不是方块时（剑、食物之类）它会提示「手持物不是方块！」，不会让你粘一串空值。</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">比例填完了没生效，是怎么回事？<span class="pm"></span></button>
+        <div class="faq-a"><p>比例框要按 <b>回车</b> 才算提交：点开方框、改数字、按 <code>Enter</code>，这一行才会真正写进去；按 <code>Esc</code> 则是取消。只改数字不回车等于还没提交，离开那一行就会恢复原值。提交后底部预览框会同步更新，复制前可以先看一眼。</p></div>
       </div>
     </div>
   </div>
