@@ -250,6 +250,21 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .dep-note .dn-t{font-size:14.5px;font-weight:800;color:#FECACA;margin-bottom:4px}
 .dep-note p{font-size:14px;color:var(--text-sub);line-height:1.75}
 .dep-note p b{color:var(--text);font-weight:700}
+/* 需要用户动手的关键操作：琥珀色键帽提示 */
+.key-note{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  margin-bottom:20px;padding:13px 16px;border-radius:12px;
+  background:linear-gradient(120deg,rgba(251,191,36,.17),rgba(251,191,36,.05));
+  border:1px solid rgba(251,191,36,.48);
+  box-shadow:0 0 0 1px rgba(251,191,36,.08) inset;
+}
+.key-note kbd{
+  display:inline-block;padding:3px 11px;border-radius:7px;flex:none;
+  font-family:var(--sans);font-size:12.5px;font-weight:800;letter-spacing:.6px;
+  color:#221703;background:linear-gradient(180deg,#FDE68A,#FBBF24);
+  box-shadow:0 2px 0 #A87A0C;
+}
+.key-note span{font-size:14px;font-weight:700;color:#FCD679;line-height:1.65}
 .entry-desc{font-size:14.5px;color:var(--text-sub);margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid rgba(58,75,103,.65);line-height:1.78}
 .group{margin-bottom:20px}
 .glabel{font-size:12.5px;font-weight:800;letter-spacing:1.4px;margin-bottom:11px}
@@ -397,7 +412,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
       <button class="chip dep" data-filter="deprecated">弃用版</button>
     </div>
     <div class="toc-list">
-      <a class="toc-item on" href="#mv-2.1.2.4" data-v="2.1.2.4"><i class="dot beta"></i>v2.1.2.4-Beta</a>
+      <a class="toc-item on" href="#mv-2.1.2.5" data-v="2.1.2.5"><i class="dot beta"></i>v2.1.2.5-Beta</a>
       <a class="toc-item dep" href="#mv-2.1.2.3" data-v="2.1.2.3"><i class="dot dep"></i>v2.1.2.3-Beta<span class="toc-dep">弃用</span></a>
       <a class="toc-item" href="#mv-2.1.2.2" data-v="2.1.2.2"><i class="dot beta"></i>v2.1.2.2-Beta</a>
       <a class="toc-item" href="#mv-2.1.2.1" data-v="2.1.2.1"><i class="dot beta"></i>v2.1.2.1-Beta</a>
@@ -415,12 +430,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   </aside>
 
   <main id="entries">
-<article class="entry" id="mv-2.1.2.4" data-kind="beta">
+<article class="entry" id="mv-2.1.2.5" data-kind="beta">
   <div class="entry-head">
-    <h3>v2.1.2.4-Beta</h3>
+    <h3>v2.1.2.5-Beta</h3>
     <div class="tags"><span class="tag beta">Beta</span></div>
   </div>
   <p class="entry-desc">修掉 v2.1.2.3-Beta 反馈的两处缺陷：默认收藏组名称乱码、比例填完又被改回去；比例改为直接输入 1–100，并新增可编辑的指令/ID 预览框。</p>
+  <div class="key-note">
+    <kbd>Enter</kbd>
+    <span>比例框填完必须按回车确认，数值才会真正写进去；只改数字不回车等于没提交，离开那一行就会恢复原值。</span>
+  </div>
   <div class="group">
     <div class="glabel g-green">修复</div>
     <div class="item">
@@ -471,7 +490,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   </div>
   <div class="info box-neutral">
     <div class="info-t">状态</div>
-    <div class="item"><p>四个版本已构建完成，等 QQ 群分发；现在就要用的话，建议先停在 v2.1.2.2-Beta。</p></div>
+    <div class="item"><p>四个版本已构建完成，等 QQ 群分发；现在就要用的话，建议先停在 v2.1.2.2-Beta。</p></div><div class="item"><p class="sub">版本号说明：这批改动原按 2.1.2.4 构建，因内容较多直接升为 2.1.2.5-Beta，2.1.2.4 未对外发布。</p></div>
   </div>
 </article>
 <article class="entry" id="mv-2.1.2.3" data-kind="deprecated">
