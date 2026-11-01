@@ -453,6 +453,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
       <p>所有方块都是默认比例时直接输出 <code>//set stone,dirt</code>，交给 WorldEdit 等概率随机；只要有方块改过比例，就把各自的数值原样带上。</p>
     </div>
     <div class="item">
+      <h4>ID 模式下替换结果被误判格式错误</h4>
+      <p>ID 模式的替换输出是「源方块组 目标方块组」两段、中间空格分隔，校验却把整串按逗号拆成一组，撞到空格后的第二段就判成 ID 不合法（指令模式有 <code>//replace</code> 前缀，所以没暴露）。现在按第一个空格拆成两段分别校验。</p>
+    </div>
+    <div class="item">
       <h4>替换模式下源与目标同名时比例错位</h4>
       <p>比例输入框原来只按方块 ID 反查所属列表，同名时会把输入框画到「替换原」那一行，并把数值当成源方块的组比例。现在按「从哪个列表点开」判定归属，源方块列表也不再提供比例入口。</p>
     </div>
