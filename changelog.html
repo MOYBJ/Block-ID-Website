@@ -15,7 +15,7 @@
 <style>
 :root{
   --paper:#F3F0E9; --card:#FBF9F4; --card-2:#FFFFFF;
-  --ink:#15181D; --ink-2:#3A414B; --mute:#6B7381; --faint:#8A9098;
+  --ink:#15181D; --ink-2:#3A414B; --mute:#5A6270; --faint:#626A77;
   --rule:#D9D2C3; --rule-2:#C3BAA6;
   --accent:#1C3E9E; --accent-ink:#152B6B; --wash:#E6E9F4;
   --ok:#0E6B4A; --warn:#A83C18; --warn-wash:#F6E4DC;
@@ -217,7 +217,7 @@ h1{font-size:clamp(38px,4.4vw,60px);line-height:1.06;letter-spacing:-.035em;font
     <div class="nav-right">
       <span class="ver-chip">v2.1.2.5-Beta</span>
       <a class="btn btn-primary btn-sm" href="index.html#install">加入 QQ 群下载</a>
-      <button class="nav-toggle" id="nav-toggle" aria-label="展开菜单" aria-expanded="false"><i></i></button>
+      <button type="button" class="nav-toggle" id="nav-toggle" aria-label="展开菜单" aria-expanded="false"><i></i></button>
     </div>
   </div>
 </header>
@@ -434,7 +434,7 @@ h1{font-size:clamp(38px,4.4vw,60px);line-height:1.06;letter-spacing:-.035em;font
       <p class="entry-desc">从 1.2.0-Alpha 到 2.0.0-Beta，本次更新是一次全面重构。无论是 UI 视觉、交互逻辑还是底层数据管理，都有跨越式的提升。</p>
       <div class="group"><div class="glabel g-blue">UI 与交互优化</div><div class="item"><h4>全新三列布局</h4><p>左侧"全部方块"，中间"常用方块"，右侧"已选列表/确认区"，空间利用率大幅提升</p></div><div class="item"><h4>双模式切换</h4><p>顶部按钮支持"复制模式/替换模式"与"ID复制/指令模式"任意组合切换</p></div><div class="item"><h4>动态图标操作</h4><p></p><p class="sub">· 左侧/中间列表每行末尾新增 ➕ 图标，点击可手动添加至常用方块</p><p class="sub">· 已添加的常用方块图标自动变为 ✔（绿色）</p><p class="sub">· 中间"常用方块"列表每行末尾新增 ➖ 图标，点击可手动移除</p></div><div class="item"><h4>智能搜索栏</h4><p>支持中文名、英文 ID、拼音首字母搜索</p></div><div class="item"><h4>自适应布局</h4><p>全屏/小窗口下所有元素自动计算位置，彻底解决按钮遮挡或列表显示不全</p></div></div><div class="group"><div class="glabel g-blue">核心功能扩展</div><div class="item"><h4>ID复制模式</h4><p>复制纯 ID（无指令前缀），支持多选，多个 ID 以逗号分隔；替换模式复制格式为"源ID 目标ID"（含空格）</p></div><div class="item"><h4>指令复制模式</h4><p>一键复制 <code>//set 或 <code>//replace 完整 WorldEdit 指令到剪贴板</p></div><div class="item"><h4>替换模式优化</h4><p>源方块与目标方块分列显示，复制格式严格保持"源ID 目标ID"（含空格）</p></div><div class="item"><h4>常用方块统计规则</h4><p></p><p class="sub">· 原版/模组方块放置 15 次自动加入（手动添加也有效）</p><p class="sub">· WorldEdit 指令使用 3 次自动加入</p><p class="sub">· 支持手动添加/移除，完全自定义</p></div></div><div class="group"><div class="glabel g-blue">底层与稳定性</div><div class="item"><h4>配置系统重构</h4><p>从 ForgeConfigSpec 迁移至 Gson JSON 存储，彻底解决配置文件读写崩溃</p></div><div class="item"><h4>统计逻辑修复</h4><p>双保险策略（右键点击 + 聊天指令监听），确保常用方块统计准确</p></div><div class="item"><h4>按键响应优化</h4><p>修复搜索框焦点死循环、按钮点击无效等遗留 Bug</p></div><div class="item"><h4>多语言支持</h4><p>内置简中、繁中、英、日、法、德、西、葡、俄 9 种语言</p></div><div class="item"><h4>新增前置依赖</h4><p>Cloth Config API（任何版本）</p></div></div><div class="group"><div class="glabel g-green">主要修复（相对 Alpha 1.2.0）</div><div class="item bare"><p>修复"替换模式复制格式缺少空格"的 Bug</p></div><div class="item bare"><p>修复"WorldEdit 指令无法被统计"的问题</p></div><div class="item bare"><p>修复"搜索栏无法输入"、"按钮无反应"等交互故障</p></div><div class="item bare"><p>修复"常用方块列表不刷新"的数据同步问题</p></div></div><div class="group"><div class="glabel g-mute">说明</div><div class="item bare"><p>自 <strong>v2.0.0 起新增 Fabric 加载器支持，1.x 系列仅支持 Forge</p></div><div class="item bare"><p>1.x Alpha 为早期测试版，强烈建议升级至最新 v2.1.2.2-Beta</p></div><div class="item bare"><p>前置说明：WorldEdit 可选（用于一键执行 //set //replace 指令），自 v2.1.1 起已移除 Cloth Config API 依赖</p></div><div class="item bare"><p>点击带 <strong>› 的版本可展开查看该版本的完整更新日志</p></div></div>
     </article>
-        <div class="more-wrap"><button class="more-btn" id="load-older">加载更早的历史版本</button></div>
+        <div class="more-wrap"><button type="button" class="more-btn" id="load-older">加载更早的历史版本</button></div>
   </main>
 </div>
 
