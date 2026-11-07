@@ -16,7 +16,7 @@
 /* ================= tokens ================= */
 :root{
   --paper:#F3F0E9; --card:#FBF9F4; --card-2:#FFFFFF;
-  --ink:#15181D; --ink-2:#3A414B; --mute:#6B7381; --faint:#8A9098;
+  --ink:#15181D; --ink-2:#3A414B; --mute:#5A6270; --faint:#626A77;
   --rule:#D9D2C3; --rule-2:#C3BAA6;
   --accent:#1C3E9E; --accent-ink:#152B6B; --wash:#E6E9F4;
   --ok:#0E6B4A; --warn:#A83C18; --warn-wash:#F6E4DC;
@@ -368,7 +368,7 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:700;
     <div class="nav-right">
       <span class="ver-chip">v2.1.2.5-Beta</span>
       <a class="btn btn-primary btn-sm" href="#install">加入 QQ 群下载</a>
-      <button class="nav-toggle" id="nav-toggle" aria-label="展开菜单" aria-expanded="false"><i></i></button>
+      <button type="button" class="nav-toggle" id="nav-toggle" aria-label="展开菜单" aria-expanded="false"><i></i></button>
     </div>
   </div>
 </header>
@@ -602,27 +602,27 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:700;
       </div>
       <div class="faq" id="faq-list">
         <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">需要装在服务端吗？<span class="pm" aria-hidden="true"></span></button>
+          <button type="button" class="faq-q" aria-expanded="false">需要装在服务端吗？<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a"><p>不需要。Block ID 是纯客户端模组，服务器和整合包都不用改动；单人、多人服务器都只装在本地即可。</p></div>
         </div>
         <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">必须装 WorldEdit 吗？<span class="pm" aria-hidden="true"></span></button>
+          <button type="button" class="faq-q" aria-expanded="false">必须装 WorldEdit 吗？<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a"><p>不是必须。不装 WorldEdit 也能搜索方块、查看 ID、复制 <code>//set</code> 与 <code>//replace</code> 指令；装了才能在游戏内直接执行（1.20.1 支持检测到后一键执行）。</p></div>
         </div>
         <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">支持哪些游戏版本？<span class="pm" aria-hidden="true"></span></button>
+          <button type="button" class="faq-q" aria-expanded="false">支持哪些游戏版本？<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a"><p>目前是 Minecraft <code>1.20.1</code> 与 <code>1.19.2</code>，两个版本各有 Forge 和 Fabric 包，共四个 jar。</p></div>
         </div>
         <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">会和别的界面模组冲突吗？<span class="pm" aria-hidden="true"></span></button>
+          <button type="button" class="faq-q" aria-expanded="false">会和别的界面模组冲突吗？<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a"><p>目前没发现冲突。面板默认用 <b>G</b> 打开，如果和你的键位撞了，可以在「选项 → 控制 → 方块ID」里改。</p></div>
         </div>
         <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">不打开界面也能复制方块 ID 吗？<span class="pm" aria-hidden="true"></span></button>
+          <button type="button" class="faq-q" aria-expanded="false">不打开界面也能复制方块 ID 吗？<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a"><p>可以。主手拿着方块按 <b>H</b>，ID 直接进系统剪贴板，动作栏会提示「已复制手持方块ID」。手里拿的不是方块时会提示「手持物不是方块！」，不会粘出一串空值。</p></div>
         </div>
         <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">比例填完了没生效，是怎么回事？<span class="pm" aria-hidden="true"></span></button>
+          <button type="button" class="faq-q" aria-expanded="false">比例填完了没生效，是怎么回事？<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a"><p>比例框要按 <b>回车</b> 才算提交：点开方框、改数字、按 <code>Enter</code>，这一行才会真正写进去；按 <code>Esc</code> 是取消。只改数字不回车等于还没提交，离开那一行就会恢复原值。</p></div>
         </div>
       </div>
@@ -675,7 +675,7 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:700;
   <div class="modal-box">
     <div class="modal-header">
       <div class="modal-header-title"> Block ID 使用协议</div>
-      <button class="modal-close" id="license-modal-close" aria-label="关闭">×</button>
+      <button type="button" class="modal-close" id="license-modal-close" aria-label="关闭">×</button>
     </div>
     <div class="modal-body">
       <div class="mv-header latest">
@@ -744,7 +744,7 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:700;
       </div>
       <div class="license-agree-area">
         <p class="license-scroll-tip" id="license-scroll-tip">请向下滚动读完全部条款后同意</p>
-        <button class="btn btn-primary license-agree-btn" id="license-agree-btn" disabled>
+        <button type="button" class="btn btn-primary license-agree-btn" id="license-agree-btn" disabled>
         我已阅读并同意以上协议
       </button>
     </div>
@@ -754,7 +754,7 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:700;
 
 <!-- ========== 版本公告：灵动岛 ========== -->
 <aside class="dyn-island" id="update-modal" role="status" aria-live="polite">
-  <button class="di-bar" id="di-toggle" aria-expanded="false" aria-controls="di-body">
+  <button type="button" class="di-bar" id="di-toggle" aria-expanded="false" aria-controls="di-body">
     <span class="di-dot" aria-hidden="true"></span>
     <span class="di-ver">v2.1.2.5-Beta</span>
     <span class="di-sep" aria-hidden="true"></span>
@@ -771,7 +771,7 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:700;
       </ul>
       <div class="di-actions">
         <a class="btn btn-primary" id="update-modal-changelog" href="changelog.html#mv-2.1.2.5">查看更新日志</a>
-        <button class="btn btn-ghost" id="update-modal-ok">知道了</button>
+        <button type="button" class="btn btn-ghost" id="update-modal-ok">知道了</button>
       </div>
     </div>
   </div>
@@ -781,7 +781,7 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:700;
 <aside class="side-notice" id="side-notice" role="note" aria-label="版本提醒">
   <div class="sn-head">
     <span class="sn-title">v2.1.2.3-Beta 不建议下载</span>
-    <button class="sn-x" id="sn-x" aria-label="关闭提醒">×</button>
+    <button type="button" class="sn-x" id="sn-x" aria-label="关闭提醒">×</button>
   </div>
   <p>该版本存在已知严重问题，请改用 <b>v2.1.2.5-Beta</b>；暂时不用新版可回退至 <b>v2.1.2.2-Beta</b>。</p>
   <a class="sn-link" href="changelog.html#mv-2.1.2.5">查看 v2.1.2.5-Beta 更新日志 →</a>
