@@ -1,836 +1,567 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-type="read">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>更新日志 - Block ID</title>
+<title>更新日志 — Block ID</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="theme-color" content="#0A0E15">
+<meta name="theme-color" content="#F3F0E9">
+<meta name="description" content="Block ID 的版本更新日志：每个版本改了什么、修了什么，按版本倒序排列。">
+<meta name="page-type" content="software">
+<meta name="site-kind" content="software">
 <link rel="preconnect" href="https://miaoda.feishu.cn" crossorigin>
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap">
 <style>
 :root{
-  --bg:#080B12; --bg-alt:#0B1017; --bg-footer:#05080E;
-  --card:#16202F; --card-hover:#1E2A3C; --card-deep:#0A0F18; --card-raise:#111B29;
-  --line:#2C3A51; --line-strong:#3A4B67;
-  --text:#F3F6FC; --text-sub:#C8D4E6; --text-mute:#9DADC5; --text-faint:#7B8BA3;
-  --blue:#7CB4F7; --blue-2:#5A9AE8; --blue-soft:#AECFFB; --blue-chip:#1A2C48;
-  --cyan:#3FD9E8; --cyan-soft:#8CEAF4;
-  --violet:#AC8FFA; --violet-soft:#CDBBFD;
-  --gold:#FBBF24; --gold-bg:#2B2312;
-  --green:#4ADE80; --green-bg:#0F1D18;
-  --pink:#F57FB6;
-  --red:#F87171; --red-deep:#EF4444; --red-soft:#FCA5A5;
+  --paper:#F3F0E9; --card:#FBF9F4; --card-2:#FFFFFF;
+  --ink:#15181D; --ink-2:#3A414B; --mute:#6B7381; --faint:#8A9098;
+  --rule:#D9D2C3; --rule-2:#C3BAA6;
+  --accent:#1C3E9E; --accent-ink:#152B6B; --wash:#E6E9F4;
+  --ok:#0E6B4A; --warn:#A83C18; --warn-wash:#F6E4DC;
   --sans:"Noto Sans SC",-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --mono:ui-monospace,"SFMono-Regular","JetBrains Mono",Consolas,"Liberation Mono",monospace;
   --ease:cubic-bezier(.22,.61,.36,1);
+  --wrap:1184px;
 }
-
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{
-  background:var(--bg);color:var(--text);font-family:var(--sans);
-  font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
-}
-body::before{
-  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(880px 600px at 88% -8%,rgba(172,143,250,.24),transparent 64%),
-    radial-gradient(760px 520px at 4% 2%,rgba(90,154,232,.22),transparent 62%),
-    radial-gradient(900px 640px at 70% 78%,rgba(63,217,232,.10),transparent 66%),
-    radial-gradient(700px 480px at 10% 96%,rgba(245,127,182,.08),transparent 62%);
-}
-body>*{position:relative;z-index:1}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.72;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4;
+  background-image:linear-gradient(to right,rgba(21,24,29,.045) 1px,transparent 1px),
+                   linear-gradient(to bottom,rgba(21,24,29,.045) 1px,transparent 1px);
+  background-size:32px 32px;
+  -webkit-mask-image:radial-gradient(1100px 520px at 50% 0%,#000 26%,transparent 76%);
+          mask-image:radial-gradient(1100px 520px at 50% 0%,#000 26%,transparent 76%)}
+img,svg{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-::selection{background:rgba(124,180,247,.30);color:#fff}
-.wrap{max-width:1280px;margin:0 auto;padding:0 40px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+code{font-family:var(--mono);font-size:.9em;background:var(--wash);border:1px solid #D3D9EC;border-radius:3px;padding:1px 5px;color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+::selection{background:#C9D2EE;color:var(--ink)}
+input,textarea{caret-color:var(--accent)}
+*{scrollbar-width:thin;scrollbar-color:var(--rule-2) transparent}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--rule-2);border:3px solid var(--paper);border-radius:8px}
+::-webkit-scrollbar-thumb:hover{background:var(--mute)}
+.wrap{width:100%;max-width:var(--wrap);margin:0 auto;padding:0 32px;position:relative;z-index:1}
 
-/* nav */
-.nav{position:sticky;top:0;z-index:60;background:rgba(8,11,18,.80);backdrop-filter:blur(16px) saturate(140%);border-bottom:1px solid rgba(58,75,103,.75)}
-.nav-in{display:flex;align-items:center;gap:32px;height:66px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
-.brand svg{filter:drop-shadow(0 2px 8px rgba(90,154,232,.45))}
-.nav-links{display:flex;align-items:center;gap:26px}
-.nav-links a{position:relative;font-size:15px;color:var(--text-sub);transition:color .18s var(--ease);padding:4px 0}
-.nav-links a:hover,.nav-links a.active{color:var(--text)}
-.nav-links a::after{
-  content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;border-radius:2px;
-  background:linear-gradient(90deg,var(--blue),var(--cyan));
-  transform:scaleX(0);transform-origin:left;transition:transform .22s var(--ease);
-}
-.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+/* nav（与首页同一套） */
+.nav{position:sticky;top:0;z-index:60;background:rgba(243,240,233,.9);backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid var(--rule)}
+.nav-in{display:flex;align-items:center;gap:28px;height:64px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:900;letter-spacing:-.02em;font-size:16.5px}
+.brand svg{width:20px;height:20px}
+.nav-links{display:flex;gap:26px;margin-left:6px}
+.nav-links a{font-size:14.5px;color:var(--ink-2);position:relative;padding:4px 0}
+.nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--accent);transition:right .28s var(--ease)}
+.nav-links a:hover{color:var(--accent-ink)}
+.nav-links a:hover::after{right:0}
+.nav-links a[aria-current]{color:var(--ink);font-weight:700}
+.nav-links a[aria-current]::after{right:0;background:var(--ink)}
 .nav-right{margin-left:auto;display:flex;align-items:center;gap:12px}
-.ver-chip{
-  font-size:13px;font-weight:600;color:var(--blue-soft);font-variant-numeric:tabular-nums;
-  background:linear-gradient(180deg,rgba(124,180,247,.14),rgba(172,143,250,.08));
-  border:1px solid rgba(124,180,247,.32);border-radius:8px;padding:6px 11px;white-space:nowrap;
-}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;font-size:14.5px;font-weight:600;
-  border-radius:10px;padding:10px 18px;border:1px solid var(--line-strong);
-  background:var(--card-hover);color:var(--text);transition:all .18s var(--ease);white-space:nowrap;
-}
-.btn:hover{border-color:rgba(124,180,247,.55);background:#213049;transform:translateY(-1px)}
-.btn-primary{
-  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-2) 55%,var(--violet) 130%);
-  border-color:transparent;color:#071120;box-shadow:0 6px 22px rgba(90,154,232,.32);
-}
-.btn-primary:hover{background:linear-gradient(135deg,#8EBFF9,#6BA8F0 55%,#B99CFC);border-color:transparent}
-.nav-toggle{display:none;width:38px;height:38px;border:1px solid var(--line);border-radius:9px;align-items:center;justify-content:center}
-.nav-toggle span{display:block;width:16px;height:1.5px;background:var(--text-sub);position:relative}
-.nav-toggle span::before,.nav-toggle span::after{content:"";position:absolute;left:0;width:16px;height:1.5px;background:var(--text-sub)}
-.nav-toggle span::before{top:-5px}.nav-toggle span::after{top:5px}
+.ver-chip{font-family:var(--mono);font-size:12px;color:var(--mute);border:1px solid var(--rule-2);border-radius:3px;padding:3px 8px;white-space:nowrap}
+.nav-toggle{display:none;width:38px;height:34px;border:1px solid var(--rule-2);border-radius:3px;align-items:center;justify-content:center}
+.nav-toggle i{display:block;width:15px;height:1.5px;background:var(--ink);position:relative}
+.nav-toggle i::before,.nav-toggle i::after{content:"";position:absolute;left:0;width:15px;height:1.5px;background:var(--ink)}
+.nav-toggle i::before{top:-5px}.nav-toggle i::after{top:5px}
 
-/* hero */
-.chero{padding:90px 0 40px;position:relative}
-.chero::before{
-  content:"";position:absolute;right:-6%;top:-20%;width:620px;height:460px;pointer-events:none;
-  background:radial-gradient(circle at 50% 50%,rgba(172,143,250,.20),transparent 68%);filter:blur(10px);
-}
-.eyebrow{
-  display:inline-flex;align-items:center;gap:9px;
-  font-size:12.5px;font-weight:700;letter-spacing:2px;color:var(--violet);
-  text-transform:uppercase;margin-bottom:16px;
-}
-.eyebrow::before{content:"";width:22px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--violet),transparent)}
-.chero h1{
-  font-size:clamp(40px,4.6vw,60px);font-weight:900;letter-spacing:-1.6px;line-height:1.2;margin-bottom:14px;
-  background:linear-gradient(115deg,#FFFFFF 6%,#C9DCF7 40%,#B49BFB 100%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
-}
-.chero p{font-size:16px;color:var(--text-sub)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border-radius:3px;
+  font-size:15px;font-weight:700;border:1px solid transparent;transition:transform .12s var(--ease),background .18s var(--ease),border-color .18s var(--ease),box-shadow .18s var(--ease)}
+.btn-primary{background:var(--ink);color:#FBF9F4}
+.btn-primary:hover{background:#000;transform:translateY(-1px);box-shadow:0 6px 18px rgba(21,24,29,.18)}
+.btn-primary:active{transform:translateY(1px);box-shadow:none}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--rule-2)}
+.btn-ghost:hover{border-color:var(--ink);background:rgba(21,24,29,.04)}
+.btn-sm{height:36px;padding:0 14px;font-size:13.5px}
 
-/* 双版本卡 */
-.dual{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:26px 0 8px;position:relative;z-index:1}
-.vcard{
-  position:relative;overflow:hidden;
-  background:linear-gradient(180deg,rgba(76,160,240,.10),var(--card-raise) 58%);
-  border:1px solid rgba(124,180,247,.30);border-radius:16px;padding:24px 26px;
-  transition:border-color .22s var(--ease),transform .22s var(--ease),box-shadow .22s var(--ease);
-}
-.vcard::after{
-  content:"";position:absolute;right:-40px;top:-50px;width:160px;height:160px;border-radius:50%;
-  background:radial-gradient(circle,rgba(124,180,247,.22),transparent 70%);pointer-events:none;
-}
-.vcard:hover{transform:translateY(-2px);border-color:rgba(124,180,247,.55);box-shadow:0 18px 44px rgba(0,0,0,.42)}
-.vcard.beta-card{
-  background:linear-gradient(180deg,rgba(251,191,36,.13),rgba(172,143,250,.06) 45%,var(--card-raise) 78%);
-  border-color:rgba(251,191,36,.34);
-}
-.vcard.beta-card::after{background:radial-gradient(circle,rgba(251,191,36,.24),transparent 70%)}
-.vcard-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.pill{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:.4px}
-.pill.rel{color:#8DE6B4;background:rgba(74,222,128,.14);border:1px solid rgba(74,222,128,.36)}
-.pill.beta{color:var(--gold);background:var(--gold-bg);border:1px solid rgba(251,191,36,.38)}
-.vcard .vnum{font-size:13px;color:var(--text-mute);font-variant-numeric:tabular-nums}
-.vcard h3{font-size:20px;font-weight:800;margin-bottom:8px;color:var(--text)}
-.vcard p{font-size:14px;color:var(--text-sub);line-height:1.75}
-.vcard .meta{margin-top:14px;font-size:12.5px;color:var(--text-faint);font-variant-numeric:tabular-nums}
-.vcard .state{margin-top:14px;font-size:12.5px;color:#FCD679;font-weight:600}
-
-/* 弃用态版本卡（红） */
-.vcard.dep-card{
-  background:linear-gradient(180deg,rgba(248,113,113,.14),rgba(239,68,68,.05) 45%,var(--card-raise) 78%);
-  border-color:rgba(248,113,113,.40);
-}
-.vcard.dep-card::after{background:radial-gradient(circle,rgba(248,113,113,.24),transparent 70%)}
-.vcard.dep-card:hover{border-color:rgba(248,113,113,.62);box-shadow:0 18px 44px rgba(239,68,68,.18)}
-.pill.dep{color:var(--red-soft);background:rgba(248,113,113,.14);border:1px solid rgba(248,113,113,.45)}
-.vcard .state.dep{color:var(--red-soft)}
+/* 页头 */
+.chero{padding:56px 0 40px;border-bottom:1px solid var(--rule)}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;
+  color:var(--mute);text-transform:uppercase;border:1px solid var(--rule-2);border-radius:3px;padding:5px 10px;margin-bottom:22px;background:var(--card)}
+.eyebrow i{width:5px;height:5px;background:var(--ok);border-radius:50%;display:block}
+h1{font-size:clamp(38px,4.4vw,60px);line-height:1.06;letter-spacing:-.035em;font-weight:900;margin-bottom:14px}
+.chero p{font-size:16.5px;color:var(--ink-2);max-width:52ch}
+.status{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:34px}
+.status div{background:var(--card);padding:14px 18px}
+.status dt{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase;margin-bottom:5px}
+.status dd{font-size:14.5px;color:var(--ink-2)}
+.status dd b{font-family:var(--mono);color:var(--ink);font-size:14px}
+.status .warnv b{color:var(--warn)}
 
 /* 主体 */
-.body-grid{display:grid;grid-template-columns:200px minmax(0,1fr);gap:76px;padding:58px 0 80px;align-items:start}
-.toc{position:sticky;top:88px}
-.toc-t{font-size:12px;font-weight:700;letter-spacing:1.2px;color:var(--text-faint);text-transform:uppercase;margin-bottom:12px}
-.chips{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
-.chip{font-size:12px;font-weight:600;color:var(--text-mute);border:1px solid var(--line);border-radius:7px;padding:5px 11px;transition:all .16s var(--ease)}
-.chip:hover{color:var(--text-sub);border-color:var(--line-strong)}
-.chip.on{
-  background:linear-gradient(135deg,rgba(124,180,247,.24),rgba(172,143,250,.18));
-  border-color:rgba(124,180,247,.55);color:#D3E5FD;
-}
-/* 弃用版筛选：红色系，激活态与普通筛选区分开 */
-.chip.dep{color:var(--red-soft);border-color:rgba(248,113,113,.34)}
-.chip.dep:hover{color:#FECACA;border-color:rgba(248,113,113,.56)}
-.chip.dep.on{
-  background:linear-gradient(135deg,rgba(248,113,113,.28),rgba(239,68,68,.16));
-  border-color:rgba(248,113,113,.62);color:#FECACA;
-  box-shadow:0 0 0 1px rgba(248,113,113,.14),0 6px 18px rgba(239,68,68,.18);
-}
-.toc-item{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--text-mute);padding:8px 0;max-height:40px;overflow:hidden;font-variant-numeric:tabular-nums;
-  transition:color .16s var(--ease),max-height .28s cubic-bezier(.32,.72,0,1),opacity .2s var(--ease),padding .28s cubic-bezier(.32,.72,0,1)}
-.toc-item.hide{max-height:0;padding:0;opacity:0;pointer-events:none}
-.toc-item:hover,.toc-item.on{color:var(--text)}
-.i,.dot{width:7px;height:7px;border-radius:50%;display:block;flex:none}
-.dot.release{background:linear-gradient(135deg,#4ADE80,#22B573);box-shadow:0 0 8px rgba(74,222,128,.5)}
-.dot.beta{background:linear-gradient(135deg,#FBBF24,#F59E0B);box-shadow:0 0 8px rgba(251,191,36,.5)}
-.dot.dep{background:linear-gradient(135deg,#F87171,#DC2626);box-shadow:0 0 9px rgba(248,113,113,.65)}
-.toc-item.dep{color:var(--red-soft)}
-.toc-item.dep:hover,.toc-item.dep.on{color:#FECACA}
-.toc-dep{
-  margin-left:auto;flex:none;
-  font-size:10px;font-weight:800;letter-spacing:.4px;
-  color:var(--red-soft);background:rgba(248,113,113,.14);
-  border:1px solid rgba(248,113,113,.40);border-radius:4px;padding:1px 5px;
-}
-.toc-more{margin-top:14px;font-size:13px;color:var(--blue)}
-.toc-more:hover{color:var(--cyan)}
+.body-grid{display:grid;grid-template-columns:216px minmax(0,1fr);gap:56px;padding:48px 0 88px;align-items:start}
+.rail{position:sticky;top:88px}
+.rail-t{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase;margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.chip{font-size:12.5px;font-weight:600;color:var(--mute);border:1px solid var(--rule-2);border-radius:3px;padding:4px 9px;transition:all .16s var(--ease);background:var(--card)}
+.chip:hover{color:var(--ink);border-color:var(--ink)}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#FBF9F4}
+.chip.dep{color:var(--warn);border-color:#DDB9A9}
+.chip.dep.on{background:var(--warn);border-color:var(--warn);color:#fff}
+.toc-list{display:grid;gap:1px}
+.toc-item{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12.5px;color:var(--mute);padding:6px 8px;border-radius:3px;white-space:nowrap;transition:background .16s var(--ease),color .16s var(--ease)}
+.toc-item:hover{background:var(--card);color:var(--ink)}
+.toc-item.on{background:var(--card);color:var(--ink);box-shadow:inset 2px 0 0 var(--ink)}
+.toc-item[hidden]{display:none}
+.toc-item .dot{width:5px;height:5px;border-radius:50%;flex:none;background:var(--ok)}
+.toc-item .dot.beta{background:var(--accent)}
+.toc-item .dot.dep{background:var(--warn)}
+.toc-item.dep{color:var(--warn)}
+.toc-dep{margin-left:auto;font-size:10px;letter-spacing:.04em;color:var(--warn);border:1px solid #DDB9A9;border-radius:2px;padding:0 4px;white-space:nowrap}
+.toc-more{margin-top:14px;font-size:13px;color:var(--accent-ink);font-family:var(--mono)}
+.toc-more:hover{text-decoration:underline}
 
 /* 条目 */
-.slot{
-  display:grid;grid-template-rows:1fr;margin-bottom:18px;
-  transition:grid-template-rows .34s cubic-bezier(.32,.72,0,1),
-             opacity .26s var(--ease),
-             margin-bottom .34s cubic-bezier(.32,.72,0,1);
-}
-.slot.closed{grid-template-rows:0fr;opacity:0;margin-bottom:0;pointer-events:none}
-.slot-in{overflow:hidden;min-height:0}
-.entry{
-  position:relative;overflow:hidden;
-  background:var(--card);border:1px solid var(--line);border-radius:16px;
-  padding:30px 34px;margin-bottom:0;scroll-margin-top:88px;
-  transition:border-color .22s var(--ease),box-shadow .22s var(--ease);
-}
-.entry::before{
-  content:"";position:absolute;left:0;right:0;top:0;height:3px;
-  background:linear-gradient(90deg,var(--ac),color-mix(in srgb,var(--ac) 28%,transparent) 62%,transparent);
-}
-.entry[data-kind="beta"]{--ac:var(--gold)}
-.entry[data-kind="release"]{--ac:var(--green)}
-.entry[data-kind="deprecated"]{
-  --ac:var(--red);
-  border-color:rgba(248,113,113,.30);
-  background:
-    radial-gradient(560px 220px at 92% -14%,rgba(248,113,113,.11),transparent 70%),
-    var(--card);
-}
-.entry[data-kind="deprecated"]:hover{
-  border-color:rgba(248,113,113,.54);
-  box-shadow:0 16px 40px rgba(239,68,68,.18);
-}
-.entry:hover{border-color:color-mix(in srgb,var(--ac) 42%,var(--line));box-shadow:0 16px 40px rgba(0,0,0,.34)}
-.entry-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px}
-.entry-head h3{font-size:24px;font-weight:800;letter-spacing:-.4px;color:var(--text);font-variant-numeric:tabular-nums}
-.entry-head h3::before{
-  content:"";display:inline-block;width:8px;height:8px;border-radius:2px;
-  background:var(--ac);margin-right:11px;vertical-align:3px;
-  box-shadow:0 0 12px color-mix(in srgb,var(--ac) 70%,transparent);
-}
-.tag{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:6px}
-.tag.beta{color:var(--gold);background:var(--gold-bg);border:1px solid rgba(251,191,36,.36)}
-.tag.release{color:#8DE6B4;background:var(--green-bg);border:1px solid rgba(74,222,128,.34)}
-.tags{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-/* 弃用标签：红色 + 呼吸圆点，一眼能认出是危险版本 */
-.tag.dep{
-  display:inline-flex;align-items:center;gap:6px;
-  color:#FECACA;background:rgba(248,113,113,.14);border:1px solid rgba(248,113,113,.48);
-  box-shadow:0 0 0 1px rgba(248,113,113,.08),0 4px 14px rgba(239,68,68,.16);
-}
-.tag.dep::before{
-  content:"";width:6px;height:6px;border-radius:50%;flex:none;
-  background:var(--red);box-shadow:0 0 8px rgba(248,113,113,.95);
-  animation:depPulse 2.2s var(--ease) infinite;
-}
-@keyframes depPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.82)}}
-/* 条目内弃用警示条 */
-.dep-note{
-  display:flex;gap:13px;align-items:flex-start;
-  border:1px solid rgba(248,113,113,.40);border-radius:12px;
-  background:linear-gradient(120deg,rgba(248,113,113,.14),rgba(239,68,68,.05) 70%);
-  padding:15px 18px;margin-bottom:20px;
-}
-.dep-note .dn-ico{
-  flex:none;width:23px;height:23px;border-radius:50%;margin-top:1px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:800;color:var(--red-soft);
-  background:rgba(248,113,113,.18);border:1px solid rgba(248,113,113,.55);
-}
-.dep-note .dn-t{font-size:14.5px;font-weight:800;color:#FECACA;margin-bottom:4px}
-.dep-note p{font-size:14px;color:var(--text-sub);line-height:1.75}
-.dep-note p b{color:var(--text);font-weight:700}
-/* 需要用户动手的关键操作：琥珀色键帽提示 */
-.key-note{
-  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
-  margin-bottom:20px;padding:13px 16px;border-radius:12px;
-  background:linear-gradient(120deg,rgba(251,191,36,.17),rgba(251,191,36,.05));
-  border:1px solid rgba(251,191,36,.48);
-  box-shadow:0 0 0 1px rgba(251,191,36,.08) inset;
-}
-.key-note kbd{
-  display:inline-block;padding:3px 11px;border-radius:7px;flex:none;
-  font-family:var(--sans);font-size:12.5px;font-weight:800;letter-spacing:.6px;
-  color:#221703;background:linear-gradient(180deg,#FDE68A,#FBBF24);
-  box-shadow:0 2px 0 #A87A0C;
-}
-.key-note span{font-size:14px;font-weight:700;color:#FCD679;line-height:1.65}
-.entry-desc{font-size:14.5px;color:var(--text-sub);margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid rgba(58,75,103,.65);line-height:1.78}
-.group{margin-bottom:20px}
-.glabel{font-size:12.5px;font-weight:800;letter-spacing:1.4px;margin-bottom:11px}
-.g-green{color:#6EE7A0}
-.g-blue{color:var(--cyan)}
-.g-mute{color:var(--text-faint)}
-.item{margin-bottom:14px}
-.item h4{font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:5px}
-.item p{font-size:14.5px;color:var(--text-mute);line-height:1.78}
-.item p.sub{font-size:13.5px;color:var(--text-faint);margin-top:6px}
-.item code{
-  font-family:var(--sans);font-size:13.5px;color:var(--cyan-soft);font-variant-numeric:tabular-nums;
-  background:rgba(63,217,232,.10);border:1px solid rgba(63,217,232,.22);
-  border-radius:5px;padding:1px 7px;
-}
-.info{
-  border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px;
-  background:rgba(124,180,247,.05);
-}
-.info.box-green{border-color:rgba(74,222,128,.32);background:rgba(74,222,128,.06)}
-.info.box-neutral{border-color:rgba(172,143,250,.30);background:rgba(172,143,250,.06)}
-.info-t{font-size:11.5px;font-weight:800;letter-spacing:1.2px;color:var(--text-mute);margin-bottom:9px;text-transform:uppercase}
-.info.box-green .info-t{color:#6EE7A0}
-.info.box-neutral .info-t{color:var(--violet-soft)}
-.info .item{margin-bottom:9px}
-.info .item:last-child{margin-bottom:0}
-.info .item p{font-size:14px}
-.more-wrap{display:flex;justify-content:center;margin-top:8px}
-.more-btn{
-  width:100%;height:48px;border:1px solid var(--line);border-radius:12px;
-  background:linear-gradient(180deg,rgba(124,180,247,.08),rgba(124,180,247,.02));
-  color:var(--text-sub);font-size:14px;font-weight:600;transition:all .18s var(--ease);
-}
-.more-btn:hover{border-color:rgba(124,180,247,.5);color:var(--text)}
+#entries{display:grid;gap:18px}
+.entry{background:var(--card-2);border:1px solid var(--rule);border-radius:4px;padding:26px 28px 28px;scroll-margin-top:88px;
+  transition:border-color .18s var(--ease),box-shadow .18s var(--ease)}
+.entry:hover{border-color:var(--rule-2);box-shadow:0 10px 30px -18px rgba(21,24,29,.28)}
+.entry[hidden]{display:none}
+.entry[data-kind="deprecated"]{border-color:#DDC3B6;background:linear-gradient(180deg,#FDF7F3,#FFFFFF 42%)}
+.entry-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px;flex-wrap:wrap}
+.entry-head h3{font-family:var(--mono);font-size:21px;font-weight:700;letter-spacing:-.02em}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;border-radius:2px;padding:2px 6px;border:1px solid}
+.tag.beta{color:var(--accent-ink);border-color:#C2CAE4;background:var(--wash)}
+.tag.release{color:var(--ok);border-color:#BFD8CB;background:#EDF5F0}
+.tag.dep{color:var(--warn);border-color:#DDB9A9;background:var(--warn-wash)}
+.entry-desc{font-size:15px;color:var(--ink-2);line-height:1.72;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #EFEBE1}
+.group{margin-bottom:18px}
+.glabel{font-size:12px;font-weight:800;letter-spacing:.06em;margin-bottom:9px;color:var(--faint)}
+.glabel.g-green{color:var(--ok)}
+.glabel.g-blue{color:var(--accent)}
+.item{margin-bottom:12px}
+.item:last-child{margin-bottom:0}
+.item h4{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+.item p{font-size:14.5px;color:var(--mute);line-height:1.72}
+.item p.sub{font-size:13.5px;color:var(--faint);margin-top:4px}
+.item.bare p{margin:0}
+.info{border:1px solid var(--rule);border-radius:3px;background:var(--card);padding:13px 15px;margin-bottom:14px}
+.info-t{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+.info.box-green{border-color:#C9DCCF;background:#F2F7F4}
+.info.box-green .info-t{color:var(--ok)}
+.info.box-neutral{border-color:#CBD2E4;background:#F4F6FB}
+.info.box-neutral .info-t{color:var(--accent)}
+.key-note{display:flex;align-items:center;gap:11px;flex-wrap:wrap;border:1px solid #C9D0E8;background:var(--wash);
+  border-radius:3px;padding:11px 14px;margin-bottom:18px}
+.key-note kbd{display:inline-block;font-family:var(--mono);font-size:11.5px;font-weight:700;line-height:1;padding:6px 9px;
+  border-radius:3px;background:#fff;border:1px solid var(--rule-2);box-shadow:0 2px 0 var(--rule-2);flex:none}
+.key-note span{font-size:13.5px;color:var(--accent-ink);font-weight:500}
+.dep-note{display:flex;gap:11px;align-items:flex-start;border:1px solid #DDB9A9;background:var(--warn-wash);border-radius:3px;padding:12px 14px;margin-bottom:18px}
+.dn-ico{flex:none;width:18px;height:18px;border-radius:2px;background:var(--warn);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:800;line-height:1}
+.dn-t{font-size:13.5px;font-weight:800;color:var(--warn);margin-bottom:3px}
+.dep-note p{font-size:13.5px;color:#5A3A2C;line-height:1.66}
+.dep-note b{color:var(--warn)}
+.entry strong{font-weight:700;color:var(--ink)}
 
-/* roadmap */
-.road{padding:0 0 96px}
-.road h2{font-size:clamp(26px,2.6vw,34px);font-weight:900;letter-spacing:-.8px;margin-bottom:6px}
-.road .eyebrow{color:var(--cyan);margin-bottom:14px}
-.road .eyebrow::before{background:linear-gradient(90deg,var(--cyan),transparent)}
-.road-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:19px 0;border-bottom:1px solid var(--line);font-size:15px}
-.road-row:first-of-type{border-top:1px solid var(--line)}
-.road-st{font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:6px}
-.road-st.doing{color:var(--gold);background:var(--gold-bg);border:1px solid rgba(251,191,36,.32)}
-.road-st.plan{color:var(--text-faint);background:rgba(124,180,247,.06);border:1px solid var(--line)}
+/* 页脚 */
+.foot{border-top:1px solid var(--rule-2);padding:52px 0 32px;position:relative;z-index:1}
+.foot-top{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr);gap:40px;padding-bottom:30px;border-bottom:1px solid var(--rule)}
+.foot-brand{display:flex;align-items:center;gap:9px;font-weight:900;letter-spacing:-.02em;font-size:17px;margin-bottom:10px}
+.foot-brand svg{width:20px;height:20px}
+.foot-tag{font-size:14px;color:var(--mute);max-width:30ch}
+.foot-links{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.foot-links h4{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase;margin-bottom:12px}
+.foot-links a{display:block;font-size:14px;color:var(--ink-2);padding:4px 0}
+.foot-links a:hover{color:var(--accent)}
+.foot-bottom{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;padding-top:20px;font-size:12.5px;color:var(--faint);font-family:var(--mono)}
 
-/* footer */
-.foot{background:linear-gradient(180deg,var(--bg-alt),var(--bg-footer));border-top:1px solid var(--line)}
-.foot-line{height:1px;background:linear-gradient(90deg,transparent,var(--blue) 22%,var(--cyan) 50%,var(--violet) 76%,transparent)}
-.foot-main{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:32px 0 16px}
-.foot-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16.5px}
-.foot-tag{font-size:13.5px;color:var(--text-faint)}
-.foot-bottom{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 0 28px;font-size:12.5px;color:var(--text-faint)}
-
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
-.reveal.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 @media (max-width:1080px){
-  .wrap{padding:0 28px}
   .body-grid{grid-template-columns:1fr;gap:28px}
-  .toc{position:static;min-width:0}
-  .body-grid>main{min-width:0}
-  .toc .toc-list{display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
-  .toc-item{white-space:nowrap}
-  .toc-item.hide{display:none}
-  .dual{grid-template-columns:1fr}
+  .rail{position:static}
+  .toc-list{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+  .foot-top{grid-template-columns:1fr}
 }
-@media (max-width:860px){
-  .nav-links{position:absolute;top:66px;left:0;right:0;flex-direction:column;gap:0;background:#0A0F17;border-bottom:1px solid var(--line);padding:6px 28px 14px;display:none}
-  .nav-links.open{display:flex}
-  .nav-links a{padding:12px 0;border-bottom:1px solid rgba(58,75,103,.6);font-size:15px}
-  .nav-links a::after{display:none}
+@media (max-width:820px){
+  .wrap{padding:0 24px}
+  .nav-links{display:none}
   .nav-toggle{display:flex}
+  .nav.open .nav-links{display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;
+    background:var(--paper);border-bottom:1px solid var(--rule);padding:6px 24px 14px}
+  .nav.open .nav-links a{padding:12px 0;border-bottom:1px solid var(--rule);font-size:15px}
   .ver-chip{display:none}
-  .chero{padding:56px 0 24px}
-  .entry{padding:22px 20px}
-  .entry-head h3{font-size:20px}
-  .entry-head{flex-wrap:wrap;gap:10px}
-  .tags{justify-content:flex-start;margin-top:2px}
-  .dep-note{padding:13px 15px;gap:10px}
-  .item p,.item code{overflow-wrap:anywhere;word-break:break-word}
-  .foot-main{flex-direction:column;align-items:flex-start;gap:10px}
-  .foot-bottom{flex-direction:column;align-items:flex-start;gap:6px}
+  .status{grid-template-columns:1fr}
+  .entry{padding:22px 20px 24px}
+  .entry-head h3{font-size:18px}
+  .foot-links{grid-template-columns:1fr 1fr}
 }
-@media (max-width:480px){.wrap{padding:0 18px}}
+@media (max-width:560px){
+  .nav-right .btn{display:none}
+  .toc-list,.toc-more{display:none}
+}
+@media (max-width:480px){
+  .wrap{padding:0 18px}
+  .foot-links{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 
-<header class="nav">
+<header class="nav" id="nav">
   <div class="wrap nav-in">
     <a class="brand" href="index.html">
-      <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
-        <path d="M16 3 29 10.5 16 18 3 10.5Z" fill="#7FB4F5"/>
-        <path d="M3 10.5 16 18V31L3 23.5Z" fill="#4A8AD5"/>
-        <path d="M29 10.5 16 18V31l13-7.5Z" fill="#2F6AA8"/>
-      </svg>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8 21.2 7 12 12.2 2.8 7Z" fill="#15181D"/><path d="M2.8 7 12 12.2v10L2.8 17Z" fill="#1C3E9E" opacity=".82"/><path d="M21.2 7 12 12.2v10l9.2-5.2Z" fill="#1C3E9E" opacity=".55"/></svg>
       <span>Block ID</span>
     </a>
     <nav class="nav-links" id="nav-links">
-      <a href="index.html#intro">模组介绍</a>
-      <a href="index.html#features">核心功能</a>
-      <a href="index.html#install">安装下载</a>
+      <a href="index.html#how">怎么用</a>
+      <a href="index.html#search">搜索</a>
+      <a href="index.html#weights">比例</a>
+      <a href="index.html#install">安装</a>
       <a href="index.html#faq">常见问题</a>
-      <a href="changelog.html" class="active">更新日志</a>
-      <a href="index.html#license" id="nav-license">使用协议</a>
+      <a href="changelog.html" aria-current="page">更新日志</a>
     </nav>
     <div class="nav-right">
-      <span class="ver-chip">v2.1.2-Release</span>
-      <a class="btn btn-primary" href="index.html#qq">加入 QQ 群</a>
-      <button class="nav-toggle" id="nav-toggle" aria-label="展开菜单"><span></span></button>
+      <span class="ver-chip">v2.1.2.5-Beta</span>
+      <a class="btn btn-primary btn-sm" href="index.html#install">加入 QQ 群下载</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="展开菜单" aria-expanded="false"><i></i></button>
     </div>
   </div>
 </header>
 
 <section class="chero">
   <div class="wrap">
-    <div class="eyebrow">Changelog</div>
     <h1>更新日志</h1>
-    <p>每一次改动都写在这里 —— 按版本倒序，最新的在最上面。</p>
-    <div class="dual">
-      <div class="vcard">
-        <div class="vcard-top"><span class="pill rel">当前正式版</span><span class="vnum">v2.1.2-Release</span></div>
-        <h3>稳定版本</h3>
-        <p>四个加载器版本齐全，默认推荐给大多数玩家。所有功能已稳定，不含实验性改动。</p>
-        <div class="meta">Forge 47.4.10+ · Fabric 0.15.11+</div>
-      </div>
-      <div class="vcard dep-card">
-        <div class="vcard-top"><span class="pill dep">已弃用 · 勿使用</span><span class="vnum">v2.1.2.3-Beta</span></div>
-        <h3>存在已知严重问题</h3>
-        <p>该版本已停止推荐，下载前请先看下方版本的弃用说明。建议回退至 v2.1.2.2-Beta。</p>
-        <div class="state dep">已弃用 · 不建议下载安装</div>
-      </div>
-    </div>
+    <p>每个版本改了什么、修了什么，都写在这里。按版本倒序，最新的在最上面。</p>
+    <dl class="status">
+      <div><dt>当前正式版</dt><dd><b>v2.1.2-Release</b><br>四个加载器齐全，推荐大多数玩家</dd></div>
+      <div><dt>最新 Beta</dt><dd><b>v2.1.2.5-Beta</b><br>已发布 · 比例与预览框修复</dd></div>
+      <div class="warnv"><dt>已弃用</dt><dd><b>v2.1.2.3-Beta</b> · <b>v2.1.0-Release</b><br>存在已知严重问题，请勿下载</dd></div>
+    </dl>
   </div>
 </section>
 
 <div class="wrap body-grid">
-  <aside class="toc">
-    <div class="toc-t">版本目录</div>
-    <div class="chips">
-      <button class="chip on" data-filter="all">全部</button>
-      <button class="chip" data-filter="release">正式版</button>
-      <button class="chip" data-filter="beta">Beta</button>
-      <button class="chip dep" data-filter="deprecated">弃用版</button>
+  <aside class="rail">
+    <div class="rail-t">版本目录</div>
+    <div class="chips" id="chips">
+      <button class="chip on" data-filter="all" type="button">全部</button>
+      <button class="chip" data-filter="release" type="button">正式版</button>
+      <button class="chip" data-filter="beta" type="button">Beta</button>
+      <button class="chip dep" data-filter="deprecated" type="button">弃用版</button>
     </div>
-    <div class="toc-list">
-      <a class="toc-item on" href="#mv-2.1.2.5" data-v="2.1.2.5"><i class="dot beta"></i>v2.1.2.5-Beta</a>
-      <a class="toc-item dep" href="#mv-2.1.2.3" data-v="2.1.2.3"><i class="dot dep"></i>v2.1.2.3-Beta<span class="toc-dep">弃用</span></a>
-      <a class="toc-item" href="#mv-2.1.2.2" data-v="2.1.2.2"><i class="dot beta"></i>v2.1.2.2-Beta</a>
-      <a class="toc-item" href="#mv-2.1.2.1" data-v="2.1.2.1"><i class="dot beta"></i>v2.1.2.1-Beta</a>
-      <a class="toc-item" href="#mv-2.1.2" data-v="2.1.2"><i class="dot release"></i>v2.1.2-Release</a>
-      <a class="toc-item" href="#mv-2.1.1" data-v="2.1.1"><i class="dot beta"></i>v2.1.1-Beta</a>
-      <a class="toc-item older dep" href="#mv-2.1.0" data-v="2.1.0"><i class="dot dep"></i>v2.1.0-Release<span class="toc-dep">弃用</span></a>
-      <a class="toc-item older" href="#mv-2.0.3.2" data-v="2.0.3.2"><i class="dot release"></i>v2.0.3.2-Release</a>
-      <a class="toc-item older" href="#mv-2.0.3.1" data-v="2.0.3.1"><i class="dot release"></i>v2.0.3.1-Release</a>
-      <a class="toc-item older" href="#mv-2.0.3" data-v="2.0.3"><i class="dot release"></i>v2.0.3-Release</a>
-      <a class="toc-item older" href="#mv-2.0.2" data-v="2.0.2"><i class="dot beta"></i>v2.0.2-Beta</a>
-      <a class="toc-item older" href="#mv-2.0.1" data-v="2.0.1"><i class="dot beta"></i>v2.0.1-Beta</a>
-      <a class="toc-item older" href="#mv-2.0.0" data-v="2.0.0"><i class="dot beta"></i>v2.0.0-Beta</a>
-    </div>
+    <div class="toc-list" id="toc"></div>
     <a class="toc-more" href="#" id="toc-more">查看全部历史版本 →</a>
   </aside>
 
   <main id="entries">
-<article class="entry" id="mv-2.1.2.5" data-kind="beta">
-  <div class="entry-head">
-    <h3>v2.1.2.5-Beta</h3>
-    <div class="tags"><span class="tag beta">Beta</span></div>
-  </div>
-  <p class="entry-desc">修掉 v2.1.2.3-Beta 反馈的两处缺陷：默认收藏组名称乱码、比例填完又被改回去；比例改为直接输入 1–100，并新增可编辑的指令/ID 预览框。</p>
-  <div class="key-note">
-    <kbd>Enter</kbd>
-    <span>比例框填完必须按回车确认，数值才会真正写进去；只改数字不回车等于没提交，离开那一行就会恢复原值。</span>
-  </div>
-  <div class="group">
-    <div class="glabel g-green">修复</div>
-    <div class="item">
-      <h4>默认收藏组名称乱码</h4>
-      <p>配置文件读写用的是平台默认编码，中文 Windows 上是 GBK。一旦配置曾在 UTF-8 环境写过（例如用 Java 21 的启动器跑过一次），读回来就是「榛樿鏀惰棌」这类乱码，还会被原样存回文件。</p>
-      <p class="sub">现在读写统一 UTF-8，读取失败自动退回 GBK 兼容旧文件，并对已经写坏的组名做一次还原。</p>
-    </div>
-    <div class="item">
-      <h4>比例填完被改回原值</h4>
-      <p>旧实现把输入值当成「占总量的百分比」，再按其他方块的权重反推一次原始权重，反推后一取整就和输入值对不上，看起来就是刚填完又被改回去。</p>
-      <p class="sub">现在比例是 1–100 的相对权重：输入什么就存什么、指令里就是什么，不再二次换算，也不要求各项加起来等于 100。</p>
-    </div>
-    <div class="item">
-      <h4>比例拖不动</h4>
-      <p>可拖动的细条只有 26 像素宽，百分比数字画在它右边 40 像素处，玩家基本都拖在数字上；Fabric 与 1.19.2 侧还把百分比直接当成原始权重写入。</p>
-      <p class="sub">已去掉拖动，改为点击比例方框直接输入：认「50」也认「50%」，<b>填完按回车确认</b>，清空即回到 100。</p>
-    </div>
-  </div>
-  <div class="group">
-    <div class="glabel g-blue">新增</div>
-    <div class="item">
-      <h4>指令 / ID 预览框</h4>
-      <p>界面底部实时显示当前会输出的完整内容，可以直接在框里改；点复制时以框里的内容为准。切换方块、改比例、改方块状态后会重新生成预览。</p>
-    </div>
-  </div>
-  <div class="group">
-    <div class="glabel g-blue">变更</div>
-    <div class="item">
-      <h4>比例全为 100 时不输出百分比</h4>
-      <p>所有方块都是默认比例时直接输出 <code>//set stone,dirt</code>，交给 WorldEdit 等概率随机；只要有方块改过比例，就把各自的数值原样带上。</p>
-    </div>
-    <div class="item">
-      <h4>ID 模式下替换结果被误判格式错误</h4>
-      <p>ID 模式的替换输出是「源方块组 目标方块组」两段、中间空格分隔，校验却把整串按逗号拆成一组，撞到空格后的第二段就判成 ID 不合法（指令模式有 <code>//replace</code> 前缀，所以没暴露）。现在按第一个空格拆成两段分别校验。</p>
-    </div>
-    <div class="item">
-      <h4>替换模式下源与目标同名时比例错位</h4>
-      <p>比例输入框原来只按方块 ID 反查所属列表，同名时会把输入框画到「替换原」那一行，并把数值当成源方块的组比例。现在按「从哪个列表点开」判定归属，源方块列表也不再提供比例入口。</p>
-    </div>
-    <div class="item">
-      <h4>列表与预览区的排版修正</h4>
-      <p>列表最后几行不再压住「下一页」按钮；点击列表下方空白处不会再选中方块；预览框与分页按钮不再重叠；未选方块时不再显示格式报错。</p>
-    </div>
-    <div class="item">
-      <h4>输出前自动校验</h4>
-      <p>方块 ID、比例数字、方块状态写法、以及「比例全带或全不带」都会检查；不通过时预览框下方红字提示<b>「当前指令格式/方块ID不正确」</b>，并禁止复制与输出，动作栏同时指出是哪一段不对。</p>
-    </div>
-  </div>
-  <div class="info box-neutral">
-    <div class="info-t">状态</div>
-    <div class="item"><p><b>已发布</b>（2026-11-01）：四个版本均已构建并校验，源码已推送 GitHub，可在官方 QQ 群 1121599701 群文件获取。</p></div><div class="item"><p class="sub">版本号说明：这批改动原按 2.1.2.4 构建，因内容较多直接升为 2.1.2.5-Beta，2.1.2.4 未对外发布。</p></div>
-  </div>
-</article>
-<article class="entry" id="mv-2.1.2.3" data-kind="deprecated">
-  <div class="entry-head">
-    <h3>v2.1.2.3-Beta</h3>
-    <div class="tags">
-      <span class="tag dep">已知严重 BUG · 已弃用</span>
-      <span class="tag beta">Beta</span>
-    </div>
-  </div>
-  <p class="entry-desc">修复模组图标在部分启动器显示为破图；同版本完成官网整体改版。</p>
-  <div class="dep-note">
-    <div class="dn-ico">!</div>
-    <div>
-      <div class="dn-t">此版本已标记为弃用</div>
-      <p>该版本存在<b>已知的严重问题</b>，已停止推荐，请勿下载安装。建议回退至 <b>v2.1.2.2-Beta</b>。</p>
-    </div>
-  </div>
-  <div class="group"><div class="glabel g-green">修复</div>
-    <div class="item"><h4>模组图标显示为破图</h4><p>原 <code>icon.png</code> 实际是 JPEG 编码（文件头 FF D8 FF），只是扩展名写成了 .png。宽容的启动器能识别，严格按扩展名解析 PNG 的就会显示破图。</p><p class="sub">现已将 4 个版本共 6 份图标统一转为真正的 PNG（512×512，RGBA），配置中的 icon 路径不变。</p></div>
-  </div>
-  <div class="group"><div class="glabel g-blue">变更</div>
-    <div class="item"><h4>官网两页整体改版</h4><p>新的视觉体系、信息结构与响应式布局；弹窗、埋点与版本跟随逻辑保持不变。</p></div>
-  </div>
-  <div class="info box-neutral"><div class="info-t">工程</div>
-    <div class="item"><p>版本号推进 2.1.2.2 → 2.1.2.3；四版本重新构建并更新发布包。</p></div>
-  </div>
-</article><article class="entry" id="mv-2.1.2.2" data-kind="beta">
-  <div class="entry-head">
-    <h3>v2.1.2.2-Beta</h3>
-    <span class="tag beta">Beta</span>
-  </div>
-  <p class="entry-desc">修复方块权重无法精确控制的问题：权重改为 WorldEdit 原生的相对权重语义，三个及以上方块也能准确设置 50% / 25% / 25% 这样的比例。</p>
-  <div class="group"><div class="glabel g-green">修复</div><div class="item"><h4>方块权重无法精确控制</h4><p>旧逻辑在设置某个方块后，会把剩余配额按其他方块当前值的比例重新分配。逐个输入目标值时，先前设置好的方块会被后续操作反复缩放，任何顺序都无法精确落在目标分布上。</p><p class="sub">典型场景：三个方块想设为 50% / 25% / 25%，结果总在漂移，怎么调都对不上。</p></div><div class="item"><h4>改为相对权重语义</h4><p>WorldEdit 的 50%stone,25%dirt,25%sand 本就不要求总和为 100，是相对值。现在输入的数值就是该方块的相对权重，各方块独立设置、互不干扰。</p><p class="sub">三个方块依次输入 50、25、25，即得到精确的 50% / 25% / 25%。</p></div></div><div class="group"><div class="glabel g-blue">变更</div><div class="item"><h4>界面权重显示</h4><p>显示实际占比（该方块权重 ÷ 组内总权重），与生成指令的真实分布一致</p></div><div class="item"><h4>权重输入范围</h4><p>由 1–99 扩展为 1–9999，支持更悬殊的比例</p></div><div class="item"><h4>拖拽滑条</h4><p>仍按百分比位置操作，内部自动换算为相对权重</p></div><div class="item"><h4>增删方块</h4><p>不再触发全组权重重分配，其余方块保持原值</p></div></div><div class="info box-green"><div class="info-t">兼容性</div><div class="item bare"><p>全默认状态（未调整权重）生成的指令与旧版完全一致</p></div><div class="item bare"><p>组内任一方块有自定义权重时，全部方块都会带上 N% 前缀（WorldEdit 中无前缀方块的权重为 1，混用会产生错误比例）</p></div></div><div class="group"><div class="glabel g-mute">验证</div><div class="item bare"><p>四版本（Forge / Fabric × 1.20.1 / 1.19.2）compileJava 与 clean build 全部 BUILD SUCCESSFUL</p></div><div class="item bare"><p>旧权重逻辑无残留，四份源码新增方法一致</p></div></div><div class="group"><div class="glabel g-mute">关于本版本</div><div class="item"><h4>版本号</h4><p>v2.1.2.2-Beta</p></div><div class="item"><h4>当前状态</h4><p><strong style="color:#4ade80;">已发布（Beta 抢先体验版）</p></div><div class="item"><h4>适用版本</h4><p>Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</p></div><div class="item"><h4>下载方式</h4><p>加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</p></div></div>
-</article>
-<article class="entry" id="mv-2.1.2.1" data-kind="beta">
-  <div class="entry-head">
-    <h3>v2.1.2.1-Beta</h3>
-    <span class="tag beta">Beta</span>
-  </div>
-  <p class="entry-desc">阶段 1「合规与工程底座」的第一步落地：统一四版本的映射方案，从源头消除 Forge / Fabric 的类名差异，为后续源码合并铺路。</p>
-  <div class="group"><div class="glabel g-blue">变更</div><div class="item"><h4>Fabric 两版切换到 Mojang 官方映射</h4><p>build.gradle 从 yarn 映射改为 loom.officialMojangMappings()，并把全部 yarn 类名 / 方法名替换为 mojmap 对等物（约 190 处）。</p><p class="sub">MinecraftClient→Minecraft、Text→Component、Identifier→ResourceLocation、ButtonWidget→Button、TextFieldWidget→EditBox、KeyBinding→KeyMapping、Formatting→ChatFormatting、wasPressed→consumeClick、getMainHandStack→getMainHandItem、sendMessage→displayClientMessage、Registries.BLOCK.getId→getKey、shouldPause→isPauseScreen。</p><p class="sub">渲染调用同步替换：drawText→drawString、drawCenteredTextWithShadow→drawCenteredString、drawItem→renderItem 等。</p></div><div class="item"><h4>1.19.2 渲染写法对齐 Forge 侧</h4><p>font.drawWithShadow→font.draw（与 Forge-1.19.2 写法一致，无阴影），itemRenderer.renderInGuiWithOverrides→renderGuiItem。</p><p class="sub">消除 Fabric / Forge 在同一 MC 版本上的视觉与代码差异。</p></div></div><div class="info box-neutral"><div class="info-t">工程</div><div class="item"><h4>建立开源副本同步脚本</h4><p>（阶段 1.2 收尾）：01-源码项目/sync_opensource.py 以主线为唯一真相源，一键把四版本源码同步到 04-开源源码/Block_ID（排除构建产物与私有 CI 配置）。</p><p class="sub">并在公开副本内自动本地提交，杜绝人工维护两份源码。</p></div><div class="item"><h4>版本 tag</h4><p>GitHub 仓库补打 v2.1.2-Release 标签，与发布包 jar 建立对应关系</p></div><div class="item"><h4>版本号推进</h4><p>2.1.2-Release → 2.1.2.1-Beta</p></div></div><div class="group"><div class="glabel g-mute">验证</div><div class="item bare"><p>四版本 compileJava 与 clean build 全部 BUILD SUCCESSFUL</p></div><div class="item bare"><p>同 MC 版本跨加载器的源码差异从约 700 行降至 282 行（仅剩 import 顺序与注册表访问方式）</p></div></div><div class="group"><div class="glabel g-mute">下个版本预告</div><div class="item bare"><p>阶段 1.3 的后两步（绘制适配层、Gradle 多模块拆分）涉及目录结构与 CI 调整，工程量大、需要单独验证窗口，将在下一个版本继续</p></div></div><div class="group"><div class="glabel g-mute">关于本版本</div><div class="item"><h4>版本号</h4><p>v2.1.2.1-Beta（阶段 1 启动）</p></div><div class="item"><h4>当前状态</h4><p><strong style="color:#4ade80;">已发布（Beta 抢先体验版）</p></div><div class="item"><h4>适用版本</h4><p>Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</p></div><div class="item"><h4>下载方式</h4><p>加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</p></div></div>
-</article>
-<article class="entry" id="mv-2.1.2" data-kind="release">
-  <div class="entry-head">
-    <h3>v2.1.2-Release</h3>
-    <span class="tag release">Release</span>
-  </div>
-  <p class="entry-desc">阶段 0「止血」的收官版本：完成默认键位调整与文档版本校正，补齐四版本统一构建，并新增一项 WorldEdit 联动能力。</p>
-  <div class="group"><div class="glabel g-green">修复</div><div class="item"><h4>修复三个版本漏初始化收藏与历史记录</h4><p>此前只有 Forge-1.20.1 在启动时完整初始化了 ConfigManager / FavoritesManager / HistoryManager，其余三个版本（Forge-1.19.2、Fabric-1.20.1、Fabric-1.19.2）只初始化了配置管理器。</p><p class="sub">由于两个管理器带有「首次访问时兜底初始化」的逻辑，该问题不会导致崩溃，但「默认收藏」分组不会在启动时写入配置文件，历史记录的初始状态也不可靠。</p><p class="sub">现四个版本已在启动时统一完成三项初始化。</p></div></div><div class="group"><div class="glabel g-blue">变更</div><div class="item"><h4>默认键位改为 G / H</h4><p>打开方块 ID 管理界面为 G，复制手中方块 ID 为 H。</p><p class="sub">此前复制键默认绑在 C，该键在整合包中冲突概率较高，故调整。两个键均保留默认绑定，玩家仍可在「选项 → 控制 → 方块ID」中自行修改。</p></div></div><div class="group"><div class="glabel g-blue">新增</div><div class="item"><h4>检测到 WorldEdit 时直接执行指令</h4><p>（1.20.1 版本）：生成 //set / //replace 指令后，若检测到环境已安装 WorldEdit，会直接把指令发送执行，省去手动打开聊天栏再粘贴的步骤。</p><p class="sub">指令始终会先写入剪贴板，因此即便自动发送失败仍可手动粘贴执行，不影响原有用法；未检测到 WorldEdit 时保持原行为：仅复制并提示需要手动执行。</p><p class="sub">1.19.2 未提供对等的指令发送接口（该版本聊天签名机制与 1.20.1 不同），因此保持「复制到剪贴板」的行为。</p></div></div><div class="info box-neutral"><div class="info-t">工程</div><div class="item"><h4>补齐四版本统一构建</h4><p>此前仅两个 Fabric 目录内带有 workflow 文件，但它们位于仓库子目录，GitHub Actions 不会执行（该服务只识别仓库根目录的 .github/workflows/）。</p><p class="sub">现已在仓库根目录建立统一的 build.yml，用矩阵任务一次性构建 Forge / Fabric × 1.20.1 / 1.19.2 四个版本并上传产物，同时移除子目录中不会生效的旧配置文件。</p></div><div class="item"><h4>版本号推进</h4><p>2.1.1-Beta → 2.1.2-Release，四处源码配置与四份说明文档同步</p></div></div><div class="group"><div class="glabel g-mute">关于本版本</div><div class="item"><h4>版本号</h4><p>v2.1.2-Release（当前正式版 · 阶段 0 完成）</p></div><div class="item"><h4>当前状态</h4><p><strong style="color:#4ade80;">正式版已发布</p></div><div class="item"><h4>适用版本</h4><p>Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</p></div><div class="item"><h4>下载方式</h4><p>加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</p></div></div>
-</article>
-<article class="entry" id="mv-2.1.1" data-kind="beta">
-  <div class="entry-head">
-    <h3>v2.1.1-Beta</h3>
-    <span class="tag beta">Beta</span>
-  </div>
-  <p class="entry-desc">无需新增功能的质量补丁，目标是让模组从「装不上」变成「装上就能用」；同时替换掉打包在制品中的 GPL 系拼音库，消除协议风险。</p>
-  <div class="group"><div class="glabel g-green">修复</div><div class="item"><h4>WorldEdit 不再被判定为必需前置</h4><p>此前模组虽在依赖清单中声明 WorldEdit 为 mandatory=true，但代码里从未调用过它的任何 API，只是把 //set / //replace 字符串写进剪贴板。</p><p class="sub">没装 WorldEdit 的玩家会直接被判定依赖缺失、游戏读不到模组；崩溃日志中确实存在 requires worldedit 0 or above / Currently, worldedit is not installed。</p><p class="sub">现已改为可选依赖并增加运行时检测——未安装时功能完全不受影响，仅在提示语中说明指令需手动粘贴执行。</p></div><div class="item"><h4>移除从未被引用的 Cloth Config 前置</h4><p>构建脚本声明了 Cloth Config、说明文档也把它列为必需前置，但源码中零引用。现已彻底移除，减少一项无谓的安装门槛。</p></div><div class="item"><h4>修正 Forge 1.19.2 的模组元数据</h4><p>该版本的 mods.toml 存在三处错误——loaderVersion 键名拼写错误且取值写成了模组自身版本、Forge 版本范围沿用了 1.20.1 的 [47,)、游戏版本范围写成了 [1.20.1]，会导致 1.19.2 的 Forge 包加载异常。</p><p class="sub">现已修正为 [43,) / [1.19.2]。</p></div><div class="item"><h4>修正 1.19.2 版本文档描述</h4><p>该版本说明文档此前错误地写着 Minecraft 1.20.1、Forge 47+、Fabric 0.15+，现已按实际支持的版本分别更正。</p></div></div><div class="group"><div class="glabel g-blue">变更</div><div class="item"><h4>替换内置拼音库，消除协议冲突</h4><p>此前模组把 pinyin4j 直接打包进主 Jar，该库采用 GPL 系协议，与本项目「允许学习修改、禁止二次发布修改版本」的自有协议直接抵触。</p><p class="sub">现已替换为 Apache-2.0 协议的 TinyPinyin，并将无需使用的传递依赖一并排除。安装包体积平均减少约 190 KB（Forge 约 −197 KB，Fabric 约 −190 KB）。</p></div><div class="item"><h4>中文拼音搜索行为保持兼容</h4><p>新旧库对 ü 的记法不同——旧库把「绿」记作 lu，新库记作 lv。</p><p class="sub">为不让惯用 lu 的玩家搜不到方块，已同时生成两种写法的索引，输入 lvbaoshi 或 lubaoshi 都能搜到「绿宝石块」，其余方块名的搜索行为完全一致。</p></div></div><div class="group"><div class="glabel g-blue">清理</div><div class="item bare"><p>删除空实现的 ClientEvents 事件订阅器（四个版本各一份，无任何实际行为）</p></div><div class="item bare"><p>移除构建脚本中随依赖删除而失效的第三方仓库配置</p></div></div><div class="group"><div class="glabel g-blue">文档</div><div class="item bare"><p>四个版本的版本号统一为 v2.1.1-Beta，此前说明文档停留在 2.0.3.1，与实际发布的版本对不上</p></div></div><div class="group"><div class="glabel g-mute">关于本版本</div><div class="item"><h4>版本号</h4><p>v2.1.1-Beta（已被 v2.1.2-Release 取代）</p></div><div class="item"><h4>当前状态</h4><p>Beta 阶段已结束，已被 <strong>v2.1.2-Release 取代</p></div><div class="item"><h4>适用版本</h4><p>Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</p></div><div class="item"><h4>下载方式</h4><p>加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</p></div></div>
-</article>
-<article class="entry older" id="mv-2.1.0" data-kind="deprecated">
-  <div class="entry-head">
-    <h3>v2.1.0-Release</h3>
-    <div class="tags">
-      <span class="tag dep">已知严重 BUG · 已弃用</span>
-      <span class="tag release">Release</span>
-    </div>
-  </div>
-  <p class="entry-desc">重大版本更新：新增收藏夹/组系统、历史记录功能，删除常用方块自动统计，UI 交互全面升级，替换模式源方块复制优化。</p>
-  <div class="dep-note">
-    <div class="dn-ico">!</div>
-    <div>
-      <div class="dn-t">此版本已标记为弃用</div>
-      <p>该版本存在<b>已知的严重问题</b>，已停止推荐，请勿下载安装。建议回退至 <b>v2.1.2.2-Beta</b>。</p>
-    </div>
-  </div>
-  <div class="group"><div class="glabel g-blue">收藏夹/组系统</div><div class="item"><h4>多组管理</h4><p>支持创建、重命名、删除多个收藏组，每组独立管理方块列表</p></div><div class="item"><h4>默认收藏组</h4><p>内置"默认收藏"组，开箱即用</p></div><div class="item"><h4>快捷添加</h4><p>方块列表右侧点击星标即可添加/移除收藏</p></div><div class="item"><h4>实时更新</h4><p>添加/移除收藏后列表立即刷新，无需重新打开界面</p></div><div class="item"><h4>数据持久化</h4><p>收藏数据保存在配置文件中，重启不丢失</p></div></div><div class="group"><div class="glabel g-blue">历史记录</div><div class="item"><h4>自动记录</h4><p>每次复制 ID 或指令自动记录到历史</p></div><div class="item"><h4>最近20条</h4><p>保留最近20条复制记录，方便回溯</p></div><div class="item"><h4>方块名称显示</h4><p>历史记录显示方块中文名而非原始 ID，更直观</p></div><div class="item"><h4>一键重复制</h4><p>点击历史记录即可重新复制到剪贴板</p></div><div class="item"><h4>模式标识</h4><p>每条记录标注 ID / Set / Replace 模式</p></div></div><div class="group"><div class="glabel g-blue">替换模式优化</div><div class="item"><h4>源方块无放置比例</h4><p>替换模式下源方块不显示放置比例滑块，符合 WorldEdit 语义</p></div><div class="item"><h4>复制不带比例</h4><p>源方块复制结果仅包含 ID 和属性，不带百分比前缀</p></div><div class="item"><h4>目标方块保留比例</h4><p>目标方块仍支持放置比例设置，格式为 <code>50%minecraft:stone</p></div></div><div class="group"><div class="glabel g-blue">UI 优化</div><div class="item"><h4>标签切换</h4><p>中列增加"收藏夹 / 历史记录"标签切换</p></div><div class="item"><h4>删除常用方块</h4><p>移除原有的常用方块自动统计功能</p></div><div class="item"><h4>滚轮浏览</h4><p>全部方块列表使用滚轮滚动，操作流畅</p></div><div class="item"><h4>布局稳定</h4><p>收藏夹区域组名、按钮、分割线、列表布局经过多轮优化</p></div></div><div class="group"><div class="glabel g-green">Bug 修复</div><div class="item"><h4>修复收藏夹列表不刷新</h4><p>添加/移除收藏后列表立即更新</p></div><div class="item"><h4>修复源方块复制带比例</h4><p>替换模式源方块复制结果不再包含百分比</p></div><div class="item"><h4>修复历史记录显示 ID</h4><p>改为显示方块中文名</p></div><div class="item"><h4>修复列表消失问题</h4><p>修复非替换模式下中列列表异常消失的 Bug</p></div></div>
-</article>
-<article class="entry older" id="mv-2.0.3.2" data-kind="release">
-  <div class="entry-head">
-    <h3>v2.0.3.2-Release</h3>
-    <span class="tag release">Release</span>
-  </div>
-  <p class="entry-desc">重大版本更新：项目结构全面重组，命名格式标准化，源码清理，开源准备完成。</p>
-  <div class="group"><div class="glabel g-blue">项目结构重组</div><div class="item"><h4>目录分类清晰</h4><p>源码项目、网页源文件、发布包、开源源码四大目录分类管理</p></div><div class="item"><h4>命名格式标准化</h4><p>jar 文件采用 MC 模组标准命名格式 <code>Block_ID-&lt;MC版本&gt;-&lt;加载器&gt;-&lt;版本&gt;.jar</p></div><div class="item"><h4>最新版本统一管理</h4><p>所有最新版本 jar 统一放到"新版模组"文件夹</p></div><div class="item"><h4>历史版本归档</h4><p>旧版本 jar 统一放到"历史版本"文件夹</p></div></div><div class="group"><div class="glabel g-blue">源码清理</div><div class="item"><h4>删除全部注释代码</h4><p>移除所有代码注释，保持源码简洁</p></div><div class="item"><h4>删除多余文件</h4><p>清理临时脚本、构建产物、无用资源文件</p></div><div class="item"><h4>删除多余模组文件</h4><p>保留历史版本，清理重复和无用文件</p></div></div><div class="group"><div class="glabel g-blue">开源准备</div><div class="item"><h4>源码公开至 GitHub</h4><p>https://github.com/MOYBJ/Block_ID</p></div><div class="item"><h4>网页托管至 GitHub Pages</h4><p>https://moybj.github.io/Block-ID-Website/</p></div><div class="item"><h4>使用协议完善</h4><p>允许查看、学习、个人修改，禁止修改后二次发布</p></div></div>
-</article>
-<article class="entry older" id="mv-2.0.3.1" data-kind="release">
-  <div class="entry-head">
-    <h3>v2.0.3.1-Release</h3>
-    <span class="tag release">Release</span>
-  </div>
-  <p class="entry-desc">新增 1.19.2 版本支持，更新自定义源码可见协议，版本号规范化。</p>
-  <div class="group"><div class="glabel g-blue">开源准备</div><div class="item"><h4>新增 1.19.2 版本支持</h4><p>Forge 和 Fabric 双加载器同步适配 1.19.2</p></div><div class="item"><h4>自定义源码可见协议</h4><p>允许查看、学习、个人修改，禁止修改后二次发布</p></div><div class="item"><h4>新增 README.md</h4><p>项目说明文档，含功能介绍、使用方法、协议说明</p></div><div class="item"><h4>版本号规范化</h4><p>从 2.0.3-Release 改为 2.0.3.1-Release，符合语义化版本规范</p></div></div>
-</article>
-<article class="entry older" id="mv-2.0.3" data-kind="release">
-  <div class="entry-head">
-    <h3>v2.0.3-Release</h3>
-    <span class="tag release">Release</span>
-  </div>
-  <p class="entry-desc">首个正式版本！从 Beta 升级为 Release，修复滑块交互BUG，添加版权协议，语言文件全面标准化。</p>
-  <div class="group"><div class="glabel g-blue">版本升级</div><div class="item"><h4>正式版发布</h4><p>版本号从 2.0.2-Beta 升级为 2.0.3-Release，结束 Beta 测试阶段</p></div><div class="item"><h4>版权协议</h4><p>添加 All Rights Reserved 协议，未经作者书面允许禁止二次修改后公开发布</p></div><div class="item"><h4>语言文件标准化</h4><p>9 种语言（简中/繁中/英/日/法/德/西/葡/俄）全部采用标准 JSON 键值对格式</p></div></div><div class="group"><div class="glabel g-green">BUG 修复</div><div class="item bare"><p>修复放置率滑块点击范围（28px）与拖动范围（26px）不一致，导致点击最右端只能得到 99% 的问题</p></div><div class="item bare"><p>统一滑块点击与拖动的轨道范围，百分比计算精确到 100%</p></div></div>
-</article>
-<article class="entry older" id="mv-2.0.2" data-kind="beta">
-  <div class="entry-head">
-    <h3>v2.0.2-Beta</h3>
-    <span class="tag beta">Beta</span>
-  </div>
-  <p class="entry-desc">在 2.0.0 重构基础上，新增方块属性设置与放置率权重功能，界面全面美化，交互体验大幅提升。</p>
-  <div class="group"><div class="glabel g-blue">核心功能扩展</div><div class="item"><h4>方块属性设置</h4><p>已选列表每项新增 ⚙ 按钮，展开属性编辑面板，支持所有 BlockState 属性可视化切换，输出 WorldEdit 格式 <code>minecraft:stone_slab[type=top,waterlogged=false]</p></div><div class="item"><h4>属性中文映射</h4><p>内置 50+ 属性名与 60+ 属性值中文翻译，如 facing→朝向、half→半层、north→北</p></div><div class="item"><h4>放置率权重滑块</h4><p>已选列表每项内置迷你滑块，拖动调整放置概率，输出 <code>50%stone,50%grass</p></div><div class="item"><h4>Ctrl+左键精确输入</h4><p>按住 Ctrl 点击滑块或百分比文字，弹出数字输入框精确设置 1-100</p></div><div class="item"><h4>自动归一化</h4><p>新增平均分配、调整后按比例补满、删除时重新分配，总和始终保持 100%</p></div></div><div class="group"><div class="glabel g-blue">UI 与交互优化</div><div class="item"><h4>属性面板小卡片化</h4><p>改为左下角 230px 小卡片，紧凑不遮挡列表</p></div><div class="item"><h4>滑块可拖动</h4><p>放置率滑块支持按住拖动实时调整</p></div><div class="item"><h4>三列半透明面板</h4><p>添加半透明背景与顶部蓝色高亮边线</p></div><div class="item"><h4>搜索栏占位文字</h4><p>添加"搜索..."提示</p></div><div class="item"><h4>选中项高亮条</h4><p>已选方块左侧添加绿色高亮指示条</p></div></div><div class="group"><div class="glabel g-green">修复与优化</div><div class="item bare"><p>修复空气方块重复显示，双重过滤仅保留 <code>minecraft:air</p></div><div class="item bare"><p>修复搜索后滚动条范围计算错误</p></div><div class="item bare"><p>修复替换模式下右列滚动失效</p></div><div class="item bare"><p>修复搜索后 ➕/✔ 图标消失</p></div><div class="item bare"><p>Fabric 版新增常用方块自动收集事件监听</p></div><div class="item bare"><p>修复 FrequentBlockManager 副作用问题</p></div></div>
-</article>
-<article class="entry older" id="mv-2.0.1" data-kind="beta">
-  <div class="entry-head">
-    <h3>v2.0.1-Beta</h3>
-    <span class="tag beta">Beta</span>
-  </div>
-  <p class="entry-desc">2.0.0 重构后的稳定性修复版本，主要解决首批用户反馈的交互问题。</p>
-  <div class="group"><div class="glabel g-green">主要修复</div><div class="item bare"><p>修复替换模式下标签页按钮位置偏移</p></div><div class="item bare"><p>修复右列标题显示不完整</p></div><div class="item bare"><p>优化列表滚动性能</p></div><div class="item bare"><p>修复部分界面文字重叠</p></div><div class="item bare"><p>提升 Fabric 版本兼容性</p></div></div>
-</article>
-<article class="entry older" id="mv-2.0.0" data-kind="beta">
-  <div class="entry-head">
-    <h3>v2.0.0-Beta</h3>
-    <span class="tag beta">Beta</span>
-  </div>
-  <p class="entry-desc">从 1.2.0-Alpha 到 2.0.0-Beta，本次更新是一次全面重构。无论是 UI 视觉、交互逻辑还是底层数据管理，都有跨越式的提升。</p>
-  <div class="group"><div class="glabel g-blue">UI 与交互优化</div><div class="item"><h4>全新三列布局</h4><p>左侧"全部方块"，中间"常用方块"，右侧"已选列表/确认区"，空间利用率大幅提升</p></div><div class="item"><h4>双模式切换</h4><p>顶部按钮支持"复制模式/替换模式"与"ID复制/指令模式"任意组合切换</p></div><div class="item"><h4>动态图标操作</h4><p></p><p class="sub">· 左侧/中间列表每行末尾新增 ➕ 图标，点击可手动添加至常用方块</p><p class="sub">· 已添加的常用方块图标自动变为 ✔（绿色）</p><p class="sub">· 中间"常用方块"列表每行末尾新增 ➖ 图标，点击可手动移除</p></div><div class="item"><h4>智能搜索栏</h4><p>支持中文名、英文 ID、拼音首字母搜索</p></div><div class="item"><h4>自适应布局</h4><p>全屏/小窗口下所有元素自动计算位置，彻底解决按钮遮挡或列表显示不全</p></div></div><div class="group"><div class="glabel g-blue">核心功能扩展</div><div class="item"><h4>ID复制模式</h4><p>复制纯 ID（无指令前缀），支持多选，多个 ID 以逗号分隔；替换模式复制格式为"源ID 目标ID"（含空格）</p></div><div class="item"><h4>指令复制模式</h4><p>一键复制 <code>//set 或 <code>//replace 完整 WorldEdit 指令到剪贴板</p></div><div class="item"><h4>替换模式优化</h4><p>源方块与目标方块分列显示，复制格式严格保持"源ID 目标ID"（含空格）</p></div><div class="item"><h4>常用方块统计规则</h4><p></p><p class="sub">· 原版/模组方块放置 15 次自动加入（手动添加也有效）</p><p class="sub">· WorldEdit 指令使用 3 次自动加入</p><p class="sub">· 支持手动添加/移除，完全自定义</p></div></div><div class="group"><div class="glabel g-blue">底层与稳定性</div><div class="item"><h4>配置系统重构</h4><p>从 ForgeConfigSpec 迁移至 Gson JSON 存储，彻底解决配置文件读写崩溃</p></div><div class="item"><h4>统计逻辑修复</h4><p>双保险策略（右键点击 + 聊天指令监听），确保常用方块统计准确</p></div><div class="item"><h4>按键响应优化</h4><p>修复搜索框焦点死循环、按钮点击无效等遗留 Bug</p></div><div class="item"><h4>多语言支持</h4><p>内置简中、繁中、英、日、法、德、西、葡、俄 9 种语言</p></div><div class="item"><h4>新增前置依赖</h4><p>Cloth Config API（任何版本）</p></div></div><div class="group"><div class="glabel g-green">主要修复（相对 Alpha 1.2.0）</div><div class="item bare"><p>修复"替换模式复制格式缺少空格"的 Bug</p></div><div class="item bare"><p>修复"WorldEdit 指令无法被统计"的问题</p></div><div class="item bare"><p>修复"搜索栏无法输入"、"按钮无反应"等交互故障</p></div><div class="item bare"><p>修复"常用方块列表不刷新"的数据同步问题</p></div></div><div class="group"><div class="glabel g-mute">说明</div><div class="item bare"><p>自 <strong>v2.0.0 起新增 Fabric 加载器支持，1.x 系列仅支持 Forge</p></div><div class="item bare"><p>1.x Alpha 为早期测试版，强烈建议升级至最新 v2.1.2.2-Beta</p></div><div class="item bare"><p>前置说明：WorldEdit 可选（用于一键执行 //set //replace 指令），自 v2.1.1 起已移除 Cloth Config API 依赖</p></div><div class="item bare"><p>点击带 <strong>› 的版本可展开查看该版本的完整更新日志</p></div></div>
-</article>
-    <div class="more-wrap"><button class="more-btn" id="load-older">加载更早的历史版本</button></div>
+    <article class="entry" id="mv-2.1.2.5" data-kind="beta">
+      <div class="entry-head">
+        <h3>v2.1.2.5-Beta</h3>
+        <div class="tags"><span class="tag beta">Beta</span></div>
+      </div>
+      <p class="entry-desc">修掉 v2.1.2.3-Beta 反馈的两处缺陷：默认收藏组名称乱码、比例填完又被改回去；比例改为直接输入 1–100，并新增可编辑的指令/ID 预览框。</p>
+      <div class="key-note">
+        <kbd>Enter</kbd>
+        <span>比例框填完必须按回车确认，数值才会真正写进去；只改数字不回车等于没提交，离开那一行就会恢复原值。</span>
+      </div>
+      <div class="group">
+        <div class="glabel g-green">修复</div>
+        <div class="item">
+          <h4>默认收藏组名称乱码</h4>
+          <p>配置文件读写用的是平台默认编码，中文 Windows 上是 GBK。一旦配置曾在 UTF-8 环境写过（例如用 Java 21 的启动器跑过一次），读回来就是「榛樿鏀惰棌」这类乱码，还会被原样存回文件。</p>
+          <p class="sub">现在读写统一 UTF-8，读取失败自动退回 GBK 兼容旧文件，并对已经写坏的组名做一次还原。</p>
+        </div>
+        <div class="item">
+          <h4>比例填完被改回原值</h4>
+          <p>旧实现把输入值当成「占总量的百分比」，再按其他方块的权重反推一次原始权重，反推后一取整就和输入值对不上，看起来就是刚填完又被改回去。</p>
+          <p class="sub">现在比例是 1–100 的相对权重：输入什么就存什么、指令里就是什么，不再二次换算，也不要求各项加起来等于 100。</p>
+        </div>
+        <div class="item">
+          <h4>比例拖不动</h4>
+          <p>可拖动的细条只有 26 像素宽，百分比数字画在它右边 40 像素处，玩家基本都拖在数字上；Fabric 与 1.19.2 侧还把百分比直接当成原始权重写入。</p>
+          <p class="sub">已去掉拖动，改为点击比例方框直接输入：认「50」也认「50%」，<b>填完按回车确认</b>，清空即回到 100。</p>
+        </div>
+      </div>
+      <div class="group">
+        <div class="glabel g-blue">新增</div>
+        <div class="item">
+          <h4>指令 / ID 预览框</h4>
+          <p>界面底部实时显示当前会输出的完整内容，可以直接在框里改；点复制时以框里的内容为准。切换方块、改比例、改方块状态后会重新生成预览。</p>
+        </div>
+      </div>
+      <div class="group">
+        <div class="glabel g-blue">变更</div>
+        <div class="item">
+          <h4>比例全为 100 时不输出百分比</h4>
+          <p>所有方块都是默认比例时直接输出 <code>//set stone,dirt</code>，交给 WorldEdit 等概率随机；只要有方块改过比例，就把各自的数值原样带上。</p>
+        </div>
+        <div class="item">
+          <h4>ID 模式下替换结果被误判格式错误</h4>
+          <p>ID 模式的替换输出是「源方块组 目标方块组」两段、中间空格分隔，校验却把整串按逗号拆成一组，撞到空格后的第二段就判成 ID 不合法（指令模式有 <code>//replace</code> 前缀，所以没暴露）。现在按第一个空格拆成两段分别校验。</p>
+        </div>
+        <div class="item">
+          <h4>替换模式下源与目标同名时比例错位</h4>
+          <p>比例输入框原来只按方块 ID 反查所属列表，同名时会把输入框画到「替换原」那一行，并把数值当成源方块的组比例。现在按「从哪个列表点开」判定归属，源方块列表也不再提供比例入口。</p>
+        </div>
+        <div class="item">
+          <h4>列表与预览区的排版修正</h4>
+          <p>列表最后几行不再压住「下一页」按钮；点击列表下方空白处不会再选中方块；预览框与分页按钮不再重叠；未选方块时不再显示格式报错。</p>
+        </div>
+        <div class="item">
+          <h4>输出前自动校验</h4>
+          <p>方块 ID、比例数字、方块状态写法、以及「比例全带或全不带」都会检查；不通过时预览框下方红字提示<b>「当前指令格式/方块ID不正确」</b>，并禁止复制与输出，动作栏同时指出是哪一段不对。</p>
+        </div>
+      </div>
+      <div class="info box-neutral">
+        <div class="info-t">状态</div>
+        <div class="item"><p><b>已发布</b>（2026-11-01）：四个版本均已构建并校验，源码已推送 GitHub，可在官方 QQ 群 1121599701 群文件获取。</p></div><div class="item"><p class="sub">版本号说明：这批改动原按 2.1.2.4 构建，因内容较多直接升为 2.1.2.5-Beta，2.1.2.4 未对外发布。</p></div>
+      </div>
+    </article>
+    <article class="entry" id="mv-2.1.2.3" data-kind="deprecated">
+      <div class="entry-head">
+        <h3>v2.1.2.3-Beta</h3>
+        <div class="tags">
+          <span class="tag dep">已知严重 BUG · 已弃用</span>
+          <span class="tag beta">Beta</span>
+        </div>
+      </div>
+      <p class="entry-desc">修复模组图标在部分启动器显示为破图；同版本完成官网整体改版。</p>
+      <div class="dep-note">
+        <div class="dn-ico">!</div>
+        <div>
+          <div class="dn-t">此版本已标记为弃用</div>
+          <p>该版本存在<b>已知的严重问题</b>，已停止推荐，请勿下载安装。建议回退至 <b>v2.1.2.2-Beta</b>。</p>
+        </div>
+      </div>
+      <div class="group"><div class="glabel g-green">修复</div>
+        <div class="item"><h4>模组图标显示为破图</h4><p>原 <code>icon.png</code> 实际是 JPEG 编码（文件头 FF D8 FF），只是扩展名写成了 .png。宽容的启动器能识别，严格按扩展名解析 PNG 的就会显示破图。</p><p class="sub">现已将 4 个版本共 6 份图标统一转为真正的 PNG（512×512，RGBA），配置中的 icon 路径不变。</p></div>
+      </div>
+      <div class="group"><div class="glabel g-blue">变更</div>
+        <div class="item"><h4>官网两页整体改版</h4><p>新的视觉体系、信息结构与响应式布局；弹窗、埋点与版本跟随逻辑保持不变。</p></div>
+      </div>
+      <div class="info box-neutral"><div class="info-t">工程</div>
+        <div class="item"><p>版本号推进 2.1.2.2 → 2.1.2.3；四版本重新构建并更新发布包。</p></div>
+      </div>
+    </article><article class="entry" id="mv-2.1.2.2" data-kind="beta">
+      <div class="entry-head">
+        <h3>v2.1.2.2-Beta</h3>
+        <span class="tag beta">Beta</span>
+      </div>
+      <p class="entry-desc">修复方块权重无法精确控制的问题：权重改为 WorldEdit 原生的相对权重语义，三个及以上方块也能准确设置 50% / 25% / 25% 这样的比例。</p>
+      <div class="group"><div class="glabel g-green">修复</div><div class="item"><h4>方块权重无法精确控制</h4><p>旧逻辑在设置某个方块后，会把剩余配额按其他方块当前值的比例重新分配。逐个输入目标值时，先前设置好的方块会被后续操作反复缩放，任何顺序都无法精确落在目标分布上。</p><p class="sub">典型场景：三个方块想设为 50% / 25% / 25%，结果总在漂移，怎么调都对不上。</p></div><div class="item"><h4>改为相对权重语义</h4><p>WorldEdit 的 50%stone,25%dirt,25%sand 本就不要求总和为 100，是相对值。现在输入的数值就是该方块的相对权重，各方块独立设置、互不干扰。</p><p class="sub">三个方块依次输入 50、25、25，即得到精确的 50% / 25% / 25%。</p></div></div><div class="group"><div class="glabel g-blue">变更</div><div class="item"><h4>界面权重显示</h4><p>显示实际占比（该方块权重 ÷ 组内总权重），与生成指令的真实分布一致</p></div><div class="item"><h4>权重输入范围</h4><p>由 1–99 扩展为 1–9999，支持更悬殊的比例</p></div><div class="item"><h4>拖拽滑条</h4><p>仍按百分比位置操作，内部自动换算为相对权重</p></div><div class="item"><h4>增删方块</h4><p>不再触发全组权重重分配，其余方块保持原值</p></div></div><div class="info box-green"><div class="info-t">兼容性</div><div class="item bare"><p>全默认状态（未调整权重）生成的指令与旧版完全一致</p></div><div class="item bare"><p>组内任一方块有自定义权重时，全部方块都会带上 N% 前缀（WorldEdit 中无前缀方块的权重为 1，混用会产生错误比例）</p></div></div><div class="group"><div class="glabel g-mute">验证</div><div class="item bare"><p>四版本（Forge / Fabric × 1.20.1 / 1.19.2）compileJava 与 clean build 全部 BUILD SUCCESSFUL</p></div><div class="item bare"><p>旧权重逻辑无残留，四份源码新增方法一致</p></div></div><div class="group"><div class="glabel g-mute">关于本版本</div><div class="item"><h4>版本号</h4><p>v2.1.2.2-Beta</p></div><div class="item"><h4>当前状态</h4><p><strong style="color:#4ade80;">已发布（Beta 抢先体验版）</p></div><div class="item"><h4>适用版本</h4><p>Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</p></div><div class="item"><h4>下载方式</h4><p>加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</p></div></div>
+    </article>
+    <article class="entry" id="mv-2.1.2.1" data-kind="beta">
+      <div class="entry-head">
+        <h3>v2.1.2.1-Beta</h3>
+        <span class="tag beta">Beta</span>
+      </div>
+      <p class="entry-desc">阶段 1「合规与工程底座」的第一步落地：统一四版本的映射方案，从源头消除 Forge / Fabric 的类名差异，为后续源码合并铺路。</p>
+      <div class="group"><div class="glabel g-blue">变更</div><div class="item"><h4>Fabric 两版切换到 Mojang 官方映射</h4><p>build.gradle 从 yarn 映射改为 loom.officialMojangMappings()，并把全部 yarn 类名 / 方法名替换为 mojmap 对等物（约 190 处）。</p><p class="sub">MinecraftClient→Minecraft、Text→Component、Identifier→ResourceLocation、ButtonWidget→Button、TextFieldWidget→EditBox、KeyBinding→KeyMapping、Formatting→ChatFormatting、wasPressed→consumeClick、getMainHandStack→getMainHandItem、sendMessage→displayClientMessage、Registries.BLOCK.getId→getKey、shouldPause→isPauseScreen。</p><p class="sub">渲染调用同步替换：drawText→drawString、drawCenteredTextWithShadow→drawCenteredString、drawItem→renderItem 等。</p></div><div class="item"><h4>1.19.2 渲染写法对齐 Forge 侧</h4><p>font.drawWithShadow→font.draw（与 Forge-1.19.2 写法一致，无阴影），itemRenderer.renderInGuiWithOverrides→renderGuiItem。</p><p class="sub">消除 Fabric / Forge 在同一 MC 版本上的视觉与代码差异。</p></div></div><div class="info box-neutral"><div class="info-t">工程</div><div class="item"><h4>建立开源副本同步脚本</h4><p>（阶段 1.2 收尾）：01-源码项目/sync_opensource.py 以主线为唯一真相源，一键把四版本源码同步到 04-开源源码/Block_ID（排除构建产物与私有 CI 配置）。</p><p class="sub">并在公开副本内自动本地提交，杜绝人工维护两份源码。</p></div><div class="item"><h4>版本 tag</h4><p>GitHub 仓库补打 v2.1.2-Release 标签，与发布包 jar 建立对应关系</p></div><div class="item"><h4>版本号推进</h4><p>2.1.2-Release → 2.1.2.1-Beta</p></div></div><div class="group"><div class="glabel g-mute">验证</div><div class="item bare"><p>四版本 compileJava 与 clean build 全部 BUILD SUCCESSFUL</p></div><div class="item bare"><p>同 MC 版本跨加载器的源码差异从约 700 行降至 282 行（仅剩 import 顺序与注册表访问方式）</p></div></div><div class="group"><div class="glabel g-mute">下个版本预告</div><div class="item bare"><p>阶段 1.3 的后两步（绘制适配层、Gradle 多模块拆分）涉及目录结构与 CI 调整，工程量大、需要单独验证窗口，将在下一个版本继续</p></div></div><div class="group"><div class="glabel g-mute">关于本版本</div><div class="item"><h4>版本号</h4><p>v2.1.2.1-Beta（阶段 1 启动）</p></div><div class="item"><h4>当前状态</h4><p><strong style="color:#4ade80;">已发布（Beta 抢先体验版）</p></div><div class="item"><h4>适用版本</h4><p>Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</p></div><div class="item"><h4>下载方式</h4><p>加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</p></div></div>
+    </article>
+    <article class="entry" id="mv-2.1.2" data-kind="release">
+      <div class="entry-head">
+        <h3>v2.1.2-Release</h3>
+        <span class="tag release">Release</span>
+      </div>
+      <p class="entry-desc">阶段 0「止血」的收官版本：完成默认键位调整与文档版本校正，补齐四版本统一构建，并新增一项 WorldEdit 联动能力。</p>
+      <div class="group"><div class="glabel g-green">修复</div><div class="item"><h4>修复三个版本漏初始化收藏与历史记录</h4><p>此前只有 Forge-1.20.1 在启动时完整初始化了 ConfigManager / FavoritesManager / HistoryManager，其余三个版本（Forge-1.19.2、Fabric-1.20.1、Fabric-1.19.2）只初始化了配置管理器。</p><p class="sub">由于两个管理器带有「首次访问时兜底初始化」的逻辑，该问题不会导致崩溃，但「默认收藏」分组不会在启动时写入配置文件，历史记录的初始状态也不可靠。</p><p class="sub">现四个版本已在启动时统一完成三项初始化。</p></div></div><div class="group"><div class="glabel g-blue">变更</div><div class="item"><h4>默认键位改为 G / H</h4><p>打开方块 ID 管理界面为 G，复制手中方块 ID 为 H。</p><p class="sub">此前复制键默认绑在 C，该键在整合包中冲突概率较高，故调整。两个键均保留默认绑定，玩家仍可在「选项 → 控制 → 方块ID」中自行修改。</p></div></div><div class="group"><div class="glabel g-blue">新增</div><div class="item"><h4>检测到 WorldEdit 时直接执行指令</h4><p>（1.20.1 版本）：生成 //set / //replace 指令后，若检测到环境已安装 WorldEdit，会直接把指令发送执行，省去手动打开聊天栏再粘贴的步骤。</p><p class="sub">指令始终会先写入剪贴板，因此即便自动发送失败仍可手动粘贴执行，不影响原有用法；未检测到 WorldEdit 时保持原行为：仅复制并提示需要手动执行。</p><p class="sub">1.19.2 未提供对等的指令发送接口（该版本聊天签名机制与 1.20.1 不同），因此保持「复制到剪贴板」的行为。</p></div></div><div class="info box-neutral"><div class="info-t">工程</div><div class="item"><h4>补齐四版本统一构建</h4><p>此前仅两个 Fabric 目录内带有 workflow 文件，但它们位于仓库子目录，GitHub Actions 不会执行（该服务只识别仓库根目录的 .github/workflows/）。</p><p class="sub">现已在仓库根目录建立统一的 build.yml，用矩阵任务一次性构建 Forge / Fabric × 1.20.1 / 1.19.2 四个版本并上传产物，同时移除子目录中不会生效的旧配置文件。</p></div><div class="item"><h4>版本号推进</h4><p>2.1.1-Beta → 2.1.2-Release，四处源码配置与四份说明文档同步</p></div></div><div class="group"><div class="glabel g-mute">关于本版本</div><div class="item"><h4>版本号</h4><p>v2.1.2-Release（当前正式版 · 阶段 0 完成）</p></div><div class="item"><h4>当前状态</h4><p><strong style="color:#4ade80;">正式版已发布</p></div><div class="item"><h4>适用版本</h4><p>Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</p></div><div class="item"><h4>下载方式</h4><p>加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</p></div></div>
+    </article>
+    <article class="entry" id="mv-2.1.1" data-kind="beta">
+      <div class="entry-head">
+        <h3>v2.1.1-Beta</h3>
+        <span class="tag beta">Beta</span>
+      </div>
+      <p class="entry-desc">无需新增功能的质量补丁，目标是让模组从「装不上」变成「装上就能用」；同时替换掉打包在制品中的 GPL 系拼音库，消除协议风险。</p>
+      <div class="group"><div class="glabel g-green">修复</div><div class="item"><h4>WorldEdit 不再被判定为必需前置</h4><p>此前模组虽在依赖清单中声明 WorldEdit 为 mandatory=true，但代码里从未调用过它的任何 API，只是把 //set / //replace 字符串写进剪贴板。</p><p class="sub">没装 WorldEdit 的玩家会直接被判定依赖缺失、游戏读不到模组；崩溃日志中确实存在 requires worldedit 0 or above / Currently, worldedit is not installed。</p><p class="sub">现已改为可选依赖并增加运行时检测——未安装时功能完全不受影响，仅在提示语中说明指令需手动粘贴执行。</p></div><div class="item"><h4>移除从未被引用的 Cloth Config 前置</h4><p>构建脚本声明了 Cloth Config、说明文档也把它列为必需前置，但源码中零引用。现已彻底移除，减少一项无谓的安装门槛。</p></div><div class="item"><h4>修正 Forge 1.19.2 的模组元数据</h4><p>该版本的 mods.toml 存在三处错误——loaderVersion 键名拼写错误且取值写成了模组自身版本、Forge 版本范围沿用了 1.20.1 的 [47,)、游戏版本范围写成了 [1.20.1]，会导致 1.19.2 的 Forge 包加载异常。</p><p class="sub">现已修正为 [43,) / [1.19.2]。</p></div><div class="item"><h4>修正 1.19.2 版本文档描述</h4><p>该版本说明文档此前错误地写着 Minecraft 1.20.1、Forge 47+、Fabric 0.15+，现已按实际支持的版本分别更正。</p></div></div><div class="group"><div class="glabel g-blue">变更</div><div class="item"><h4>替换内置拼音库，消除协议冲突</h4><p>此前模组把 pinyin4j 直接打包进主 Jar，该库采用 GPL 系协议，与本项目「允许学习修改、禁止二次发布修改版本」的自有协议直接抵触。</p><p class="sub">现已替换为 Apache-2.0 协议的 TinyPinyin，并将无需使用的传递依赖一并排除。安装包体积平均减少约 190 KB（Forge 约 −197 KB，Fabric 约 −190 KB）。</p></div><div class="item"><h4>中文拼音搜索行为保持兼容</h4><p>新旧库对 ü 的记法不同——旧库把「绿」记作 lu，新库记作 lv。</p><p class="sub">为不让惯用 lu 的玩家搜不到方块，已同时生成两种写法的索引，输入 lvbaoshi 或 lubaoshi 都能搜到「绿宝石块」，其余方块名的搜索行为完全一致。</p></div></div><div class="group"><div class="glabel g-blue">清理</div><div class="item bare"><p>删除空实现的 ClientEvents 事件订阅器（四个版本各一份，无任何实际行为）</p></div><div class="item bare"><p>移除构建脚本中随依赖删除而失效的第三方仓库配置</p></div></div><div class="group"><div class="glabel g-blue">文档</div><div class="item bare"><p>四个版本的版本号统一为 v2.1.1-Beta，此前说明文档停留在 2.0.3.1，与实际发布的版本对不上</p></div></div><div class="group"><div class="glabel g-mute">关于本版本</div><div class="item"><h4>版本号</h4><p>v2.1.1-Beta（已被 v2.1.2-Release 取代）</p></div><div class="item"><h4>当前状态</h4><p>Beta 阶段已结束，已被 <strong>v2.1.2-Release 取代</p></div><div class="item"><h4>适用版本</h4><p>Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</p></div><div class="item"><h4>下载方式</h4><p>加入官方 QQ 群在群文件获取，或到 CurseForge 搜索 "Block ID" 下载</p></div></div>
+    </article>
+    <article class="entry older" id="mv-2.1.0" data-kind="deprecated">
+      <div class="entry-head">
+        <h3>v2.1.0-Release</h3>
+        <div class="tags">
+          <span class="tag dep">已知严重 BUG · 已弃用</span>
+          <span class="tag release">Release</span>
+        </div>
+      </div>
+      <p class="entry-desc">重大版本更新：新增收藏夹/组系统、历史记录功能，删除常用方块自动统计，UI 交互全面升级，替换模式源方块复制优化。</p>
+      <div class="dep-note">
+        <div class="dn-ico">!</div>
+        <div>
+          <div class="dn-t">此版本已标记为弃用</div>
+          <p>该版本存在<b>已知的严重问题</b>，已停止推荐，请勿下载安装。建议回退至 <b>v2.1.2.2-Beta</b>。</p>
+        </div>
+      </div>
+      <div class="group"><div class="glabel g-blue">收藏夹/组系统</div><div class="item"><h4>多组管理</h4><p>支持创建、重命名、删除多个收藏组，每组独立管理方块列表</p></div><div class="item"><h4>默认收藏组</h4><p>内置"默认收藏"组，开箱即用</p></div><div class="item"><h4>快捷添加</h4><p>方块列表右侧点击星标即可添加/移除收藏</p></div><div class="item"><h4>实时更新</h4><p>添加/移除收藏后列表立即刷新，无需重新打开界面</p></div><div class="item"><h4>数据持久化</h4><p>收藏数据保存在配置文件中，重启不丢失</p></div></div><div class="group"><div class="glabel g-blue">历史记录</div><div class="item"><h4>自动记录</h4><p>每次复制 ID 或指令自动记录到历史</p></div><div class="item"><h4>最近20条</h4><p>保留最近20条复制记录，方便回溯</p></div><div class="item"><h4>方块名称显示</h4><p>历史记录显示方块中文名而非原始 ID，更直观</p></div><div class="item"><h4>一键重复制</h4><p>点击历史记录即可重新复制到剪贴板</p></div><div class="item"><h4>模式标识</h4><p>每条记录标注 ID / Set / Replace 模式</p></div></div><div class="group"><div class="glabel g-blue">替换模式优化</div><div class="item"><h4>源方块无放置比例</h4><p>替换模式下源方块不显示放置比例滑块，符合 WorldEdit 语义</p></div><div class="item"><h4>复制不带比例</h4><p>源方块复制结果仅包含 ID 和属性，不带百分比前缀</p></div><div class="item"><h4>目标方块保留比例</h4><p>目标方块仍支持放置比例设置，格式为 <code>50%minecraft:stone</p></div></div><div class="group"><div class="glabel g-blue">UI 优化</div><div class="item"><h4>标签切换</h4><p>中列增加"收藏夹 / 历史记录"标签切换</p></div><div class="item"><h4>删除常用方块</h4><p>移除原有的常用方块自动统计功能</p></div><div class="item"><h4>滚轮浏览</h4><p>全部方块列表使用滚轮滚动，操作流畅</p></div><div class="item"><h4>布局稳定</h4><p>收藏夹区域组名、按钮、分割线、列表布局经过多轮优化</p></div></div><div class="group"><div class="glabel g-green">Bug 修复</div><div class="item"><h4>修复收藏夹列表不刷新</h4><p>添加/移除收藏后列表立即更新</p></div><div class="item"><h4>修复源方块复制带比例</h4><p>替换模式源方块复制结果不再包含百分比</p></div><div class="item"><h4>修复历史记录显示 ID</h4><p>改为显示方块中文名</p></div><div class="item"><h4>修复列表消失问题</h4><p>修复非替换模式下中列列表异常消失的 Bug</p></div></div>
+    </article>
+    <article class="entry older" id="mv-2.0.3.2" data-kind="release">
+      <div class="entry-head">
+        <h3>v2.0.3.2-Release</h3>
+        <span class="tag release">Release</span>
+      </div>
+      <p class="entry-desc">重大版本更新：项目结构全面重组，命名格式标准化，源码清理，开源准备完成。</p>
+      <div class="group"><div class="glabel g-blue">项目结构重组</div><div class="item"><h4>目录分类清晰</h4><p>源码项目、网页源文件、发布包、开源源码四大目录分类管理</p></div><div class="item"><h4>命名格式标准化</h4><p>jar 文件采用 MC 模组标准命名格式 <code>Block_ID-&lt;MC版本&gt;-&lt;加载器&gt;-&lt;版本&gt;.jar</p></div><div class="item"><h4>最新版本统一管理</h4><p>所有最新版本 jar 统一放到"新版模组"文件夹</p></div><div class="item"><h4>历史版本归档</h4><p>旧版本 jar 统一放到"历史版本"文件夹</p></div></div><div class="group"><div class="glabel g-blue">源码清理</div><div class="item"><h4>删除全部注释代码</h4><p>移除所有代码注释，保持源码简洁</p></div><div class="item"><h4>删除多余文件</h4><p>清理临时脚本、构建产物、无用资源文件</p></div><div class="item"><h4>删除多余模组文件</h4><p>保留历史版本，清理重复和无用文件</p></div></div><div class="group"><div class="glabel g-blue">开源准备</div><div class="item"><h4>源码公开至 GitHub</h4><p>https://github.com/MOYBJ/Block_ID</p></div><div class="item"><h4>网页托管至 GitHub Pages</h4><p>https://moybj.github.io/Block-ID-Website/</p></div><div class="item"><h4>使用协议完善</h4><p>允许查看、学习、个人修改，禁止修改后二次发布</p></div></div>
+    </article>
+    <article class="entry older" id="mv-2.0.3.1" data-kind="release">
+      <div class="entry-head">
+        <h3>v2.0.3.1-Release</h3>
+        <span class="tag release">Release</span>
+      </div>
+      <p class="entry-desc">新增 1.19.2 版本支持，更新自定义源码可见协议，版本号规范化。</p>
+      <div class="group"><div class="glabel g-blue">开源准备</div><div class="item"><h4>新增 1.19.2 版本支持</h4><p>Forge 和 Fabric 双加载器同步适配 1.19.2</p></div><div class="item"><h4>自定义源码可见协议</h4><p>允许查看、学习、个人修改，禁止修改后二次发布</p></div><div class="item"><h4>新增 README.md</h4><p>项目说明文档，含功能介绍、使用方法、协议说明</p></div><div class="item"><h4>版本号规范化</h4><p>从 2.0.3-Release 改为 2.0.3.1-Release，符合语义化版本规范</p></div></div>
+    </article>
+    <article class="entry older" id="mv-2.0.3" data-kind="release">
+      <div class="entry-head">
+        <h3>v2.0.3-Release</h3>
+        <span class="tag release">Release</span>
+      </div>
+      <p class="entry-desc">首个正式版本！从 Beta 升级为 Release，修复滑块交互BUG，添加版权协议，语言文件全面标准化。</p>
+      <div class="group"><div class="glabel g-blue">版本升级</div><div class="item"><h4>正式版发布</h4><p>版本号从 2.0.2-Beta 升级为 2.0.3-Release，结束 Beta 测试阶段</p></div><div class="item"><h4>版权协议</h4><p>添加 All Rights Reserved 协议，未经作者书面允许禁止二次修改后公开发布</p></div><div class="item"><h4>语言文件标准化</h4><p>9 种语言（简中/繁中/英/日/法/德/西/葡/俄）全部采用标准 JSON 键值对格式</p></div></div><div class="group"><div class="glabel g-green">BUG 修复</div><div class="item bare"><p>修复放置率滑块点击范围（28px）与拖动范围（26px）不一致，导致点击最右端只能得到 99% 的问题</p></div><div class="item bare"><p>统一滑块点击与拖动的轨道范围，百分比计算精确到 100%</p></div></div>
+    </article>
+    <article class="entry older" id="mv-2.0.2" data-kind="beta">
+      <div class="entry-head">
+        <h3>v2.0.2-Beta</h3>
+        <span class="tag beta">Beta</span>
+      </div>
+      <p class="entry-desc">在 2.0.0 重构基础上，新增方块属性设置与放置率权重功能，界面全面美化，交互体验大幅提升。</p>
+      <div class="group"><div class="glabel g-blue">核心功能扩展</div><div class="item"><h4>方块属性设置</h4><p>已选列表每项新增 ⚙ 按钮，展开属性编辑面板，支持所有 BlockState 属性可视化切换，输出 WorldEdit 格式 <code>minecraft:stone_slab[type=top,waterlogged=false]</p></div><div class="item"><h4>属性中文映射</h4><p>内置 50+ 属性名与 60+ 属性值中文翻译，如 facing→朝向、half→半层、north→北</p></div><div class="item"><h4>放置率权重滑块</h4><p>已选列表每项内置迷你滑块，拖动调整放置概率，输出 <code>50%stone,50%grass</p></div><div class="item"><h4>Ctrl+左键精确输入</h4><p>按住 Ctrl 点击滑块或百分比文字，弹出数字输入框精确设置 1-100</p></div><div class="item"><h4>自动归一化</h4><p>新增平均分配、调整后按比例补满、删除时重新分配，总和始终保持 100%</p></div></div><div class="group"><div class="glabel g-blue">UI 与交互优化</div><div class="item"><h4>属性面板小卡片化</h4><p>改为左下角 230px 小卡片，紧凑不遮挡列表</p></div><div class="item"><h4>滑块可拖动</h4><p>放置率滑块支持按住拖动实时调整</p></div><div class="item"><h4>三列半透明面板</h4><p>添加半透明背景与顶部蓝色高亮边线</p></div><div class="item"><h4>搜索栏占位文字</h4><p>添加"搜索..."提示</p></div><div class="item"><h4>选中项高亮条</h4><p>已选方块左侧添加绿色高亮指示条</p></div></div><div class="group"><div class="glabel g-green">修复与优化</div><div class="item bare"><p>修复空气方块重复显示，双重过滤仅保留 <code>minecraft:air</p></div><div class="item bare"><p>修复搜索后滚动条范围计算错误</p></div><div class="item bare"><p>修复替换模式下右列滚动失效</p></div><div class="item bare"><p>修复搜索后 ➕/✔ 图标消失</p></div><div class="item bare"><p>Fabric 版新增常用方块自动收集事件监听</p></div><div class="item bare"><p>修复 FrequentBlockManager 副作用问题</p></div></div>
+    </article>
+    <article class="entry older" id="mv-2.0.1" data-kind="beta">
+      <div class="entry-head">
+        <h3>v2.0.1-Beta</h3>
+        <span class="tag beta">Beta</span>
+      </div>
+      <p class="entry-desc">2.0.0 重构后的稳定性修复版本，主要解决首批用户反馈的交互问题。</p>
+      <div class="group"><div class="glabel g-green">主要修复</div><div class="item bare"><p>修复替换模式下标签页按钮位置偏移</p></div><div class="item bare"><p>修复右列标题显示不完整</p></div><div class="item bare"><p>优化列表滚动性能</p></div><div class="item bare"><p>修复部分界面文字重叠</p></div><div class="item bare"><p>提升 Fabric 版本兼容性</p></div></div>
+    </article>
+    <article class="entry older" id="mv-2.0.0" data-kind="beta">
+      <div class="entry-head">
+        <h3>v2.0.0-Beta</h3>
+        <span class="tag beta">Beta</span>
+      </div>
+      <p class="entry-desc">从 1.2.0-Alpha 到 2.0.0-Beta，本次更新是一次全面重构。无论是 UI 视觉、交互逻辑还是底层数据管理，都有跨越式的提升。</p>
+      <div class="group"><div class="glabel g-blue">UI 与交互优化</div><div class="item"><h4>全新三列布局</h4><p>左侧"全部方块"，中间"常用方块"，右侧"已选列表/确认区"，空间利用率大幅提升</p></div><div class="item"><h4>双模式切换</h4><p>顶部按钮支持"复制模式/替换模式"与"ID复制/指令模式"任意组合切换</p></div><div class="item"><h4>动态图标操作</h4><p></p><p class="sub">· 左侧/中间列表每行末尾新增 ➕ 图标，点击可手动添加至常用方块</p><p class="sub">· 已添加的常用方块图标自动变为 ✔（绿色）</p><p class="sub">· 中间"常用方块"列表每行末尾新增 ➖ 图标，点击可手动移除</p></div><div class="item"><h4>智能搜索栏</h4><p>支持中文名、英文 ID、拼音首字母搜索</p></div><div class="item"><h4>自适应布局</h4><p>全屏/小窗口下所有元素自动计算位置，彻底解决按钮遮挡或列表显示不全</p></div></div><div class="group"><div class="glabel g-blue">核心功能扩展</div><div class="item"><h4>ID复制模式</h4><p>复制纯 ID（无指令前缀），支持多选，多个 ID 以逗号分隔；替换模式复制格式为"源ID 目标ID"（含空格）</p></div><div class="item"><h4>指令复制模式</h4><p>一键复制 <code>//set 或 <code>//replace 完整 WorldEdit 指令到剪贴板</p></div><div class="item"><h4>替换模式优化</h4><p>源方块与目标方块分列显示，复制格式严格保持"源ID 目标ID"（含空格）</p></div><div class="item"><h4>常用方块统计规则</h4><p></p><p class="sub">· 原版/模组方块放置 15 次自动加入（手动添加也有效）</p><p class="sub">· WorldEdit 指令使用 3 次自动加入</p><p class="sub">· 支持手动添加/移除，完全自定义</p></div></div><div class="group"><div class="glabel g-blue">底层与稳定性</div><div class="item"><h4>配置系统重构</h4><p>从 ForgeConfigSpec 迁移至 Gson JSON 存储，彻底解决配置文件读写崩溃</p></div><div class="item"><h4>统计逻辑修复</h4><p>双保险策略（右键点击 + 聊天指令监听），确保常用方块统计准确</p></div><div class="item"><h4>按键响应优化</h4><p>修复搜索框焦点死循环、按钮点击无效等遗留 Bug</p></div><div class="item"><h4>多语言支持</h4><p>内置简中、繁中、英、日、法、德、西、葡、俄 9 种语言</p></div><div class="item"><h4>新增前置依赖</h4><p>Cloth Config API（任何版本）</p></div></div><div class="group"><div class="glabel g-green">主要修复（相对 Alpha 1.2.0）</div><div class="item bare"><p>修复"替换模式复制格式缺少空格"的 Bug</p></div><div class="item bare"><p>修复"WorldEdit 指令无法被统计"的问题</p></div><div class="item bare"><p>修复"搜索栏无法输入"、"按钮无反应"等交互故障</p></div><div class="item bare"><p>修复"常用方块列表不刷新"的数据同步问题</p></div></div><div class="group"><div class="glabel g-mute">说明</div><div class="item bare"><p>自 <strong>v2.0.0 起新增 Fabric 加载器支持，1.x 系列仅支持 Forge</p></div><div class="item bare"><p>1.x Alpha 为早期测试版，强烈建议升级至最新 v2.1.2.2-Beta</p></div><div class="item bare"><p>前置说明：WorldEdit 可选（用于一键执行 //set //replace 指令），自 v2.1.1 起已移除 Cloth Config API 依赖</p></div><div class="item bare"><p>点击带 <strong>› 的版本可展开查看该版本的完整更新日志</p></div></div>
+    </article>
+        <div class="more-wrap"><button class="more-btn" id="load-older">加载更早的历史版本</button></div>
   </main>
 </div>
 
-<section class="road">
-  <div class="wrap">
-    <div class="eyebrow">Roadmap</div>
-    <h2>接下来做什么</h2>
-    <div class="road-row"><span>绘制适配层与多模块拆分</span><span class="road-st doing">进行中</span></div>
-    <div class="road-row"><span>四版本源码合并为单一主线</span><span class="road-st plan">计划中</span></div>
-    <div class="road-row"><span>更多方块属性与语言支持</span><span class="road-st plan">计划中</span></div>
-  </div>
-</section>
-
 <footer class="foot">
-  <div class="foot-line"></div>
   <div class="wrap">
-    <div class="foot-main">
-      <div class="foot-brand">
-        <svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true">
-          <path d="M16 3 29 10.5 16 18 3 10.5Z" fill="#7FB4F5"/>
-          <path d="M3 10.5 16 18V31L3 23.5Z" fill="#4A8AD5"/>
-          <path d="M29 10.5 16 18V31l13-7.5Z" fill="#2F6AA8"/>
-        </svg>
-        <span>Block ID</span>
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.8 21.2 7 12 12.2 2.8 7Z" fill="#15181D"/><path d="M2.8 7 12 12.2v10L2.8 17Z" fill="#1C3E9E" opacity=".82"/><path d="M21.2 7 12 12.2v10l9.2-5.2Z" fill="#1C3E9E" opacity=".55"/></svg>
+          <span>Block ID</span>
+        </div>
+        <p class="foot-tag">打中文，出方块。建筑玩家的 WorldEdit 外挂大脑。</p>
       </div>
-      <span class="foot-tag">打中文，出方块。</span>
+      <div class="foot-links">
+        <div>
+          <h4>站内</h4>
+          <a href="index.html#how">怎么用</a>
+          <a href="index.html#search">搜索</a>
+          <a href="index.html#weights">比例</a>
+          <a href="index.html#faq">常见问题</a>
+        </div>
+        <div>
+          <h4>获取</h4>
+          <a href="index.html#install">安装下载</a>
+          <a href="https://modrinth.com/mod/block_id" target="_blank" rel="noopener">Modrinth</a>
+          <a href="https://www.curseforge.com/minecraft/mc-mods/block-id" target="_blank" rel="noopener">CurseForge</a>
+          <a href="https://github.com/MOYBJ/Block_ID" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <div>
+          <h4>其他</h4>
+          <a href="index.html#install">QQ 群 1121599701</a>
+          <a href="index.html">返回首页</a>
+        </div>
+      </div>
     </div>
     <div class="foot-bottom">
-      <span>Copyright 2026 Block ID · 保留所有权利</span>
-      <span>v2.1.2.3-Beta · Forge / Fabric · 2026.10.31</span>
+      <span>Forge / Fabric · 1.20.1 / 1.19.2 · 更新于 2026.11.01</span>
+      <span>Copyright © 2026 Block ID</span>
     </div>
   </div>
 </footer>
 
 <script>
-/* ============ 条目折叠包装（让筛选/展开有高度动画） ============ */
 (function(){
-  var list = [].slice.call(document.querySelectorAll('#entries .entry'));
-  window.__slots = list.map(function(e){
-    var slot = document.createElement('div'); slot.className = 'slot';
-    var inner = document.createElement('div'); inner.className = 'slot-in';
-    e.parentNode.insertBefore(slot, e);
-    slot.appendChild(inner); inner.appendChild(e);
-    if (e.classList.contains('older')) slot.classList.add('closed');
-    return { el: e, slot: slot };
+  var nav=document.getElementById('nav'), t=document.getElementById('nav-toggle');
+  if(!nav||!t) return;
+  t.addEventListener('click',function(){
+    var open=nav.classList.toggle('open');
+    t.setAttribute('aria-expanded',open?'true':'false');
+  });
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    a.addEventListener('click',function(){ nav.classList.remove('open'); });
   });
 })();
 
-/* 导航 */
 (function(){
-  var t=document.getElementById('nav-toggle'), l=document.getElementById('nav-links');
-  if(!t||!l) return;
-  t.addEventListener('click',function(){ l.classList.toggle('open'); });
-})();
+  var entries=Array.prototype.slice.call(document.querySelectorAll('.entry'));
+  var toc=document.getElementById('toc');
+  var chips=Array.prototype.slice.call(document.querySelectorAll('.chip'));
+  var more=document.getElementById('toc-more');
+  var revealed=false;
 
-/* 筛选 */
-(function(){
-  var chips=document.querySelectorAll('.chip');
-  var pairs=window.__slots||[];
-  function syncToc(){
-    document.querySelectorAll('.toc-item').forEach(function(a){
-      var el=document.getElementById('mv-'+(a.dataset.v||''));
-      var slot=el&&el.closest('.slot');
-      var unloaded=el&&el.classList.contains('older')&&!el.classList.contains('show');
-      a.classList.toggle('hide', !el || unloaded || (slot&&slot.classList.contains('closed')));
+  function kindOf(el){ return el.getAttribute('data-kind')||'beta'; }
+  function versOf(el){ return el.id.replace(/^mv-/,''); }
+
+  // 版本目录
+  toc.innerHTML=entries.map(function(el){
+    var v=versOf(el), k=kindOf(el);
+    var dep=k==='deprecated'?' dep':'';
+    var badge=dep?'<span class="toc-dep">弃用</span>':'';
+    return '<a class="toc-item'+dep+'" href="#'+el.id+'" data-v="'+v+'"><i class="dot '+(k==='deprecated'?'dep':k)+'"></i>v'+v+(k==='release'?'-Release':'-Beta')+badge+'</a>';
+  }).join('');
+
+  function apply(f){
+    entries.forEach(function(el){
+      var k=kindOf(el);
+      var show=(f==='all')||(k===f);
+      if(f==='deprecated'&&k==='deprecated'){ el.classList.add('show'); }
+      if(show&&el.classList.contains('older')&&!el.classList.contains('show')) show=false;
+      el.hidden=!show;
     });
+    document.querySelectorAll('.toc-item').forEach(function(a){
+      var el=document.getElementById(a.getAttribute('href').slice(1));
+      a.hidden=!el||el.hidden;
+    });
+    if(more) more.style.display=(f==='all'&&!revealed)?'':'none';
   }
+
   chips.forEach(function(c){
     c.addEventListener('click',function(){
-      chips.forEach(function(x){ x.classList.toggle('on', x===c); });
-      var f=c.dataset.filter;
-      pairs.forEach(function(p){
-        // 弃用版是单独的收纳架：命中的历史条目直接展开，不受「先点查看全部」的限制
-        if(f==='deprecated' && p.el.dataset.kind==='deprecated' && p.el.classList.contains('older')){
-          p.el.classList.add('show');
-        }
-        var ok=(f==='all')||(p.el.dataset.kind===f);
-        if(ok && p.el.classList.contains('older') && !p.el.classList.contains('show')) ok=false;
-        p.slot.classList.toggle('closed', !ok);
-      });
-      syncToc();
+      chips.forEach(function(x){ x.classList.toggle('on',x===c); });
+      apply(c.getAttribute('data-filter'));
     });
   });
-})();
 
-/* 目录点击 + 滚动高亮 */
-(function(){
-  var links=document.querySelectorAll('.toc-item');
-  links.forEach(function(a){
-    a.addEventListener('click',function(ev){
-      var el=document.getElementById(a.getAttribute('href').slice(1));
-      if(!el) return;
-      ev.preventDefault();
-      if(el.classList.contains('older') && !el.classList.contains('show') && window.__revealAll) window.__revealAll();
-      el.classList.add('show');
-      var slot=el.closest('.slot'); if(slot) slot.classList.remove('closed');
-      setTimeout(function(){
-        window.scrollTo({top: el.getBoundingClientRect().top + window.scrollY - 88, behavior:'smooth'});
-      },60);
-    });
+  function revealAll(){
+    entries.forEach(function(el){ if(el.classList.contains('older')) el.classList.add('show'); });
+    revealed=true;
+    var active=document.querySelector('.chip.on');
+    apply(active?active.getAttribute('data-filter'):'all');
+  }
+  if(more) more.addEventListener('click',function(e){ e.preventDefault(); revealAll(); });
+
+  apply('all');
+
+  // 点击目录：展开并滚动
+  toc.addEventListener('click',function(e){
+    var a=e.target.closest('.toc-item'); if(!a) return;
+    e.preventDefault();
+    var el=document.getElementById(a.getAttribute('href').slice(1));
+    if(!el) return;
+    el.classList.add('show'); el.hidden=false;
+    setTimeout(function(){ el.scrollIntoView({behavior:'smooth',block:'start'}); },20);
   });
+
+  // 滚动高亮
   var io=new IntersectionObserver(function(es){
     es.forEach(function(en){
       if(!en.isIntersecting) return;
-      links.forEach(function(a){ a.classList.toggle('on', a.getAttribute('href')==='#'+en.target.id); });
+      document.querySelectorAll('.toc-item').forEach(function(a){
+        a.classList.toggle('on',a.getAttribute('href')==='#'+en.target.id);
+      });
     });
-  },{rootMargin:'-90px 0px -70% 0px'});
-  document.querySelectorAll('.entry').forEach(function(e){ io.observe(e); });
-})();
-
-/* 加载更早 */
-(function(){
-  var btn=document.getElementById('load-older');
-  var tocMore=document.getElementById('toc-more');
-  window.__revealAll=function(){
-    var pairs=window.__slots||[];
-    var active=document.querySelector('.chip.on');
-    var f=active?active.dataset.filter:'all';
-    pairs.forEach(function(p){
-      if(p.el.classList.contains('older')) p.el.classList.add('show');
-      var ok=(f==='all')||(p.el.dataset.kind===f);
-      p.slot.classList.toggle('closed', !ok);
-    });
-    document.querySelectorAll('.toc-item').forEach(function(a){
-      var el=document.getElementById('mv-'+(a.dataset.v||''));
-      var slot=el&&el.closest('.slot');
-      a.classList.toggle('hide', !el || (slot&&slot.classList.contains('closed')));
-    });
-    if(btn) btn.parentElement.style.display='none';
-  };
-  if(btn) btn.addEventListener('click',window.__revealAll);
-  if(tocMore) tocMore.addEventListener('click',function(e){ e.preventDefault(); window.__revealAll(); });
-})();
-
-/* 深链：从主页弹窗跳 #mv-x 时，先展开历史条目再滚动 */
-(function(){
-  function jump(){
-    var h=location.hash.slice(1);
-    if(!h) return;
-    var el=document.getElementById(h);
-    if(!el) return;
-    if(el.classList.contains('older') && !el.classList.contains('show') && window.__revealAll){
-      window.__revealAll();
-    }
-    var slot=el.closest('.slot'); if(slot) slot.classList.remove('closed');
-    setTimeout(function(){
-      window.scrollTo({top: el.getBoundingClientRect().top + window.scrollY - 88, behavior:'auto'});
-    },40);
-  }
-  jump();
-  window.addEventListener('hashchange', jump);
-})();
-
-/* 入场动画 */
-(function(){
-  var els=document.querySelectorAll('.reveal');
-  if(!('IntersectionObserver' in window)) return;
-  var io=new IntersectionObserver(function(es){
-    es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
-  },{threshold:.1});
-  els.forEach(function(e){ io.observe(e); });
+  },{rootMargin:'-88px 0px -66% 0px'});
+  entries.forEach(function(el){ io.observe(el); });
 })();
 </script>
 
-<!-- ============ 站点统计（匿名埋点，失败静默） ============ -->
-<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js" defer></script>
-<script>
-(function () {
-  var ENDPOINT = 'https://blockid-admin.app.workbuddy.host';
-  var KEY = 'wbpk_whwchtrfJEOVB2ElS83PSo_pNItdHl7mGzEsxaNGKlfdvr31AflxWbn';
-  var PAGE_VERSION = 'v2.1.2.3-Beta';
-  var cloud = null, queue = [], tries = 0;
-
-  function flush() {
-    if (!cloud) return;
-    while (queue.length) {
-      var row = queue.shift();
-      try { cloud.database.from("stats_events").insert(row); } catch (e) {}
-    }
-  }
-
-  function boot() {
-    if (window.WorkBuddyCloud) {
-      try {
-        cloud = window.WorkBuddyCloud.createWorkBuddyCloud({ endpoint: ENDPOINT, publishableKey: KEY });
-      } catch (e) { cloud = null; return; }
-      flush();
-      return;
-    }
-    if (++tries < 40) setTimeout(boot, 150);
-  }
-
-  function track(type, target, version) {
-    if (queue.length > 20) return;
-    queue.push({
-      event_type: type,
-      target: target || location.pathname,
-      version: version || PAGE_VERSION,
-      referrer: document.referrer || null,
-      user_agent: navigator.userAgent || null
-    });
-    flush();
-  }
-
-  track('page_view', location.pathname);
-  document.addEventListener('click', function (e) {
-    var el = e.target;
-    if (!el || !el.closest) return;
-    var a = el.closest('a[href*=".jar"], a[data-download]');
-    if (a) track('download', a.getAttribute('href') || 'download', a.dataset.version || PAGE_VERSION);
-  });
-
-  boot();
-})();
-</script>
 </body>
 </html>
