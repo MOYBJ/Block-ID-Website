@@ -212,7 +212,7 @@ h1{font-size:clamp(38px,4.4vw,60px);line-height:1.08;letter-spacing:-.02em;font-
       <a href="changelog.html" aria-current="page">更新日志</a>
     </nav>
     <div class="nav-right">
-      <span class="ver-chip">v2.1.2.5-Beta</span>
+      <span class="ver-chip">v2.1.3-Release</span>
       <a class="btn btn-primary btn-sm" href="index.html#install">加入 QQ 群下载</a>
       <button type="button" class="nav-toggle" id="nav-toggle" aria-label="展开菜单" aria-expanded="false"><i></i></button>
     </div>
@@ -224,8 +224,8 @@ h1{font-size:clamp(38px,4.4vw,60px);line-height:1.08;letter-spacing:-.02em;font-
     <h1>更新日志</h1>
     <p>每个版本改了什么、修了什么，都写在这里。按版本倒序，最新的在最上面。</p>
     <dl class="status">
-      <div><dt>当前正式版</dt><dd><b>v2.1.2-Release</b><br>四个加载器齐全，推荐大多数玩家</dd></div>
-      <div><dt>最新 Beta</dt><dd><b>v2.1.2.5-Beta</b><br>已发布 · 比例与预览框修复</dd></div>
+      <div><dt>当前正式版</dt><dd><b>v2.1.3-Release</b><br>指令矩阵 + 界面贴图化，四个包齐全</dd></div>
+      <div><dt>上一个版本</dt><dd><b>v2.1.2.5-Beta</b><br>比例输入重做 + 指令/ID 预览框</dd></div>
       <div class="warnv"><dt>已弃用</dt><dd><b>v2.1.2.3-Beta</b> · <b>v2.1.0-Release</b><br>存在已知严重问题，请勿下载</dd></div>
     </dl>
   </div>
@@ -245,6 +245,39 @@ h1{font-size:clamp(38px,4.4vw,60px);line-height:1.08;letter-spacing:-.02em;font-
   </aside>
 
   <main id="entries">
+    <article class="entry" id="mv-2.1.3" data-kind="release">
+      <div class="entry-head">
+        <h3>v2.1.3-Release</h3>
+        <div class="tags"><span class="tag release">Release</span></div>
+      </div>
+      <p class="entry-desc">指令模式补上 <code>//walls</code> / <code>//faces</code> / <code>//overlay</code> 三条填充指令并改成下拉菜单；界面从代码里的硬编码色块换成 PNG 九宫格贴图，换肤不用改代码。</p>
+      <div class="group">
+        <div class="glabel g-green">新增</div>
+        <div class="item">
+          <h4>指令矩阵：//set / //walls / //faces / //overlay</h4>
+          <p>预览框上方一个下拉按钮显示当前指令，点开四条可选，每条后面跟语言文件里的说明。选中后预览与复制同步变化，<code>//replace</code> 仍在替换模式。</p>
+        </div>
+        <div class="item">
+          <h4>界面贴图化：资源包可直接换肤</h4>
+          <p>面板与按钮改用 <code>assets/block_id/textures/gui/</code> 下的 24×24 九宫格贴图（panel / button / button_on），四边 4 像素不拉伸。资源包同名覆盖即可换肤，不需要重新编译模组。</p>
+        </div>
+        <div class="item">
+          <h4>9 种语言补齐</h4>
+          <p>语言文件从 21 键扩到 26 键，新增 <code>gui.block_id.cmd.*</code>；复制按钮改用语言键，不再硬编码中文。</p>
+        </div>
+      </div>
+      <div class="group">
+        <div class="glabel g-blue">变更</div>
+        <div class="item bare">
+          <p>指令按钮右对齐并上移到预览框上方 4px；翻页按钮下移 2px、高度改为 16。1.19.2 没有指令发送接口，仍是「复制后手动粘贴」。</p>
+        </div>
+      </div>
+      <div class="info box-green">
+        <div class="info-t">验证</div>
+        <div class="c">四个版本 clean build 全部通过，jar 内均含三张贴图与 9 份语言文件；包与源构建 SHA-256 一致。</div>
+      </div>
+    </article>
+
     <article class="entry" id="mv-2.1.2.5" data-kind="beta">
       <div class="entry-head">
         <h3>v2.1.2.5-Beta</h3>
