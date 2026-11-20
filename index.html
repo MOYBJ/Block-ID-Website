@@ -373,7 +373,7 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12.5px;font-weight:60
       <a href="changelog.html">更新日志</a>
     </nav>
     <div class="nav-right">
-      <span class="ver-chip">v2.1.2.5-Beta</span>
+      <span class="ver-chip">v2.1.3-Release</span>
       <a class="btn btn-primary btn-sm" href="#install">加入 QQ 群下载</a>
       <button type="button" class="nav-toggle" id="nav-toggle" aria-label="展开菜单" aria-expanded="false"><i></i></button>
     </div>
@@ -672,7 +672,7 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12.5px;font-weight:60
       </div>
     </div>
     <div class="foot-bottom">
-      <span>Forge / Fabric · 1.20.1 / 1.19.2 · 更新于 2026.11.01</span>
+      <span>Forge / Fabric · 1.20.1 / 1.19.2 · 更新于 2026.11.20</span>
       <span>Copyright © 2026 Block ID</span>
     </div>
   </div>
@@ -736,7 +736,7 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12.5px;font-weight:60
         <div class="mtitle">模组信息</div>
         <ul class="mlist">
           <li><strong>模组名称</strong>：Block ID（方块ID）</li>
-          <li><strong>当前版本</strong>：v2.1.2.5-Beta（正式版 v2.1.2-Release）</li>
+          <li><strong>当前版本</strong>：v2.1.3-Release</li>
           <li><strong>支持版本</strong>：Minecraft 1.20.1 / 1.19.2（Forge + Fabric）</li>
           <li><strong>官方渠道</strong>：QQ群 1121599701 · GitHub · Modrinth · CurseForge</li>
           <li><strong>协议生效日期</strong>：2026年9月6日</li>
@@ -763,21 +763,21 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12.5px;font-weight:60
 <aside class="dyn-island" id="update-modal" role="status" aria-live="polite">
   <button type="button" class="di-bar" id="di-toggle" aria-expanded="false" aria-controls="di-body">
     <span class="di-dot" aria-hidden="true"></span>
-    <span class="di-ver">v2.1.2.5-Beta</span>
+    <span class="di-ver">v2.1.3-Release</span>
     <span class="di-sep" aria-hidden="true"></span>
-    <span class="di-name">已发布 · 比例与预览框修复</span>
+    <span class="di-name">已发布 · 四条指令 + 界面换肤</span>
     <svg class="di-chev" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5 6 8.5 10 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
   <div class="di-body" id="di-body">
     <div class="di-inner">
-      <p class="di-desc">比例改为直接输入 1–100（填完按回车确认），底部新增可编辑的指令/ID 预览框；同时修掉 v2.1.2.3-Beta 的收藏组乱码与比例回弹。</p>
+      <p class="di-desc">指令模式补上 //walls、//faces、//overlay，改成下拉菜单；界面换成 PNG 九宫格贴图，资源包可以自己换肤。</p>
       <ul class="di-list">
-        <li>比例输入什么就存什么，全 100 即等概率随机</li>
-        <li>预览框可直接改指令，格式不对会红字拦下</li>
-        <li>v2.1.2.3-Beta 与 v2.1.0-Release 仍为弃用状态</li>
+        <li>四条填充指令可切换，每条带语言文件说明</li>
+        <li>贴图在 assets/block_id/textures/gui/，资源包覆盖即可</li>
+        <li>语言文件补齐 9 种语言，共 26 个键</li>
       </ul>
       <div class="di-actions">
-        <a class="btn btn-primary" id="update-modal-changelog" href="changelog.html#mv-2.1.2.5">查看更新日志</a>
+        <a class="btn btn-primary" id="update-modal-changelog" href="changelog.html#mv-2.1.3">查看更新日志</a>
         <button type="button" class="btn btn-ghost" id="update-modal-ok">知道了</button>
       </div>
     </div>
@@ -790,7 +790,7 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12.5px;font-weight:60
     <span class="sn-title">v2.1.2.3-Beta 不建议下载</span>
     <button type="button" class="sn-x" id="sn-x" aria-label="关闭提醒">×</button>
   </div>
-  <p>该版本存在已知严重问题，请改用 <b>v2.1.2.5-Beta</b>；暂时不用新版可回退至 <b>v2.1.2.2-Beta</b>。</p>
+  <p>该版本存在已知严重问题，请改用 <b>v2.1.3-Release</b>；暂时不用新版可回退至 <b>v2.1.2.2-Beta</b>。</p>
   <a class="sn-link" href="changelog.html#mv-2.1.2.5">查看 v2.1.2.5-Beta 更新日志 →</a>
 </aside>
 
@@ -943,8 +943,9 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12.5px;font-weight:60
 
 /* ========== 版本公告 ========== */
 (function(){
-  var KEY='blockid_update_2125_seen';
+  var KEY='blockid_update_213_seen';
   try{
+    localStorage.removeItem('blockid_update_2125_seen');
     localStorage.removeItem('blockid_update_2123_seen');
     localStorage.removeItem('blockid_update_2123_dep_seen');
     localStorage.removeItem('blockid_update_2122_seen');
@@ -1000,7 +1001,7 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12.5px;font-weight:60
 (function () {
   var ENDPOINT = 'https://blockid-admin.app.workbuddy.host';
   var KEY = 'wbpk_whwchtrfJEOVB2ElS83PSo_pNItdHl7mGzEsxaNGKlfdvr31AflxWbn';
-  var PAGE_VERSION = 'v2.1.2.3-Beta';
+  var PAGE_VERSION = 'v2.1.3-Release';
   var cloud = null, queue = [], tries = 0;
 
   function flush() {
