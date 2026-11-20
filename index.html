@@ -763,21 +763,21 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12.5px;font-weight:60
 <aside class="dyn-island" id="update-modal" role="status" aria-live="polite">
   <button type="button" class="di-bar" id="di-toggle" aria-expanded="false" aria-controls="di-body">
     <span class="di-dot" aria-hidden="true"></span>
-    <span class="di-ver">v2.1.3-Release</span>
+    <span class="di-ver">v2.1.4-Beta</span>
     <span class="di-sep" aria-hidden="true"></span>
-    <span class="di-name">已发布 · 四条指令 + 界面换肤</span>
+    <span class="di-name">预发布 · 搜索与多音字修复</span>
     <svg class="di-chev" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5 6 8.5 10 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
   <div class="di-body" id="di-body">
     <div class="di-inner">
-      <p class="di-desc">指令模式补上 //walls、//faces、//overlay，改成下拉菜单；界面换成 PNG 九宫格贴图，资源包可以自己换肤。</p>
+      <p class="di-desc">搜索不再受空格与标点影响，多音字也补上了；同时开始做源码合并。这一版是预发布，正式发布前仍可能调整。</p>
       <ul class="di-list">
-        <li>四条填充指令可切换，每条带语言文件说明</li>
-        <li>贴图在 assets/block_id/textures/gui/，资源包覆盖即可</li>
-        <li>语言文件补齐 9 种语言，共 26 个键</li>
+        <li>「石 头」「石头，」都能搜到</li>
+        <li>shanchangyan 现在能找到闪长岩</li>
+        <li>改动一处，四个版本同时生效</li>
       </ul>
       <div class="di-actions">
-        <a class="btn btn-primary" id="update-modal-changelog" href="changelog.html#mv-2.1.3">查看更新日志</a>
+        <a class="btn btn-primary" id="update-modal-changelog" href="changelog.html#mv-2.1.4">查看更新日志</a>
         <button type="button" class="btn btn-ghost" id="update-modal-ok">知道了</button>
       </div>
     </div>
@@ -943,8 +943,9 @@ kbd{display:inline-block;font-family:var(--mono);font-size:12.5px;font-weight:60
 
 /* ========== 版本公告 ========== */
 (function(){
-  var KEY='blockid_update_213_seen';
+  var KEY='blockid_update_214_pre_seen';
   try{
+    localStorage.removeItem('blockid_update_213_seen');
     localStorage.removeItem('blockid_update_2125_seen');
     localStorage.removeItem('blockid_update_2123_seen');
     localStorage.removeItem('blockid_update_2123_dep_seen');
